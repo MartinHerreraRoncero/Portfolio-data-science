@@ -3,10 +3,10 @@
 ## Descripción del Proyecto
 Este proyecto contiene la resolución de la competición de Machine Learning "Pump it Up", organizada por DrivenData. El objetivo de la tarea es predecir el estado operativo de diversas bombas de agua a partir de un conjunto de datos complejo con múltiples variables numéricas y categóricas[cite: 2].
 
-🔗 **Enlace a la competición:** [Pump it up: Data Mining the Water Table](https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/)[cite: 2].
+🔗 **Enlace a la competición:** [Pump it up: Data Mining the Water Table](https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/).
 
 ## Retos Técnicos y Enfoque
-La predicción es un problema de clasificación multiclase donde la variable objetivo ("status_group") no está balanceada y se divide en tres estados: funcional, no funcional y necesita reparación[cite: 2]. 
+La predicción es un problema de clasificación multiclase donde la variable objetivo ("status_group") no está balanceada y se divide en tres estados: funcional, no funcional y necesita reparación. 
 
 Para abordar el problema, el pipeline de datos implementa:
 * **Ingeniería de Características:** Limpieza de datos inconsistentes y creación de nuevas variables como `pump_age`[cite: 5].

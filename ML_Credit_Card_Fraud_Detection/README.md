@@ -23,6 +23,10 @@ El objetivo es identificar patrones de fraude en un entorno altamente desbalance
 | **Latencia P99** | 2.79 ms | 0.56 ms |
 
 ## 💡 Conclusión Estratégica
-El proyecto concluye que, si bien CatBoost ofrece una latencia superior y un incremento marginal en la sensibilidad, **XGBoost** se mantiene como el modelo estándar de oro cuando la prioridad es reducir la fricción operativa del cliente, cumpliendo sobradamente con los SLAs de la industria.
+La selección definitiva debe ponderar la política de riesgos de la entidad frente a los costes de implementación:
+
+1. **Prioridad en la Experiencia de Usuario:** Si el objetivo es minimizar la fricción del cliente y optimizar costes de *Call Center*, **XGBoost** es la opción que mejor equilibra precisión y operatividad.
+2. **Política de Tolerancia Cero al Fraude:** Si el coste marginal de investigar más de alertas debido a la reducción de 6 p.p. en precisión es inferior al capital salvado por elevar la sensibilidad al **97,87%**, **CatBoost** es el candidato a implementar.
+3. **Restricciones Críticas de Latencia:** En infraestructuras con cuellos de botella extremos (ej. pagos *contactless* masivos), la arquitectura de **CatBoost** es la elección necesaria por viabilidad técnica.
 
 ---

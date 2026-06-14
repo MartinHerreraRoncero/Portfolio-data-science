@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignorar carpetas de datos y archivos pesados
+data/
+*.csv
+*.xlsx

@@ -1,0 +1,14 @@
+import yt_dlp
+
+ydl_opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+    'outtmpl': 'espana_argentina_2026.%(ext)s',
+}
+
+with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    ydl.download(['https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/final-espana-argentina-completo-mundial-2026/17162172/'])

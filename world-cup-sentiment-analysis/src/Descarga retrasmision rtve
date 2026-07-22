@@ -4,7 +4,25 @@ import yt_dlp
 output_dir = r"world-cup-sentiment-analysis\data"
 os.makedirs(output_dir, exist_ok=True)
 
-# Definir la plantilla de salida apuntando a la carpeta data
+# Lista completa de enlaces de las retransmisiones de RTVE
+urls_rtve = [
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/final-espana-argentina-completo-mundial-2026/17162172/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/francia-espana-partido-completo-mundial-2026/17156511/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/espana-belgica-partido-completo-mundial-2026/17152377/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/portugal-espana-partido-completo-mundial-2026/17146075/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/espana-austria-partido-completo-mundial-2026/17141590/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/uruguay-espana-partido-completo-mundial-2026/17133913/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/espana-arabia-saudi-partido-completo-mundial-2026/17125141/",
+    "https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/espana-cabo-verde-partido-completo-mundial-2026/17116492/",
+
+]
+
+
+
+
+
+
+# Configuración de yt-dlp para extracción de audio en MP3 y guardado en 'data'
 output_template = os.path.join(output_dir, "%(title)s.%(ext)s")
 
 ydl_opts = {
@@ -12,10 +30,21 @@ ydl_opts = {
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
-        'preferredquality': '0', # 0 para la mejor calidad VBR
+        'preferredquality': '0', # Máxima calidad VBR
     }],
     'outtmpl': output_template,
+    'ignoreerrors': True, # Salta automáticamente si hay un error en un vídeo y sigue con el siguiente
 }
 
+print(f"Iniciando la descarga de {len(urls_rtve)} retransmisiones hacia la carpeta '{output_dir}'...")
+
 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    ydl.download(['https://www.rtve.es/play/videos/copa-mundial-de-la-fifa-2026/final-espana-argentina-completo-mundial-2026/17162172/'])
+    for index, url in enumerate(urls_rtve, start=1):
+        print(f"\n[{index}/{len(urls_rtve)}] Procesando enlace: {url}")
+        try:
+            ydl.download([url])
+            print(f"✔ Descarga y conversión completadas con éxito.")
+        except Exception as e:
+            print(f"✖ Error procesando el enlace {url}: {e}")
+
+print("\n¡Proceso de descarga masiva finalizado!")

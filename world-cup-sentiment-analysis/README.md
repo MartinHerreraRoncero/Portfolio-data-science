@@ -1,4 +1,4 @@
-# ⚽ Copa Mundial 2026: Análisis Narrativo, Emocional y de Redes de las Retransmisiones de España
+# ⚽ Mundial 2026: Análisis Narrativo, Emocional y de Redes de las Retransmisiones de España
 
 Este proyecto procesa y analiza las retransmisiones en audio de la Selección Española en el Mundial 2026 mediante un *pipeline* *end-to-end* en Python. El flujo transforma el audio bruto en series temporales de sentimiento y grafos de co-ocurrencia narrativa.
 

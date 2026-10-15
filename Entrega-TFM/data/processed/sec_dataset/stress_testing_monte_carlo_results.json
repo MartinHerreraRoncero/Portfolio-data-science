@@ -1,0 +1,44 @@
+{
+  "baseline_default_rate": 0.14,
+  "baseline_avg_pd": 0.10813956315080925,
+  "baseline_expected_loss_usd": 648837378.9048555,
+  "portfolio_size": 1000,
+  "total_portfolio_exposure_usd": 10000000000.0,
+  "mean_stressed_rate": 0.18089999999999998,
+  "mean_stressed_loss_usd": 1085400000.0,
+  "var_95": 0.209,
+  "var_99": 0.217,
+  "credit_var_95_usd": 1254000000.0,
+  "credit_var_99_usd": 1302000000.0,
+  "unexpected_loss_95_usd": 605162621.0951445,
+  "unexpected_loss_99_usd": 653162621.0951445,
+  "scenarios": {
+    "scenario_1": {
+      "name": "1. Estanflaci\u00f3n 1970s",
+      "description": "Inflaci\u00f3n +500 bps, Desempleo +350 bps, PIB -3.0%",
+      "stressed_default_rate": 0.219,
+      "stressed_avg_pd": 0.15337478331047746,
+      "stressed_loss_usd": 920248699.8628645,
+      "loss_increment_usd": 271411320.958009,
+      "loss_increment_pct": 41.83040770803193
+    },
+    "scenario_2": {
+      "name": "2. Shock de Tipos Fed",
+      "description": "Tipos +450 bps, Gastos Intereses +60%, Ca\u00edda Merton DtD",
+      "stressed_default_rate": 0.248,
+      "stressed_avg_pd": 0.16999983910808925,
+      "stressed_loss_usd": 1019999034.6485356,
+      "loss_increment_usd": 371161655.7436801,
+      "loss_increment_pct": 57.20411120119926
+    },
+    "scenario_3": {
+      "name": "3. Recesi\u00f3n Severa 2008/COVID",
+      "description": "Ingresos -30%, Contracci\u00f3n Caja -50%, Ca\u00edda Market Cap -40%",
+      "stressed_default_rate": 0.311,
+      "stressed_avg_pd": 0.2007672056088488,
+      "stressed_loss_usd": 1204603233.6530929,
+      "loss_increment_usd": 555765854.7482374,
+      "loss_increment_pct": 85.65564697987814
+    }
+  }
+}

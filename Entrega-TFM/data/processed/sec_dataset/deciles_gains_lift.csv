@@ -1,0 +1,11 @@
+Decil,% Cartera Auditada,Ganancia Acum. XGBoost (%),Lift XGBoost,Ganancia Acum. Scorecard (%),Lift Scorecard,Lift Baseline
+Decil 1,10%,79.53%,7.95x,72.50%,7.25x,1.00x
+Decil 2,20%,93.89%,4.69x,91.58%,4.58x,1.00x
+Decil 3,30%,98.44%,3.28x,96.42%,3.21x,1.00x
+Decil 4,40%,99.56%,2.49x,97.99%,2.45x,1.00x
+Decil 5,50%,99.84%,2.00x,98.96%,1.98x,1.00x
+Decil 6,60%,99.93%,1.67x,99.50%,1.66x,1.00x
+Decil 7,70%,99.96%,1.43x,99.84%,1.43x,1.00x
+Decil 8,80%,99.99%,1.25x,99.91%,1.25x,1.00x
+Decil 9,90%,100.00%,1.11x,99.99%,1.11x,1.00x
+Decil 10,100%,100.00%,1.00x,100.00%,1.00x,1.00x

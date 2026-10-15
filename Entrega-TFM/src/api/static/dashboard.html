@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S&P 500 Corporate Bankruptcy AI Cockpit | TFM Data Science UCM</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f4f4f5; }
+    ::-webkit-scrollbar-thumb { background: #a1a1aa; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #71717a; }
+    
+    .fintech-card {
+      background: #09090b;
+      backdrop-filter: blur(16px);
+      border: 1px solid #27272a;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+    }
+
+    .fintech-dial-bg {
+      background: radial-gradient(circle at 50% 90%, #18181b 0%, #09090b 70%, #000000 100%);
+    }
+
+    .needle-smooth {
+      transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-origin: 150px 150px;
+    }
+
+    .glow-emerald {
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+    }
+    .glow-rose {
+      filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.7));
+    }
+    .glow-amber {
+      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));
+    }
+  </style>
+</head>
+<body class="bg-[#f4f4f6] text-zinc-900 min-h-screen antialiased flex flex-col font-sans selection:bg-black selection:text-white">
+
+  <!-- Top Executive Navigation Bar (White Canvas, Minimalist) -->
+  <header class="border-b border-zinc-200 bg-white sticky top-0 z-50 px-6 py-3 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center gap-3.5">
+      <div class="h-9 w-9 rounded-lg bg-black flex items-center justify-center font-black text-white text-lg shadow">
+        &Sigma;
+      </div>
+      <div>
+        <h1 class="text-sm font-bold tracking-tight text-zinc-900 flex items-center gap-2">
+          S&P 500 Corporate Distress & Bankruptcy AI Cockpit
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-300 bg-zinc-100 text-zinc-800">
+            Producción Institucional
+          </span>
+        </h1>
+        <p class="text-[11px] text-zinc-500">
+          TFM Máster en Data Science (UCM) &bull; Coste Asimétrico 24x &bull; SEC EDGAR &bull; FinBERT &bull; Merton KMV
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Governance Indicators -->
+    <div class="flex items-center gap-2.5 text-xs">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-600">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+        </span>
+        <span>Microservicio API:</span>
+        <span id="api-status-badge" class="text-zinc-900 font-bold">Online (&le; 5 ms)</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-50 border border-zinc-200 text-zinc-600">
+        <span>Directiva:</span>
+        <span class="text-zinc-900 font-semibold">EU AI Act (Art. 12/14) &bull; Fed SR 11-7</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ticker Live Downloader Bar & Model Selector (White Background) -->
+  <div class="bg-white border-b border-zinc-200 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-3 flex-wrap flex-1 min-w-[320px]">
+      <span class="text-zinc-700 font-semibold flex items-center gap-1.5 text-xs whitespace-nowrap">
+        <svg class="w-4 h-4 text-zinc-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        Búsqueda por Ticker:
+      </span>
+      <div class="flex items-center gap-1.5 flex-1 max-w-lg">
+        <input type="text" id="ticker-search-input" placeholder="Ej: AAPL, TSLA, NVDA, F, BBBY..." onkeydown="if(event.key==='Enter') searchAndLoadTicker()" class="w-full bg-zinc-50 border border-zinc-300 rounded-lg px-3 py-1.5 text-zinc-900 text-xs font-mono uppercase focus:border-black focus:outline-none placeholder-zinc-400 shadow-inner">
+        <label class="flex items-center gap-1 cursor-pointer text-zinc-700 select-none bg-zinc-100 border border-zinc-300 px-2.5 py-1.5 rounded-lg hover:border-zinc-400 transition whitespace-nowrap" title="Forzar actualización en vivo de mercado, contabilidad y noticias">
+          <input type="checkbox" id="force-refresh-toggle" class="accent-black rounded cursor-pointer">
+          <span class="text-[11px] font-medium text-zinc-700">En Vivo</span>
+        </label>
+        <button onclick="searchAndLoadTicker()" class="px-4 py-1.5 rounded-lg bg-black hover:bg-zinc-800 text-white font-bold text-xs transition flex items-center gap-1.5 shadow whitespace-nowrap">
+          Evaluar
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Model Selector Tabs (No buzzwords) -->
+    <div class="flex items-center gap-2">
+      <span class="text-zinc-600 font-medium">Modelo Activo:</span>
+      <div class="inline-flex rounded-lg p-0.5 bg-zinc-100 border border-zinc-300">
+        <button id="btn-m-xgboost" onclick="setActiveModel('xgboost')" class="px-2.5 py-1 text-xs font-bold rounded-md transition bg-black text-white shadow">
+          1. XGBoost (Rank 1)
+        </button>
+        <button id="btn-m-lightgbm" onclick="setActiveModel('lightgbm')" class="px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black">
+          2. LightGBM (Rank 2)
+        </button>
+        <button id="btn-m-random_forest" onclick="setActiveModel('random_forest')" class="px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black">
+          3. Random Forest
+        </button>
+        <button id="btn-m-voting_classifier" onclick="setActiveModel('voting_classifier')" class="px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black">
+          4. Soft Voting
+        </button>
+        <button id="btn-m-catboost" onclick="setActiveModel('catboost')" class="px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black">
+          5. CatBoost
+        </button>
+        <button id="btn-m-logistic_regression" onclick="setActiveModel('logistic_regression')" class="px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black">
+          6. Reg. Logística
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Presets Command Bar: Solvente, En Quiebra, Aleatorio -->
+  <div class="bg-zinc-50 border-b border-zinc-200 px-6 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-zinc-600 font-medium flex items-center gap-1">
+        Muestras Empíricas SEC EDGAR:
+      </span>
+      <button onclick="loadSampleCompany('solvent')" class="px-3 py-1 rounded-lg bg-black hover:bg-zinc-800 border border-zinc-800 text-white text-xs font-medium transition shadow-sm">
+        Solvente
+      </button>
+      <button onclick="loadSampleCompany('distressed')" class="px-3 py-1 rounded-lg bg-black hover:bg-zinc-800 border border-zinc-800 text-white text-xs font-medium transition shadow-sm">
+        En Quiebra
+      </button>
+      <button onclick="loadSampleCompany('random')" class="px-3 py-1 rounded-lg bg-black hover:bg-zinc-800 border border-zinc-800 text-white text-xs font-medium transition shadow-sm">
+        Aleatorio (12% Mercado)
+      </button>
+    </div>
+    
+    <div id="status-notification" class="text-zinc-600 text-xs font-mono font-medium hidden">
+      Descargando datos...
+    </div>
+  </div>
+
+  <!-- Main Cockpit Workspace (Recuadros donde hay texto en NEGRO tal como está) -->
+  <main class="flex-1 p-6 grid grid-cols-1 xl:grid-cols-12 gap-6 max-w-[1740px] w-full mx-auto">
+
+    <!-- LEFT COLUMN: Financial Features Input (5 Cols on XL) - Recuadro en Negro -->
+    <section class="xl:col-span-5 flex flex-col gap-4">
+      <div class="fintech-card rounded-2xl p-5 border border-zinc-800 flex-1 flex flex-col">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800 mb-3">
+          <div>
+            <h2 class="text-sm font-bold text-white flex items-center gap-2">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+              Vector Multimodal (21 Variables Óptimas &bull; 5 Pilares)
+            </h2>
+            <p class="text-[11px] text-zinc-400">Poda de colinealidad Fed SR 11-7 &bull; Zero Training-Serving Skew &bull; GMM Regímenes</p>
+          </div>
+          <span id="sample-source-badge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-zinc-900 text-zinc-300 border border-zinc-800 font-mono">
+            Manual
+          </span>
+        </div>
+
+        <!-- Input Form Sections (5 Pilares Oficiales - Minimalist Monochrome en Panel Negro) -->
+        <div class="space-y-3 overflow-y-auto max-h-[620px] pr-2 text-xs">
+          
+          <!-- Identidad Corporativa -->
+          <div class="grid grid-cols-3 gap-2.5 bg-black p-2.5 rounded-xl border border-zinc-800">
+            <div>
+              <label class="block text-zinc-400 text-[11px] mb-1">Empresa</label>
+              <input type="text" id="company_name" value="Apple Inc." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-white text-xs focus:border-white focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-zinc-400 text-[11px] mb-1">Ticker / CIK</label>
+              <input type="text" id="ticker" value="AAPL" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-white text-xs focus:border-white focus:outline-none font-mono uppercase">
+            </div>
+            <div>
+              <label class="block text-zinc-400 text-[11px] mb-1">Año Fiscal</label>
+              <input type="number" id="year" value="2024" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-white text-xs focus:border-white focus:outline-none">
+            </div>
+          </div>
+
+          <!-- 1. Pilar Contable (SEC EDGAR - 9 Variables) -->
+          <div class="border border-zinc-800 rounded-xl p-3 bg-zinc-950/60">
+            <h3 class="font-semibold text-zinc-200 flex items-center gap-1.5 mb-2.5 text-xs">
+              <span class="text-white font-mono font-bold">1.</span> Pilar Contable y Balance (SEC EDGAR &bull; 9 Variables)
+            </h3>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Total Activo consolidado (USD)">Total Activo ($)</label>
+                <input type="number" step="any" id="tag_Assets" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Fondo de maniobra neto (Activo Corriente - Pasivo Corriente, USD)">Fondo Maniobra ($)</label>
+                <input type="number" step="any" id="tag_WorkingCapital" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Resultado neto contable consolidado del ejercicio (USD)">Resultado Neto ($)</label>
+                <input type="number" step="any" id="tag_NetIncomeLoss" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Beneficios no distribuidos retenidos o déficit acumulado (USD)">Reservas / Déficit ($)</label>
+                <input type="number" step="any" id="tag_RetainedEarningsAccumulatedDeficit" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Número total de acciones ordinarias comunes en circulación">Acciones Circulación</label>
+                <input type="number" step="any" id="tag_EntityCommonStockSharesOutstanding" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Días transcurridos entre cierre fiscal y depósito formal de 10-K ante SEC">Retardo 10-K (días)</label>
+                <input type="number" step="any" id="pub_lag_days" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Número estatutario máximo de acciones comunes autorizadas">Acciones Autorizadas</label>
+                <input type="number" step="any" id="tag_CommonStockSharesAuthorized" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Valor contable en balance del capital social común (USD)">Valor Capital Social ($)</label>
+                <input type="number" step="any" id="tag_CommonStockValue" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Valor nominal facial legal por acción común (USD)">Valor Facial / Acc. ($)</label>
+                <input type="number" step="any" id="tag_CommonStockParOrStatedValuePerShare" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Pilar Bursátil y Estructural (Merton KMV - 3 Variables) -->
+          <div class="border border-zinc-800 rounded-xl p-3 bg-zinc-950/60">
+            <h3 class="font-semibold text-zinc-200 flex items-center gap-1.5 mb-2.5 text-xs">
+              <span class="text-white font-mono font-bold">2.</span> Pilar Bursátil y Estructural (Merton KMV &bull; 3 Variables)
+            </h3>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Distancia estructural al default de Merton-KMV en desviaciones estándar">Merton DD (&sigma;)</label>
+                <input type="number" step="any" id="merton_distance_to_default" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Capitalización bursátil total de mercado (USD)">Market Cap ($)</label>
+                <input type="number" step="any" id="market_cap" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Precio bursátil de cierre de las acciones ordinarias (USD)">Precio Cierre ($)</label>
+                <input type="number" step="any" id="stock_price_close" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Pilar Macroeconómico y Regímenes (FRED & GMM - 4 Variables) -->
+          <div class="border border-zinc-800 rounded-xl p-3 bg-zinc-950/60">
+            <h3 class="font-semibold text-zinc-200 flex items-center gap-1.5 mb-2.5 text-xs">
+              <span class="text-white font-mono font-bold">3.</span> Pilar Macroeconómico y Regímenes (FRED &bull; 4 Variables)
+            </h3>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Inflación FRED (admite índice CPI ~236.5 o tasa porcentual anual % <= 25.0)">Inflación FRED (CPI / %)</label>
+                <input type="number" step="any" id="macro_inflation" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Tipo oficial de los fondos federales de la Reserva Federal (%)">Tipo Fed Funds (%)</label>
+                <input type="number" step="any" id="macro_interest_rate" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Tasa interanual de crecimiento del PIB real de EE.UU. (%)">PIB Real YoY (%)</label>
+                <input type="number" step="any" id="macro_real_gdp_growth_yoy" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Probabilidad condicionada de régimen de expansión económica (GMM)">P(Régimen Expansión)</label>
+                <input type="number" step="any" id="macro_regime_expansion_prob" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Pilar Sentimiento NLP y Noticias (FinBERT - 3 Variables) -->
+          <div class="border border-zinc-800 rounded-xl p-3 bg-zinc-950/60">
+            <h3 class="font-semibold text-zinc-200 flex items-center gap-1.5 mb-2.5 text-xs">
+              <span class="text-white font-mono font-bold">4.</span> Pilar Sentimiento NLP y Noticias (FinBERT &bull; 3 Variables)
+            </h3>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Sentimiento medio FinBERT de noticias corporativas de la empresa">Sentimiento Empresa</label>
+                <input type="number" step="any" id="news_sentiment_avg" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Sentimiento agregado global de los mercados financieros">Sentimiento Mercado</label>
+                <input type="number" step="any" id="market_news_sentiment_mean" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Amplitud y dispersión temporal del sentimiento en noticias a 6 meses">Rango Sentimiento 6M</label>
+                <input type="number" step="any" id="news_sentiment_range_6m" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Pilar Arquetipos Corporativos (GMM - 2 Variables) -->
+          <div class="border border-zinc-800 rounded-xl p-3 bg-zinc-950/60">
+            <h3 class="font-semibold text-zinc-200 flex items-center gap-1.5 mb-2.5 text-xs">
+              <span class="text-white font-mono font-bold">5.</span> Pilar Arquetipos Corporativos (GMM &bull; 2 Variables)
+            </h3>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Probabilidad de asignación al Arquetipo 1 (Empresas maduras / escala)">P(Arquetipo 1 - Madurez)</label>
+                <input type="number" step="any" id="corp_archetype_prob_1" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-zinc-400 text-[11px] mb-0.5" title="Probabilidad de asignación al Arquetipo 2 (Apalancamiento / estrés)">P(Arquetipo 2 - Apalancamiento)</label>
+                <input type="number" step="any" id="corp_archetype_prob_2" class="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-white text-xs font-mono focus:border-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Submit Button (High-Contrast White Button on Black Card) -->
+        <button onclick="triggerPrediction()" class="mt-4 w-full bg-white hover:bg-zinc-200 text-black font-extrabold py-3 px-4 rounded-xl transition shadow flex items-center justify-center gap-2 text-xs tracking-wider uppercase">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+          EJECUTAR INFERENCIA EN TIEMPO REAL (&le; 5 MS)
+        </button>
+
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: Executive Visual Instruments & Results (7 Cols on XL) - Recuadros en Negro -->
+    <section class="xl:col-span-7 flex flex-col gap-4">
+
+      <!-- Top Row: Professional Gauge + Scorecard -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+
+        <!-- Executive Financial Risk Dial Gauge (Recuadro Negro, Score Graphic en Color) -->
+        <div class="md:col-span-7 fintech-card rounded-2xl p-5 border border-zinc-800 flex flex-col items-center justify-between relative overflow-hidden shadow-2xl fintech-dial-bg">
+          
+          <div class="w-full flex items-center justify-between text-xs text-zinc-400 pb-1 border-b border-zinc-800/80">
+            <span class="font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+              Probabilidad de Insolvencia (12M)
+            </span>
+            <div class="flex items-center gap-1.5 font-mono">
+              <span class="text-zinc-400">Umbral Óptimo:</span>
+              <span id="active-tau-badge" class="text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+                &tau;* = 15.8%
+              </span>
+            </div>
+          </div>
+
+          <!-- Professional Dial Meter SVG Instrument (Score Graphic with colors) -->
+          <div class="relative w-72 h-44 flex items-end justify-center my-3">
+            <svg class="w-72 h-44 overflow-visible" viewBox="0 0 300 170">
+              <defs>
+                <linearGradient id="dialGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#10b981"/>
+                  <stop offset="15%" stop-color="#34d399"/>
+                  <stop offset="25%" stop-color="#f59e0b"/>
+                  <stop offset="50%" stop-color="#f97316"/>
+                  <stop offset="100%" stop-color="#ef4444"/>
+                </linearGradient>
+                <filter id="gaugeShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.8"/>
+                </filter>
+              </defs>
+
+              <!-- Outer Gauge Track Frame -->
+              <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#18181b" stroke-width="22" stroke-linecap="round" filter="url(#gaugeShadow)"/>
+              
+              <!-- Colored Risk Range Arc (Retains colors) -->
+              <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="url(#dialGradient)" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+
+              <!-- Tick Marks & Numbers (0%, 25%, 50%, 75%, 100%) -->
+              <line x1="30" y1="150" x2="44" y2="150" stroke="#52525b" stroke-width="2"/>
+              <text x="26" y="165" fill="#71717a" font-size="10" font-family="monospace" text-anchor="middle">0%</text>
+
+              <line x1="65" y1="65" x2="75" y2="75" stroke="#52525b" stroke-width="2"/>
+              <text x="60" y="58" fill="#71717a" font-size="10" font-family="monospace" text-anchor="middle">25%</text>
+
+              <line x1="150" y1="30" x2="150" y2="44" stroke="#52525b" stroke-width="2"/>
+              <text x="150" y="24" fill="#71717a" font-size="10" font-family="monospace" text-anchor="middle">50%</text>
+
+              <line x1="235" y1="65" x2="225" y2="75" stroke="#52525b" stroke-width="2"/>
+              <text x="240" y="58" fill="#71717a" font-size="10" font-family="monospace" text-anchor="middle">75%</text>
+
+              <line x1="270" y1="150" x2="256" y2="150" stroke="#52525b" stroke-width="2"/>
+              <text x="274" y="165" fill="#71717a" font-size="10" font-family="monospace" text-anchor="middle">100%</text>
+
+              <!-- Dynamic Threshold Line & Indicator Flag -->
+              <g id="tau-marker-group">
+                <line id="tau-line" x1="55" y1="99" x2="37" y2="89" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+                <circle id="tau-dot" cx="37" cy="89" r="4.5" fill="#eab308" stroke="#fef08a" stroke-width="1.5"/>
+              </g>
+
+              <!-- Precision Needle -->
+              <g id="svg-needle-group" class="needle-smooth" style="transform: rotate(-90deg);">
+                <polygon points="147,150 150,42 153,150" fill="#ffffff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.9))"/>
+                <polygon points="149,150 150,38 151,150" fill="#e4e4e7"/>
+                <circle cx="150" cy="150" r="14" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+                <circle cx="150" cy="150" r="7" fill="#ffffff"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Digital HUD Value Display (Score Graphic with colors) -->
+          <div class="text-center w-full">
+            <div class="flex items-baseline justify-center gap-1 font-mono">
+              <span id="prob-percentage" class="text-4xl font-black tracking-tight text-emerald-400 glow-emerald">
+                0.05%
+              </span>
+              <span class="text-xs text-zinc-400 uppercase font-sans">PD Est.</span>
+            </div>
+            <div class="mt-1.5 flex justify-center">
+              <span id="risk-category-badge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                SOLVENTE &bull; CRÉDITO APROBADO
+              </span>
+            </div>
+          </div>
+
+          <!-- Quick Telemetry Row -->
+          <div class="w-full pt-3 mt-3 border-t border-zinc-800/80 text-[11px] text-zinc-500 flex justify-between font-mono">
+            <span>Latencia: <strong id="latency-val" class="text-zinc-200">3.8 ms</strong></span>
+            <span>Altman Z: <strong id="altman-val" class="text-zinc-200">3.85</strong></span>
+            <span>Merton DD: <strong id="merton-val" class="text-zinc-200">4.50 &sigma;</strong></span>
+          </div>
+
+        </div>
+
+        <!-- Basel III / WoE Regulatory Scorecard (Recuadro Negro, Score Graphic conserva colores) -->
+        <div class="md:col-span-5 fintech-card rounded-2xl p-5 border border-zinc-800 flex flex-col justify-between shadow-2xl">
+          <div class="flex items-center justify-between text-xs text-zinc-400 pb-2 border-b border-zinc-800/80">
+            <span class="font-bold uppercase tracking-wider text-zinc-300">Scorecard Regulatorio</span>
+            <span class="text-zinc-300 font-mono text-[10px] bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">Basilea III / IV</span>
+          </div>
+
+          <!-- Score Display (Score Graphic) -->
+          <div class="my-auto py-2 text-center">
+            <div class="text-zinc-400 text-xs mb-1 font-medium">Rating Score (300 &ndash; 850 pts)</div>
+            <div id="scorecard-points" class="text-4xl font-black text-white font-mono tracking-tight">
+              755 <span class="text-sm text-zinc-500 font-normal">/ 850</span>
+            </div>
+            <div class="mt-2 flex items-center justify-center gap-2">
+              <span class="text-xs text-zinc-400 font-medium">Banda Crediticia:</span>
+              <span id="scorecard-rating" class="text-base font-black px-3 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                AA (Prime Solvency)
+              </span>
+            </div>
+          </div>
+
+          <!-- Rating Scale Breakdown (Score Graphic Progress Bar) -->
+          <div class="space-y-1.5 pt-3 border-t border-zinc-800/80">
+            <div class="flex justify-between text-[10px] font-mono">
+              <span class="text-rose-400">300 (D - Insolvencia)</span>
+              <span class="text-amber-400">600 (BBB)</span>
+              <span class="text-emerald-400">850 (AAA)</span>
+            </div>
+            <div class="h-2.5 w-full bg-black rounded-full overflow-hidden p-0.5 border border-zinc-800">
+              <div id="score-bar" class="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400 rounded-full transition-all duration-700" style="width: 82%;"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-zinc-400 pt-1">
+              <span>PD Scorecard: <strong id="implied-pd" class="text-zinc-200 font-mono">0.05%</strong></span>
+              <span>Metodología: <strong class="text-zinc-300">Weight-of-Evidence</strong></span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Multi-Model Consensus Card (Recuadro Negro, Score Graphic conserva colores, Sin muletillas) -->
+      <div class="fintech-card rounded-2xl p-5 border border-zinc-800 shadow-2xl">
+        <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-zinc-800 text-xs">
+          <div>
+            <h3 class="font-bold text-white flex items-center gap-2">
+              Consenso Multi-Modelo del Benchmark Oficial (21 Variables Óptimas)
+            </h3>
+            <p class="text-[11px] text-zinc-400">Jerarquía según Función de Costes Asimétricos (FN &times; $6M + FP &times; $250k)</p>
+          </div>
+          <span class="text-[11px] font-mono text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+            6 Modelos en Paralelo
+          </span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          
+          <!-- 1. XGBoost (Rank 1 - 12M) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-white font-extrabold">1. XGBoost (Rank 1 &bull; 12M)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.8551 &bull; ROC-AUC 0.9763 &bull; &tau;* = 15.8% &bull; Coste $2,380M)</span>
+              </span>
+              <span id="val-xgboost" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-xgboost" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- 2. LightGBM (Rank 2 - 24M) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-zinc-300 font-semibold">2. LightGBM (Rank 2 &bull; 24M &bull; Solo 127 FN)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.8501 &bull; ROC-AUC 0.9759 &bull; &tau;* = 22.4%)</span>
+              </span>
+              <span id="val-lightgbm" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-lightgbm" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- 3. Random Forest (Rank 3) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-zinc-300 font-semibold">3. Random Forest (Rank 3 &bull; Precisión 45.9%)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.8450 &bull; ROC-AUC 0.9751 &bull; &tau;* = 18.2%)</span>
+              </span>
+              <span id="val-random_forest" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-random_forest" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- 4. Soft Voting Ensemble (Rank 4) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-zinc-300 font-semibold">4. Soft Voting Ensemble (Rank 4)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.8449 &bull; ROC-AUC 0.9751 &bull; &tau;* = 22.0%)</span>
+              </span>
+              <span id="val-voting_classifier" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-voting_classifier" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- 5. CatBoost GPU (Rank 5) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-zinc-300 font-semibold">5. CatBoost GPU (Rank 5)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.8462 &bull; ROC-AUC 0.9744 &bull; &tau;* = 3.8%)</span>
+              </span>
+              <span id="val-catboost" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-catboost" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- 6. Regresión Logística Baseline (Rank 6) -->
+          <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-zinc-200 flex items-center gap-1.5">
+                <span class="text-zinc-300 font-semibold">6. Regresión Logística (Rank 6 &bull; Baseline)</span>
+                <span class="text-[10px] text-zinc-400 font-mono">(PR-AUC 0.4193 &bull; ROC-AUC 0.7964 &bull; &tau;* = 17.0%)</span>
+              </span>
+              <span id="val-logistic_regression" class="font-mono text-emerald-400 font-bold text-sm">--</span>
+            </div>
+            <div class="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
+              <div id="bar-logistic_regression" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Adverse Action Notices & EU AI Act XAI (Recuadro Negro) -->
+      <div class="fintech-card rounded-2xl p-5 border border-zinc-800 flex-1 flex flex-col">
+        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-zinc-800 text-xs">
+          <h3 class="font-bold text-white flex items-center gap-2">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Trazabilidad y Explicabilidad Regulatoria (EU AI Act Art. 12/14 & FCRA)
+          </h3>
+          <span class="text-[11px] text-zinc-400 font-mono">Registro Automático</span>
+        </div>
+
+        <div id="adverse-action-box" class="text-xs text-zinc-300 space-y-2 my-auto">
+          <p class="text-emerald-400 flex items-center gap-2 font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Perfil de solvencia favorable. Los indicadores de fondo de maniobra, resultado operativo y distancia estructural de Merton superan holgadamente el umbral óptimo de riesgo.
+          </p>
+        </div>
+
+        <div class="pt-3 mt-3 border-t border-zinc-800/80 text-[11px] text-zinc-500 flex flex-wrap justify-between gap-2 font-mono">
+          <span>Audit Log: <code class="text-zinc-400">logs/audit_logs.jsonl</code></span>
+          <span>Normalización: <strong class="text-zinc-400">StandardScaler 21D Canónico (Zero Skew)</strong></span>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- JavaScript Client Logic -->
+  <script>
+    // Endpoint Resolution: Funciona idénticamente sirviendo desde '/' o desde '/ui'
+    const API_BASE = (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http'))
+      ? window.location.origin
+      : 'http://127.0.0.1:8000';
+
+    let currentActiveModel = 'xgboost';
+
+    // Umbrales operativos institucionales tau* (Coste asimétrico FN 24x FP)
+    const MODEL_THRESHOLDS = {
+      xgboost: 0.158,
+      lightgbm: 0.224,
+      random_forest: 0.182,
+      voting_classifier: 0.220,
+      catboost: 0.038,
+      logistic_regression: 0.170
+    };
+
+    // Vector canónico de 21 características óptimas (5 pilares)
+    const VARIABLE_FIELDS = [
+      'tag_NetIncomeLoss',
+      'tag_WorkingCapital',
+      'merton_distance_to_default',
+      'tag_Assets',
+      'pub_lag_days',
+      'stock_price_close',
+      'tag_RetainedEarningsAccumulatedDeficit',
+      'corp_archetype_prob_1',
+      'macro_inflation',
+      'market_cap',
+      'tag_EntityCommonStockSharesOutstanding',
+      'tag_CommonStockSharesAuthorized',
+      'macro_real_gdp_growth_yoy',
+      'news_sentiment_range_6m',
+      'tag_CommonStockParOrStatedValuePerShare',
+      'tag_CommonStockValue',
+      'macro_interest_rate',
+      'market_news_sentiment_mean',
+      'corp_archetype_prob_2',
+      'macro_regime_expansion_prob',
+      'news_sentiment_avg'
+    ];
+
+    function showStatusNotification(msg, isError = false) {
+      const el = document.getElementById('status-notification');
+      if (!el) return;
+      el.innerText = msg;
+      el.className = isError ? "text-rose-600 text-xs font-mono font-bold block" : "text-zinc-800 text-xs font-mono font-medium block animate-pulse";
+      setTimeout(() => {
+        el.className = isError ? "text-rose-600 text-xs font-mono font-bold block" : "text-zinc-600 text-xs font-mono font-medium block";
+      }, 2500);
+    }
+
+    // Comprobación de salud y diagnóstico del microservicio (/health)
+    async function checkHealth() {
+      const badge = document.getElementById('api-status-badge');
+      if (!badge) return;
+      try {
+        const t0 = performance.now();
+        const resp = await fetch(`${API_BASE}/health`);
+        const lat = Math.round(performance.now() - t0);
+        if (resp.ok) {
+          const data = await resp.json();
+          const isHealthy = (data.status === 'healthy' || data.status === 'online');
+          badge.className = isHealthy ? "text-zinc-900 font-bold" : "text-amber-600 font-bold";
+          badge.innerText = isHealthy ? `Online (${lat} ms)` : `Degradado (${lat} ms)`;
+        } else {
+          badge.className = "text-amber-600 font-bold";
+          badge.innerText = `HTTP ${resp.status}`;
+        }
+      } catch (e) {
+        badge.className = "text-rose-600 font-bold";
+        badge.innerText = "Offline";
+      }
+    }
+
+    // Búsqueda por ticker: intenta /fetch_and_predict, con fallback a /fetch_company
+    async function searchAndLoadTicker() {
+      const input = document.getElementById('ticker-search-input');
+      const query = input.value.trim();
+      if (!query) return;
+
+      const forceRefresh = document.getElementById('force-refresh-toggle')?.checked || false;
+
+      showStatusNotification(forceRefresh ? `Descargando datos en vivo de ${query}...` : `Buscando ${query}...`);
+      document.getElementById('sample-source-badge').innerText = forceRefresh ? `En vivo...` : `Buscando...`;
+
+      // 1. Intento con /fetch_and_predict
+      try {
+        const fAndPResp = await fetch(
+          `${API_BASE}/fetch_and_predict?ticker=${encodeURIComponent(query)}&model_name=${currentActiveModel}&force_refresh=${forceRefresh}`,
+          { method: 'POST' }
+        );
+        if (fAndPResp.ok) {
+          const res = await fAndPResp.json();
+          if (res.financial_data) {
+            populateForm(res.financial_data);
+          }
+          const info = res.company_info || {};
+          const srcText = info.source || (forceRefresh ? 'Online En Vivo' : 'SEC EDGAR / DuckDB');
+          document.getElementById('sample-source-badge').innerText = srcText;
+          showStatusNotification(`[OK] ${info.company_name || query} (${info.ticker || query}) cargado desde ${srcText}`);
+
+          if (res.prediction) {
+            updateFromSinglePrediction(res.prediction);
+          }
+          if (res.comparison) {
+            if (res.comparison.models) {
+              updateComparativeBars(res.comparison.models);
+            }
+            if (res.comparison.scorecard) {
+              updateScorecard(res.comparison.scorecard.credit_score, res.comparison.scorecard.rating_band, res.comparison.scorecard.implied_pd);
+            }
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn('/fetch_and_predict no disponible en este backend, recurriendo a /fetch_company:', err);
+      }
+
+      // 2. Fallback estándar a /fetch_company + triggerPrediction()
+      try {
+        const resp = await fetch(`${API_BASE}/fetch_company?ticker=${encodeURIComponent(query)}&force_refresh=${forceRefresh}`);
+        if (resp.status === 404) {
+          const errData = await resp.json().catch(() => ({}));
+          const errMsg = errData.detail || `Empresa o ticker '${query}' no encontrado en los registros oficiales.`;
+          showStatusNotification(`[ERROR] ${errMsg}`, true);
+          document.getElementById('sample-source-badge').innerText = 'No encontrado';
+          input.classList.add('border-rose-500', 'animate-pulse');
+          setTimeout(() => input.classList.remove('border-rose-500', 'animate-pulse'), 3000);
+          return;
+        }
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        
+        if (data.found && data.company_data) {
+          populateForm(data.company_data);
+          document.getElementById('sample-source-badge').innerText = data.source || query;
+          showStatusNotification(`[OK] ${data.company_name} (${data.ticker}) cargado desde ${data.source || 'Online'}`);
+          triggerPrediction();
+        } else {
+          showStatusNotification(`[ERROR] Empresa o ticker '${query}' no encontrado en los registros oficiales.`, true);
+          document.getElementById('sample-source-badge').innerText = 'No encontrado';
+        }
+      } catch (err) {
+        console.warn('Error en fetch_company:', err);
+        showStatusNotification(`[ERROR] Error al buscar '${query}'. Verifique la conexión con el servidor.`, true);
+      }
+    }
+
+    // Configuración del modelo activo y actualización visual del umbral tau*
+    function setActiveModel(modelKey) {
+      currentActiveModel = modelKey;
+
+      ['xgboost', 'lightgbm', 'random_forest', 'voting_classifier', 'catboost', 'logistic_regression'].forEach(m => {
+        const btn = document.getElementById(`btn-m-${m}`);
+        if (!btn) return;
+        if (m === modelKey) {
+          btn.className = "px-2.5 py-1 text-xs font-bold rounded-md transition bg-black text-white shadow";
+        } else {
+          btn.className = "px-2.5 py-1 text-xs font-medium rounded-md transition text-zinc-600 hover:text-black";
+        }
+      });
+
+      const tau = MODEL_THRESHOLDS[modelKey] || 0.158;
+      document.getElementById('active-tau-badge').innerText = `τ* = ${(tau * 100).toFixed(1)}%`;
+
+      // Posicionamiento trigonométrico exacto del marcador de tau* en el dial SVG
+      const clampedTau = Math.max(0.0, Math.min(1.0, tau));
+      const angleRad = Math.PI * (1.0 + clampedTau);
+      const cx = 150, cy = 150, r1 = 108, r2 = 128;
+      const x1 = cx + r1 * Math.cos(angleRad);
+      const y1 = cy + r1 * Math.sin(angleRad);
+      const x2 = cx + r2 * Math.cos(angleRad);
+      const y2 = cy + r2 * Math.sin(angleRad);
+      
+      const tauLine = document.getElementById('tau-line');
+      if (tauLine) {
+        tauLine.setAttribute('x1', x1);
+        tauLine.setAttribute('y1', y1);
+        tauLine.setAttribute('x2', x2);
+        tauLine.setAttribute('y2', y2);
+      }
+      const tauDot = document.getElementById('tau-dot');
+      if (tauDot) {
+        tauDot.setAttribute('cx', x2);
+        tauDot.setAttribute('cy', y2);
+      }
+
+      triggerPrediction();
+    }
+
+    // Carga de valores en los 21 campos del formulario
+    function populateForm(data) {
+      if (!data) return;
+      if (data.company_name) document.getElementById('company_name').value = data.company_name;
+      if (data.ticker) {
+        document.getElementById('ticker').value = data.ticker;
+        document.getElementById('ticker-search-input').value = data.ticker;
+      }
+      if (data.year) document.getElementById('year').value = data.year;
+
+      VARIABLE_FIELDS.forEach(field => {
+        const el = document.getElementById(field);
+        if (el && data[field] !== undefined && data[field] !== null) {
+          el.value = data[field];
+        }
+      });
+    }
+
+    // Endpoint /sample_company?mode=... (Muestra aleatoria calibrada al 12% persistencia en random)
+    async function loadSampleCompany(mode) {
+      document.getElementById('sample-source-badge').innerText = 'Cargando...';
+      try {
+        const resp = await fetch(`${API_BASE}/sample_company?mode=${mode}`);
+        if (!resp.ok) throw new Error('API Error');
+        const resJson = await resp.json();
+        const cData = resJson.company_data || resJson;
+        populateForm(cData);
+        const source = resJson.source || cData.source || mode.toUpperCase();
+        document.getElementById('sample-source-badge').innerText = source;
+        const compLabel = cData.company_name ? `${cData.company_name} (${cData.ticker || ''})` : source;
+        showStatusNotification(`[OK] Muestra cargada: ${compLabel}`);
+      } catch (err) {
+        console.warn('Error al cargar muestra:', err);
+      }
+      triggerPrediction();
+    }
+
+    // Recolectar vector de 21 características y metadatos
+    function collectPayload() {
+      const payload = {
+        company_name: document.getElementById('company_name').value || "Empresa_Demo",
+        ticker: document.getElementById('ticker').value || "DMO",
+        year: parseInt(document.getElementById('year').value) || 2024
+      };
+
+      VARIABLE_FIELDS.forEach(field => {
+        const el = document.getElementById(field);
+        if (el && el.value !== '') {
+          payload[field] = parseFloat(el.value);
+        }
+      });
+      return payload;
+    }
+
+    // Actualización visual del velocímetro/dial de aguja (Score Graphic: conserva colores)
+    function updateGauge(prob, tau) {
+      const clamped = Math.max(0.0, Math.min(1.0, prob));
+      const deg = -90 + (clamped * 180);
+      
+      const needle = document.getElementById('svg-needle-group');
+      if (needle) {
+        needle.style.transform = `rotate(${deg}deg)`;
+      }
+
+      const pctStr = (clamped * 100).toFixed(2) + '%';
+      const probElem = document.getElementById('prob-percentage');
+      probElem.innerText = pctStr;
+
+      const badge = document.getElementById('risk-category-badge');
+      if (clamped >= tau) {
+        probElem.className = "text-4xl font-black tracking-tight text-rose-500 glow-rose";
+        badge.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/50 tracking-wide animate-pulse";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-400"></span> [ALERTA] ALTO RIESGO &bull; DENEGADO / ESTRÉS SEVERO`;
+      } else if (clamped >= (tau * 0.4)) {
+        probElem.className = "text-4xl font-black tracking-tight text-amber-400 glow-amber";
+        badge.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/40 tracking-wide";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> [AVISO] RIESGO MEDIO &bull; VIGILANCIA INTENSIVA`;
+      } else {
+        probElem.className = "text-4xl font-black tracking-tight text-emerald-400 glow-emerald";
+        badge.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 tracking-wide";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> SOLVENTE &bull; CRÉDITO APROBADO`;
+      }
+    }
+
+    // Actualización del Scorecard regulatorio de Basilea III (Score Graphic: conserva colores)
+    function updateScorecard(score, band, impliedPd) {
+      document.getElementById('scorecard-points').innerHTML = `${Math.round(score)} <span class="text-sm text-zinc-500 font-normal">/ 850</span>`;
+      const ratingBadge = document.getElementById('scorecard-rating');
+      ratingBadge.innerText = `${band} Rating`;
+
+      if (['AAA', 'AA', 'A'].includes(band)) {
+        ratingBadge.className = "text-base font-black px-3 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+      } else if (['BBB', 'BB'].includes(band)) {
+        ratingBadge.className = "text-base font-black px-3 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      } else {
+        ratingBadge.className = "text-base font-black px-3 py-0.5 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40";
+      }
+
+      const pct = Math.max(0, Math.min(100, ((score - 300) / 550) * 100));
+      document.getElementById('score-bar').style.width = `${pct}%`;
+      document.getElementById('implied-pd').innerText = (impliedPd * 100).toFixed(2) + '%';
+    }
+
+    // Tarjetas comparativas del Benchmark de los 6 Modelos (Score Graphic: conserva barras y valores con color)
+    function updateComparativeBars(models) {
+      if (!models) return;
+      ['xgboost', 'lightgbm', 'random_forest', 'voting_classifier', 'catboost', 'logistic_regression'].forEach(mKey => {
+        const mData = models[mKey];
+        if (!mData) return;
+        const p = mData.probability !== undefined ? mData.probability : (mData.bankruptcy_probability || 0.0);
+        const tau = mData.threshold !== undefined ? mData.threshold : (MODEL_THRESHOLDS[mKey] || 0.158);
+        const pct = (p * 100).toFixed(2);
+
+        const valElem = document.getElementById(`val-${mKey}`);
+        if (valElem) valElem.innerText = pct + '%';
+
+        const barElem = document.getElementById(`bar-${mKey}`);
+        if (barElem) {
+          barElem.style.width = Math.max(1, Math.min(100, pct)) + '%';
+          if (p >= tau) {
+            barElem.className = "h-full bg-rose-500 rounded-full transition-all duration-500";
+            if (valElem) valElem.className = "font-mono text-rose-400 font-bold text-sm";
+          } else if (p >= (tau * 0.4)) {
+            barElem.className = "h-full bg-amber-400 rounded-full transition-all duration-500";
+            if (valElem) valElem.className = "font-mono text-amber-400 font-bold text-sm";
+          } else {
+            barElem.className = "h-full bg-emerald-500 rounded-full transition-all duration-500";
+            if (valElem) valElem.className = "font-mono text-emerald-400 font-bold text-sm";
+          }
+        }
+      });
+    }
+
+    // Cartas de Acción Adversa (ECOA, CFPB Circular 2022-03, EU AI Act Art. 12/14)
+    function updateAdverseNotices(notices) {
+      const box = document.getElementById('adverse-action-box');
+      if (!notices || notices.length === 0) {
+        box.innerHTML = `
+          <p class="text-emerald-400 flex items-center gap-2 font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Perfil de solvencia favorable. Los indicadores de fondo de maniobra, resultado operativo y distancia estructural de Merton superan holgadamente el umbral óptimo de riesgo.
+          </p>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="space-y-1.5">
+            <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Factores Críticos Determinantes de Riesgo (Notificación FCRA / EU AI Act Art. 14):
+            </div>
+            <ul class="list-disc pl-5 space-y-1 text-zinc-300">
+              ${notices.map(n => `<li class="text-rose-200 font-medium">${n}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+    }
+
+    // Aplica telemetría e indicadores de una predicción individual
+    function updateFromSinglePrediction(pred) {
+      const tau = MODEL_THRESHOLDS[currentActiveModel] || pred.operational_threshold || 0.158;
+      updateGauge(pred.bankruptcy_probability, tau);
+      
+      const latElem = document.getElementById('latency-val');
+      if (latElem) latElem.innerText = `${pred.latency_ms} ms`;
+      
+      const altElem = document.getElementById('altman-val');
+      if (altElem) altElem.innerText = pred.altman_z_score ?? '-';
+      
+      const merElem = document.getElementById('merton-val');
+      if (merElem) {
+        merElem.innerText = (pred.merton_distance_to_default !== undefined && pred.merton_distance_to_default !== null)
+          ? `${Number(pred.merton_distance_to_default).toFixed(2)} σ`
+          : '-';
+      }
+
+      updateAdverseNotices(pred.adverse_action_notices);
+    }
+
+    // Ejecuta inferencia global en tiempo real: /predict + /predict_comparison + /scorecard
+    async function triggerPrediction() {
+      const payload = collectPayload();
+
+      try {
+        const [predResp, compResp] = await Promise.all([
+          fetch(`${API_BASE}/predict?model_name=${currentActiveModel}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }),
+          fetch(`${API_BASE}/predict_comparison`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(() => null)
+        ]);
+
+        if (!predResp.ok) throw new Error(`HTTP ${predResp.status}`);
+        const pred = await predResp.json();
+        updateFromSinglePrediction(pred);
+
+        let comp = null;
+        if (compResp && compResp.ok) {
+          comp = await compResp.json();
+          if (comp.models) {
+            updateComparativeBars(comp.models);
+          }
+          if (comp.scorecard) {
+            updateScorecard(comp.scorecard.credit_score, comp.scorecard.rating_band, comp.scorecard.implied_pd);
+          }
+        }
+
+        if (!comp || !comp.scorecard) {
+          try {
+            const scResp = await fetch(`${API_BASE}/scorecard`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (scResp.ok) {
+              const scData = await scResp.json();
+              updateScorecard(scData.credit_score, scData.rating_band, scData.implied_pd);
+            }
+          } catch (scErr) {
+            console.warn('Scorecard directo:', scErr);
+          }
+        }
+
+      } catch (err) {
+        console.warn('Error en triggerPrediction:', err);
+      }
+    }
+
+    // Inicialización del Cockpit con una muestra aleatoria solvente real de SEC EDGAR
+    window.addEventListener('DOMContentLoaded', () => {
+      checkHealth();
+      setInterval(checkHealth, 30000);
+      setActiveModel('xgboost');
+      loadSampleCompany('solvent');
+    });
+  </script>
+</body>
+</html>

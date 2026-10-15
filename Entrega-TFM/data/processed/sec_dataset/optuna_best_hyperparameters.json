@@ -1,0 +1,44 @@
+{
+  "CatBoost GPU": {
+    "iterations": 350,
+    "depth": 4,
+    "learning_rate": 0.04483822247204969,
+    "l2_leaf_reg": 4.322467991178997,
+    "random_strength": 4.019255120223299
+  },
+  "XGBoost": {
+    "n_estimators": 250,
+    "max_depth": 8,
+    "learning_rate": 0.013926900667369364,
+    "subsample": 0.7139337830107051,
+    "colsample_bytree": 0.8695434036230296,
+    "min_child_weight": 7,
+    "scale_pos_weight": 5.318682771496085
+  },
+  "LightGBM": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "num_leaves": 24,
+    "learning_rate": 0.04090940381383981,
+    "subsample": 0.9918502100103214,
+    "colsample_bytree": 0.6620903558325627,
+    "scale_pos_weight": 9.211626432598383
+  },
+  "Random Forest": {
+    "n_estimators": 150,
+    "max_depth": 13,
+    "min_samples_split": 9,
+    "min_samples_leaf": 5,
+    "class_weight": "balanced"
+  },
+  "PyTorch MLP (Custom Loss)": {
+    "hidden_dims": "128-64-32",
+    "lr": 0.0007929599529295886,
+    "dropout_rate": 0.3745332099865577,
+    "cost_fn": 31.69235322440224
+  },
+  "Logistic Regression": {
+    "C": 0.10987351736619827,
+    "class_weight": "balanced"
+  }
+}

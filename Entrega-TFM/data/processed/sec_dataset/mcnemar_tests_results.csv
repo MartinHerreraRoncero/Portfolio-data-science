@@ -1,0 +1,7 @@
+Comparacion,Casos_b,Casos_c,Chi2_Stat,p_value,Significativo
+XGBoost vs Baseline Altman/Merton,6105,10929,1365.58,0.0000e+00,SI (p < 0.001)
+XGBoost vs Scorecard WOE,15946,1967,10907.41,0.0000e+00,SI (p < 0.001)
+LightGBM vs Baseline Altman/Merton,6061,11330,1595.76,0.0000e+00,SI (p < 0.001)
+LightGBM vs Scorecard WOE,15575,2041,10396.35,0.0000e+00,SI (p < 0.001)
+CatBoost vs Baseline Altman/Merton,5919,10801,1424.89,0.0000e+00,SI (p < 0.001)
+CatBoost vs Scorecard WOE,15546,1625,11284.51,0.0000e+00,SI (p < 0.001)

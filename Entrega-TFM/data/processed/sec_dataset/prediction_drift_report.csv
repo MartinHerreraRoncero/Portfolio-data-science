@@ -1,0 +1,2 @@
+modelo,n_train,n_test_oot,pd_media_train,pd_media_test,pd_mediana_train,pd_mediana_test,psi_value,ks_statistic,ks_p_value,status
+XGBoost (Modelo Campeon),284337,108994,0.2031,0.1703,0.0268,0.0321,0.0622,0.0674,1.0819e-311,Estable (Sin Accion)

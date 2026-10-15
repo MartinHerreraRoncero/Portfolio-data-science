@@ -1,0 +1,275 @@
+{
+  "dataset_path": "data\\processed\\sec_dataset\\v2_sec_financials_pivoted.parquet",
+  "total_observations": 404853,
+  "macro_gmm": {
+    "n_components": 3,
+    "covariance_type": "full",
+    "bic_table": [
+      {
+        "covariance_type": "full",
+        "K": 5,
+        "BIC": -171438.19,
+        "AIC": -172572.96,
+        "log_likelihood": 86390.48,
+        "converged": true,
+        "n_iter": 6
+      },
+      {
+        "covariance_type": "full",
+        "K": 4,
+        "BIC": 390524.01,
+        "AIC": 389618.37,
+        "log_likelihood": -194726.18,
+        "converged": true,
+        "n_iter": 6
+      },
+      {
+        "covariance_type": "full",
+        "K": 3,
+        "BIC": 1109491.05,
+        "AIC": 1108814.55,
+        "log_likelihood": -554345.28,
+        "converged": true,
+        "n_iter": 5
+      },
+      {
+        "covariance_type": "diag",
+        "K": 5,
+        "BIC": 1117013.03,
+        "AIC": 1116423.83,
+        "log_likelihood": -558157.91,
+        "converged": true,
+        "n_iter": 11
+      },
+      {
+        "covariance_type": "diag",
+        "K": 4,
+        "BIC": 1671098.46,
+        "AIC": 1670629.27,
+        "log_likelihood": -835271.64,
+        "converged": true,
+        "n_iter": 11
+      },
+      {
+        "covariance_type": "full",
+        "K": 2,
+        "BIC": 2067710.56,
+        "AIC": 2067263.2,
+        "log_likelihood": -1033590.6,
+        "converged": true,
+        "n_iter": 6
+      },
+      {
+        "covariance_type": "diag",
+        "K": 3,
+        "BIC": 2446129.01,
+        "AIC": 2445779.84,
+        "log_likelihood": -1222857.92,
+        "converged": true,
+        "n_iter": 8
+      },
+      {
+        "covariance_type": "diag",
+        "K": 2,
+        "BIC": 3183585.67,
+        "AIC": 3183356.53,
+        "log_likelihood": -1591657.27,
+        "converged": true,
+        "n_iter": 6
+      }
+    ],
+    "regime_weights": {
+      "regime_0": 0.35337652103408546,
+      "regime_1": 0.24531681666020969,
+      "regime_2": 0.4013066623057048
+    },
+    "regime_means": {
+      "R\u00e9gimen 0: Expansi\u00f3n y Estabilidad Crediticia": {
+        "macro_interest_rate": 1.020204930225002,
+        "macro_yield_curve": 0.7078092930693416,
+        "macro_real_gdp_growth_yoy": 3.219539773922894,
+        "macro_inflation": 254.9223436918489,
+        "macro_unemployment_rate": 4.33764381075269
+      },
+      "R\u00e9gimen 1: Sobrecalentamiento / Endurecimiento Monetario": {
+        "macro_interest_rate": 4.343448193917008,
+        "macro_yield_curve": -0.07259589908710307,
+        "macro_real_gdp_growth_yoy": 2.49425350789213,
+        "macro_inflation": 312.60557802483834,
+        "macro_unemployment_rate": 3.929645664983559
+      },
+      "R\u00e9gimen 2: Estr\u00e9s Crediticio / Recesi\u00f3n": {
+        "macro_interest_rate": 0.10797298678532852,
+        "macro_yield_curve": 1.6997772671123332,
+        "macro_real_gdp_growth_yoy": 1.6703495350025648,
+        "macro_inflation": 236.19406367555908,
+        "macro_unemployment_rate": 7.497411721084125
+      }
+    },
+    "target_distribution_12m": {
+      "0": {
+        "N_Observaciones": 139002.0,
+        "Total_Quiebras": 16740.0,
+        "Tasa_Insolvencia_12M": 0.12042992,
+        "Regime_Name": "Expansion economica"
+      },
+      "1": {
+        "N_Observaciones": 96485.0,
+        "Total_Quiebras": 9122.0,
+        "Tasa_Insolvencia_12M": 0.09454319,
+        "Regime_Name": "Endurecimiento FED"
+      },
+      "2": {
+        "N_Observaciones": 157844.0,
+        "Total_Quiebras": 21030.0,
+        "Tasa_Insolvencia_12M": 0.13323281,
+        "Regime_Name": "Crisis y estres financiero"
+      }
+    }
+  },
+  "corporate_gmm": {
+    "n_components": 4,
+    "covariance_type": "full",
+    "bic_table": [
+      {
+        "covariance_type": "full",
+        "K": 5,
+        "BIC": -823042.16,
+        "AIC": -823694.82,
+        "converged": true,
+        "n_iter": 89
+      },
+      {
+        "covariance_type": "full",
+        "K": 4,
+        "BIC": -809116.77,
+        "AIC": -809637.14,
+        "converged": true,
+        "n_iter": 95
+      },
+      {
+        "covariance_type": "diag",
+        "K": 5,
+        "BIC": -688968.83,
+        "AIC": -689356.9,
+        "converged": true,
+        "n_iter": 91
+      },
+      {
+        "covariance_type": "full",
+        "K": 3,
+        "BIC": -591394.95,
+        "AIC": -591783.02,
+        "converged": true,
+        "n_iter": 25
+      },
+      {
+        "covariance_type": "diag",
+        "K": 4,
+        "BIC": -463317.05,
+        "AIC": -463625.74,
+        "converged": true,
+        "n_iter": 78
+      },
+      {
+        "covariance_type": "diag",
+        "K": 3,
+        "BIC": -397443.04,
+        "AIC": -397672.36,
+        "converged": true,
+        "n_iter": 23
+      },
+      {
+        "covariance_type": "full",
+        "K": 2,
+        "BIC": -365353.65,
+        "AIC": -365609.42,
+        "converged": true,
+        "n_iter": 24
+      },
+      {
+        "covariance_type": "diag",
+        "K": 2,
+        "BIC": -222315.11,
+        "AIC": -222465.05,
+        "converged": true,
+        "n_iter": 18
+      }
+    ],
+    "archetype_weights": {
+      "archetype_0": 0.3204159159448558,
+      "archetype_1": 0.2052348028369617,
+      "archetype_2": 0.38831054871701826,
+      "archetype_3": 0.0860387325011641
+    },
+    "archetype_means": {
+      "Arquetipo 0": {
+        "tag_WorkingCapital": 4546263.023685813,
+        "tag_NetIncomeLoss": -978995.4926468134,
+        "tag_AssetsCurrent": 10751718.005646586,
+        "tag_LiabilitiesCurrent": 5785125.691893458
+      },
+      "Arquetipo 1": {
+        "tag_WorkingCapital": 19368000.000008255,
+        "tag_NetIncomeLoss": 30811277.724437896,
+        "tag_AssetsCurrent": 82749742.5536815,
+        "tag_LiabilitiesCurrent": 31339240.683300674
+      },
+      "Arquetipo 2": {
+        "tag_WorkingCapital": 208187973.3829558,
+        "tag_NetIncomeLoss": 8518961.733639687,
+        "tag_AssetsCurrent": 469340205.31054103,
+        "tag_LiabilitiesCurrent": 261152698.51344344
+      },
+      "Arquetipo 3": {
+        "tag_WorkingCapital": 1316152832.5141354,
+        "tag_NetIncomeLoss": 559650540.0032604,
+        "tag_AssetsCurrent": 6045004227.2212305,
+        "tag_LiabilitiesCurrent": 4485042128.974655
+      }
+    },
+    "target_distribution_12m": {
+      "0": {
+        "N_Observaciones": 126023.0,
+        "Total_Quiebras": 39835.0,
+        "Tasa_Insolvencia_12M": 0.31609309,
+        "Archetype_Name": "Micro-cap distress"
+      },
+      "1": {
+        "N_Observaciones": 81634.0,
+        "Total_Quiebras": 3143.0,
+        "Tasa_Insolvencia_12M": 0.03850111,
+        "Archetype_Name": "Mid-Cap con liquidez"
+      },
+      "2": {
+        "N_Observaciones": 152691.0,
+        "Total_Quiebras": 2779.0,
+        "Tasa_Insolvencia_12M": 0.01820015,
+        "Archetype_Name": "Large-cap solvente"
+      },
+      "3": {
+        "N_Observaciones": 32983.0,
+        "Total_Quiebras": 327.0,
+        "Tasa_Insolvencia_12M": 0.00991419,
+        "Archetype_Name": "Mega-cap fortaleza"
+      }
+    }
+  },
+  "validation": {
+    "macro_probabilities_valid_sum": true,
+    "corp_probabilities_valid_sum": true,
+    "new_features_generated": [
+      "macro_regime_expansion_prob",
+      "macro_regime_neutral_prob",
+      "macro_regime_crisis_prob",
+      "macro_regime_label",
+      "macro_regime_name",
+      "corp_archetype_prob_0",
+      "corp_archetype_prob_1",
+      "corp_archetype_prob_2",
+      "corp_archetype_prob_3",
+      "corp_archetype_label",
+      "corp_archetype_name"
+    ]
+  }
+}

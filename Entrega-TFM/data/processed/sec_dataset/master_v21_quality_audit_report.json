@@ -1,0 +1,18 @@
+{
+    "total_records": 393331,
+    "total_features": 108,
+    "null_count_total": 1778737,
+    "duplicate_adsh_count": 0,
+    "solvent_count_12m": 345869,
+    "bankrupt_count_12m": 47462,
+    "bankrupt_pct_12m": 12.066681751501916,
+    "years_range": [
+        2009,
+        2026
+    ],
+    "unique_companies_cik": 15097,
+    "temporal_leakage_invalid_dates": 0,
+    "gmm_macro_probabilities_sum_valid": true,
+    "gmm_corp_probabilities_sum_valid": true,
+    "outliers_isolation_forest": 11800
+}

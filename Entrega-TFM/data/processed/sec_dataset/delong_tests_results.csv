@@ -1,0 +1,9 @@
+Comparacion,Delta_AUC,Z_Stat,p_value,Significativo
+XGBoost (SOTA 12M) vs Altman & Merton,+0.0799,62.74,0.0000e+00,SI (p < 0.001)
+XGBoost (SOTA 12M) vs Scorecard WOE,+0.0149,28.019,0.0000e+00,SI (p < 0.001)
+XGBoost (SOTA 12M) vs LightGBM,+0.0001,0.374,0.7087,NO (p > 0.001)
+XGBoost (SOTA 12M) vs CatBoost GPU,+0.0054,12.798,0.0000,SI (p < 0.001)
+LightGBM vs Altman & Merton,+0.0798,63.615,0.0000e+00,SI (p < 0.001)
+LightGBM vs Scorecard WOE,+0.0149,27.68,0.0000e+00,SI (p < 0.001)
+CatBoost GPU vs Altman & Merton,+0.0745,64.191,0.0000e+00,SI (p < 0.001)
+CatBoost GPU vs Scorecard WOE,+0.0095,15.32,0.0000e+00,SI (p < 0.001)

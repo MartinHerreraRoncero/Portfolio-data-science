@@ -1,0 +1,22 @@
+feature,mean_abs_shap,importance,pillar
+tag_WorkingCapital,1.3025539,30.019287,Balances Contables SEC XBRL & Arquetipos
+tag_Assets,1.2419024,28.621479,Balances Contables SEC XBRL & Arquetipos
+merton_distance_to_default,0.5953938,13.721733,Mercado Bursatil & Merton KMV
+tag_NetIncomeLoss,0.54791045,12.627408,Balances Contables SEC XBRL & Arquetipos
+tag_RetainedEarningsAccumulatedDeficit,0.11408808,2.629329,Balances Contables SEC XBRL & Arquetipos
+stock_price_close,0.11100983,2.558386,Mercado Bursatil & Merton KMV
+pub_lag_days,0.083739385,1.9298981,Balances Contables SEC XBRL & Arquetipos
+market_cap,0.06455489,1.4877632,Mercado Bursatil & Merton KMV
+macro_inflation,0.050762445,1.1698958,Variables Macroeconomicas FRED & Regimenes
+tag_EntityCommonStockSharesOutstanding,0.03526263,0.8126795,Balances Contables SEC XBRL & Arquetipos
+tag_CommonStockValue,0.03296216,0.7596618,Balances Contables SEC XBRL & Arquetipos
+news_sentiment_range_6m,0.032238267,0.74297863,Mineria de Prensa & NLP FinBERT
+corp_archetype_prob_2,0.031603996,0.72836095,Balances Contables SEC XBRL & Arquetipos
+tag_CommonStockParOrStatedValuePerShare,0.027830172,0.6413876,Balances Contables SEC XBRL & Arquetipos
+corp_archetype_prob_1,0.023336256,0.5378186,Balances Contables SEC XBRL & Arquetipos
+market_news_sentiment_mean,0.010513264,0.24229375,Mineria de Prensa & NLP FinBERT
+macro_interest_rate,0.0094011435,0.21666329,Variables Macroeconomicas FRED & Regimenes
+macro_real_gdp_growth_yoy,0.008347469,0.19237982,Variables Macroeconomicas FRED & Regimenes
+tag_CommonStockSharesAuthorized,0.0060359207,0.13910674,Balances Contables SEC XBRL & Arquetipos
+news_sentiment_avg,0.005561218,0.12816651,Mineria de Prensa & NLP FinBERT
+macro_regime_expansion_prob,0.004049524,0.09332729,Variables Macroeconomicas FRED & Regimenes

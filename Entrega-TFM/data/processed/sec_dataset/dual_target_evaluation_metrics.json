@@ -1,0 +1,181 @@
+{
+  "metadata": {
+    "dataset": "data\\processed\\sec_dataset\\v2_sec_financials_pivoted_clean.parquet",
+    "model": "models\\lightgbm_model.pkl",
+    "n_total_observations": 393331,
+    "cost_fn_usd": 6000000.0,
+    "cost_fp_usd": 250000.0,
+    "production_threshold": 0.15,
+    "evaluation_timestamp": "2026-09-16T16:18:03.114490+00:00"
+  },
+  "subsets": {
+    "Panel Global (Total Observaciones)": {
+      "description": "Total del universo de estados financieros auditados.",
+      "sample_size_N": 393331,
+      "positive_events": 47462,
+      "negative_events": 345869,
+      "base_rate": 0.12066681751501916,
+      "base_rate_pct": 12.07,
+      "ranking_metrics": {
+        "pr_auc": 0.8552179384265115,
+        "roc_auc": 0.978174363593429
+      },
+      "production_threshold_metrics": {
+        "threshold_tau": 0.15,
+        "confusion_matrix": {
+          "true_negatives": 277370,
+          "false_positives": 68499,
+          "false_negatives": 518,
+          "true_positives": 46944
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 0.9890860056466225,
+          "precision": 0.4066422390270523,
+          "specificity": 0.8019510277012395
+        },
+        "financial_impact": {
+          "fn_loss_usd": 3108000000.0,
+          "fp_loss_usd": 17124750000.0,
+          "total_cost_usd": 20232750000.0,
+          "total_cost_usd_millions": 20232.75,
+          "net_pnl_usd": 330773750000.0,
+          "net_pnl_usd_millions": 330773.75
+        }
+      },
+      "optimal_threshold_metrics": {
+        "optimal_threshold_tau": 0.25,
+        "confusion_matrix": {
+          "true_negatives": 291728,
+          "false_positives": 54141,
+          "false_negatives": 978,
+          "true_positives": 46484
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 0.9793940415490286,
+          "precision": 0.4619527950310559,
+          "specificity": 0.8434638548120821
+        },
+        "financial_impact": {
+          "fn_loss_usd": 5868000000.0,
+          "fp_loss_usd": 13535250000.0,
+          "total_cost_usd": 19403250000.0,
+          "total_cost_usd_millions": 19403.25,
+          "net_pnl_usd": 332432750000.0,
+          "net_pnl_usd_millions": 332432.75
+        }
+      }
+    },
+    "Subconjunto A: Transiciones Puras (Sanas en t -> Quiebra 12m)": {
+      "description": "Firmas sanas en t (is_distress_event == 0), evaluando la predicción causal de transición ex-ante a insolvencia.",
+      "sample_size_N": 360463,
+      "positive_events": 18229,
+      "negative_events": 342234,
+      "base_rate": 0.05057107109467546,
+      "base_rate_pct": 5.06,
+      "ranking_metrics": {
+        "pr_auc": 0.5648230438300249,
+        "roc_auc": 0.9598248489348685
+      },
+      "production_threshold_metrics": {
+        "threshold_tau": 0.15,
+        "confusion_matrix": {
+          "true_negatives": 277370,
+          "false_positives": 64864,
+          "false_negatives": 518,
+          "true_positives": 17711
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 0.971583740194196,
+          "precision": 0.21448380260369362,
+          "specificity": 0.810468860487269
+        },
+        "financial_impact": {
+          "fn_loss_usd": 3108000000.0,
+          "fp_loss_usd": 16216000000.0,
+          "total_cost_usd": 19324000000.0,
+          "total_cost_usd_millions": 19324.0,
+          "net_pnl_usd": 156284500000.0,
+          "net_pnl_usd_millions": 156284.5
+        }
+      },
+      "optimal_threshold_metrics": {
+        "optimal_threshold_tau": 0.25,
+        "confusion_matrix": {
+          "true_negatives": 291728,
+          "false_positives": 50506,
+          "false_negatives": 978,
+          "true_positives": 17251
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 0.9463492237643315,
+          "precision": 0.25460100063462077,
+          "specificity": 0.8524226114296066
+        },
+        "financial_impact": {
+          "fn_loss_usd": 5868000000.0,
+          "fp_loss_usd": 12626500000.0,
+          "total_cost_usd": 18494500000.0,
+          "total_cost_usd_millions": 18494.5,
+          "net_pnl_usd": 157943500000.0,
+          "net_pnl_usd_millions": 157943.5
+        }
+      }
+    },
+    "Subconjunto B: Persistencia de Distress (Distress en t -> Distress 12m)": {
+      "description": "Firmas ya en distress técnico en t (is_distress_event == 1), evaluando la persistencia estructural a 12m.",
+      "sample_size_N": 32868,
+      "positive_events": 29233,
+      "negative_events": 3635,
+      "base_rate": 0.8894061092856274,
+      "base_rate_pct": 88.94,
+      "ranking_metrics": {
+        "pr_auc": 0.926616240631311,
+        "roc_auc": 0.6425983928114254
+      },
+      "production_threshold_metrics": {
+        "threshold_tau": 0.15,
+        "confusion_matrix": {
+          "true_negatives": 0,
+          "false_positives": 3635,
+          "false_negatives": 0,
+          "true_positives": 29233
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 1.0,
+          "precision": 0.8894061092856274,
+          "specificity": 0.0
+        },
+        "financial_impact": {
+          "fn_loss_usd": 0.0,
+          "fp_loss_usd": 908750000.0,
+          "total_cost_usd": 908750000.0,
+          "total_cost_usd_millions": 908.75,
+          "net_pnl_usd": 174489250000.0,
+          "net_pnl_usd_millions": 174489.25
+        }
+      },
+      "optimal_threshold_metrics": {
+        "optimal_threshold_tau": 0.01,
+        "confusion_matrix": {
+          "true_negatives": 0,
+          "false_positives": 3635,
+          "false_negatives": 0,
+          "true_positives": 29233
+        },
+        "classification_metrics": {
+          "sensitivity_recall": 1.0,
+          "precision": 0.8894061092856274,
+          "specificity": 0.0
+        },
+        "financial_impact": {
+          "fn_loss_usd": 0.0,
+          "fp_loss_usd": 908750000.0,
+          "total_cost_usd": 908750000.0,
+          "total_cost_usd_millions": 908.75,
+          "net_pnl_usd": 174489250000.0,
+          "net_pnl_usd_millions": 174489.25
+        }
+      }
+    }
+  }
+}

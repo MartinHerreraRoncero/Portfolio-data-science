@@ -1,0 +1,136 @@
+{
+  "top20_features": [
+    {
+      "feature": "tag_OperatingIncomeLoss",
+      "importance": 16.47641764613564,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "ratio_working_capital_to_assets",
+      "importance": 5.322095084121738,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "tag_Assets",
+      "importance": 4.903244663725094,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "tag_StockholdersEquity",
+      "importance": 3.972160838956526,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "tag_WorkingCapital",
+      "importance": 3.949109765513999,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "stock_price_close",
+      "importance": 3.6875802465608265,
+      "pillar": "Cotizaciones Burs\u00e1tiles & Merton KMV"
+    },
+    {
+      "feature": "tag_AssetsCurrent",
+      "importance": 3.6340957271236487,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "ratio_current_ratio",
+      "importance": 3.515437399610366,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "merton_distance_to_default",
+      "importance": 3.356407593409395,
+      "pillar": "Cotizaciones Burs\u00e1tiles & Merton KMV"
+    },
+    {
+      "feature": "tag_EBIT_combined",
+      "importance": 2.839319848187936,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "stock_volatility_30d",
+      "importance": 2.8096448520980117,
+      "pillar": "Cotizaciones Burs\u00e1tiles & Merton KMV"
+    },
+    {
+      "feature": "market_cap",
+      "importance": 2.6958511775522456,
+      "pillar": "Cotizaciones Burs\u00e1tiles & Merton KMV"
+    },
+    {
+      "feature": "ohlson_o_score",
+      "importance": 2.586592347920066,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "macro_inflation",
+      "importance": 2.5394989652631503,
+      "pillar": "Macroecon\u00f3mico FRED"
+    },
+    {
+      "feature": "ratio_ebit_to_assets",
+      "importance": 2.5168574903344916,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "tag_LiabilitiesAndStockholdersEquity",
+      "importance": 2.2751053150905265,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "zmijewski_score",
+      "importance": 2.144346361685193,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "tag_LiabilitiesCurrent",
+      "importance": 2.098593650772223,
+      "pillar": "Contabilidad & Ratios Financieros"
+    },
+    {
+      "feature": "sector_division_Finanzas_Banca_RealEstate",
+      "importance": 1.7605217419330579,
+      "pillar": "Categ\u00f3ricas & Estr\u00e9s Contable"
+    },
+    {
+      "feature": "tag_InterestExpense",
+      "importance": 1.6760512024432406,
+      "pillar": "Contabilidad & Ratios Financieros"
+    }
+  ],
+  "pillar_distribution": [
+    {
+      "pillar": "Contabilidad & Ratios Financieros",
+      "importance": 72.99159334932776,
+      "importance_pct": 72.99159334932773
+    },
+    {
+      "pillar": "Cotizaciones Burs\u00e1tiles & Merton KMV",
+      "importance": 13.126819697894543,
+      "importance_pct": 13.12681969789454
+    },
+    {
+      "pillar": "Categ\u00f3ricas & Estr\u00e9s Contable",
+      "importance": 8.580890518737306,
+      "importance_pct": 8.580890518737304
+    },
+    {
+      "pillar": "Macroecon\u00f3mico FRED",
+      "importance": 4.601993260883727,
+      "importance_pct": 4.6019932608837255
+    },
+    {
+      "pillar": "SEC Insider Transactions",
+      "importance": 0.4992760770755757,
+      "importance_pct": 0.4992760770755756
+    },
+    {
+      "pillar": "NLP FinBERT Noticias Financieras",
+      "importance": 0.19942709608110626,
+      "importance_pct": 0.1994270960811062
+    }
+  ]
+}

@@ -6,6 +6,12 @@ Este portfolio reúne proyectos en Python que abarcan preparación de datos, ing
 
 ## Proyectos
 
+### RAG sobre pensiones y sostenibilidad fiscal — AIReF
+
+**[Explorar el prototipo](./RAG/)** · **Work in progress**
+
+Sistema local de preguntas y respuestas sobre documentos, tablas y gráficos de AIReF. Combina LangGraph, DuckDB y modelos Qwen en Ollama para recuperar cifras con procedencia y generar explicaciones con citas. Incluye el diagrama del flujo actual y las instrucciones de ejecución. La validación completa del perfil actual está pendiente.
+
 ### Detección temprana de quiebras y optimización del coste de negocio
 
 **[Explorar el TFM](./TFM%20detecci%C3%B3n%20quiebras%20opt%20coste%20de%20negocio/)**

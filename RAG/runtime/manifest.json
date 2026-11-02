@@ -1,0 +1,62 @@
+[
+  {
+    "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+    "sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+    "bytes": 3567148
+  },
+  {
+    "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Opinion sobre la Sostenibilidad de las AAPP a largo plazo Marzo 2025.pdf",
+    "sha256": "2af1f49f2d1554c42e0eae82f6855683224d31b89b974216c6d40f1a48680ea1",
+    "bytes": 1953530
+  },
+  {
+    "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+    "sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+    "bytes": 1501111
+  },
+  {
+    "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/Estudio_Regla_Gasto_Pensiones-2026.pdf",
+    "sha256": "a41ffe179cb55e31fed1dba5ac28c83b521eb0f74fe0655d0ed3141c42727787",
+    "bytes": 1333654
+  },
+  {
+    "path": "data/processed/graph_semantic_context_v3.json",
+    "sha256": "ed435e1536d5bb24c26ef6c00cc2b31869e9de33b17d3b0f4a20507fb197d5c6",
+    "bytes": 201662
+  },
+  {
+    "path": "data/processed/graph_source_policy_v3.json",
+    "sha256": "b40981290a63a0a36b27a7f2fea0690e598f7725ef6307ee442ca7af1d91975e",
+    "bytes": 65942
+  },
+  {
+    "path": "data/processed/langgraph_9b_assets/catalog.json",
+    "sha256": "5c38fad6a7f61275a3d91f137e16748c4b08a821c294b84656ccf6ebc00ceef8",
+    "bytes": 110821088
+  },
+  {
+    "path": "data/processed/langgraph_9b_assets/documents.json",
+    "sha256": "8863337c93f964e05e9f11863f65e80e870bcb7ed7e04c2f77fa6a4bfa7eaea5",
+    "bytes": 25529438
+  },
+  {
+    "path": "evaluation/source_recovery_policy_2026-11-01/assets/policy.json",
+    "sha256": "306e5c48c56b822dfa3f92e7358d1750813858f0a8a0e55c2d856374f39aba38",
+    "bytes": 5136
+  },
+  {
+    "path": "evaluation/source_recovery_policy_2026-11-01/run_v3/source_recovery_policy.duckdb",
+    "sha256": "92fc885172be97c3069218f1b107f49510d2428293c28fdd1b900df20ffffdd2",
+    "bytes": 166735872
+  },
+  {
+    "path": "evaluation/source_recovery_policy_2026-11-01/run_v3/validation.json",
+    "sha256": "03a7dc4baefcf4847159e4ed9b2e26657787e5995aee86c3468a885d7a9f6d15",
+    "bytes": 899
+  },
+  {
+    "path": "evaluation\\source_recovery_2026-11-01\\research_writer\\primary_sources\\tesoro_2022_strategy.pdf",
+    "sha256": "3febf3a5c5016e2cdf8a36dec471038346cf3fd0a029d1f43ddc08b40dd630c4",
+    "bytes": 1101944
+  }
+]

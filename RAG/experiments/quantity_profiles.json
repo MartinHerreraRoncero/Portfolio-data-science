@@ -1,0 +1,306 @@
+[
+  {
+    "book": "2025",
+    "block": "Gráfico RE 1.7",
+    "universal_title": "TASA DE DEPENDENCIA. MENORES DE 15 AÑOS Y MAYORES DE 74 AÑOS",
+    "headers": [
+      [
+        "L5",
+        "TASA DE DEPENDENCIA. MENORES DE 15 AÑOS Y MAYORES DE 74 AÑOS"
+      ]
+    ],
+    "units": {
+      "Histórico": "percent_dependency_15_74_as_labelled",
+      "AIReF 2025": "percent_dependency_15_74_as_labelled",
+      "INE 2024": "percent_dependency_15_74_as_labelled",
+      "EUROPOP 2023": "percent_dependency_15_74_as_labelled",
+      "STP 2024": "percent_dependency_15_74_as_labelled"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [
+      {
+        "page": 46,
+        "fragments": [
+          "ratio de menores de 15 años y mayores de 74 años sobre la población entre 15 y 74 años",
+          "42,7% del INE y el 48,6% de Eurostat"
+        ]
+      }
+    ],
+    "additivity": null
+  },
+  {
+    "book": "2025",
+    "block": "Gráfico 81",
+    "universal_title": "PIB NOMINAL (VAR. ANUAL) Y RANGO DE +/- 0,5%",
+    "headers": [
+      [
+        "B2",
+        "Gráfico 81. PIB NOMINAL (VAR. ANUAL) Y RANGO DE +/- 0,5%"
+      ]
+    ],
+    "units": {
+      "Inercial": "percent_nominal_gdp_annual_growth_as_published",
+      "+0.5": "percent_nominal_gdp_annual_growth_as_published",
+      "-0.5": "percent_nominal_gdp_annual_growth_as_published"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [
+      {
+        "page": 135,
+        "fragments": [
+          "bandas de variación de ±0,5 puntos porcentuales",
+          "GRÁFICO 81. PIB NOMINAL (VAR. ANUAL) Y RANGO DE +/- 0,5%"
+        ]
+      }
+    ],
+    "additivity": null
+  },
+  {
+    "book": "2025",
+    "block": "Gráfico 89",
+    "universal_title": "CONTRIBUCIONES A LA VARIACIÓN DE LA DEUDA DE LOS COMPONENTES DEL ENVEJECIMIENTO",
+    "headers": [
+      [
+        "B2",
+        "Gráfico 89. CONTRIBUCIONES A LA VARIACIÓN DE LA DEUDA DE LOS COMPONENTES DEL ENVEJECIMIENTO"
+      ]
+    ],
+    "units": {
+      "Educación": "percentage_points_gdp",
+      "Sanidad": "percentage_points_gdp",
+      "Cuidados LD": "percentage_points_gdp",
+      "Pensiones": "percentage_points_gdp"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [
+      {
+        "page": 138,
+        "fragments": [
+          "CONTRIBUCIONES A LA VARIACIÓN DE LA DEUDA DE LOS COMPONENTES DEL ENVEJECIMIENTO",
+          "31 de los 47 puntos adicionales"
+        ]
+      },
+      {
+        "page": 137,
+        "fragments": [
+          "incrementando la ratio en 47 puntos para 2050",
+          "181% del PIB"
+        ]
+      }
+    ],
+    "additivity": null
+  },
+  {
+    "book": "2026",
+    "block": "Gráfico 37",
+    "universal_title": "Contribuciones a la variación de la deuda de los componentes del envejecimiento",
+    "headers": [
+      [
+        "I7",
+        "Gráfico 37"
+      ],
+      [
+        "J7",
+        "CONTRIBUCIONES A LA VARIACIÓN DE LA DEUDA DE LOS COMPONENTES DEL ENVEJECIMIENTO"
+      ]
+    ],
+    "units": {
+      "Educación": "percentage_points_gdp",
+      "Sanidad": "percentage_points_gdp",
+      "Cuidados LD": "percentage_points_gdp",
+      "Pensiones": "percentage_points_gdp"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [
+      {
+        "page": 74,
+        "fragments": [
+          "CONTRIBUCIONES A LA VARIACIÓN DE LA DEUDA DE LOS COMPONENTES DEL ENVEJECIMIENTO",
+          "52 puntos de PIB superior"
+        ]
+      }
+    ],
+    "additivity": null
+  },
+  {
+    "book": "2026",
+    "block": "Gráfico 12",
+    "universal_title": "Fuentes de financiación del sistema público de pensiones",
+    "headers": [
+      [
+        "B3",
+        "GRÁFICO 12. FUENTES DE FINANCIACIÓN DEL SISTEMA PÚBLICO DE PENSIONES"
+      ]
+    ],
+    "units": {
+      "Presupuesto del Estado": "percent_gdp",
+      "Transferencias de AC": "percent_gdp",
+      "Gasto en pensiones": "percent_gdp",
+      "Cotizaciones SSS dedicadas a pensiones": "percent_gdp"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [
+      {
+        "page": 54,
+        "fragments": [
+          "GRÁFICO 12. FUENTES DE FINANCIACIÓN DEL SISTEMA PÚBLICO DE PENSIONES",
+          "12,7 % del PIB en 2022 hasta el 16,4 % del PIB en 2050"
+        ]
+      }
+    ],
+    "additivity": null
+  },
+  {
+    "book": "2025",
+    "block": "Gráfico 51",
+    "universal_title": "DESCOMPOSICIÓN DEL CRECIMIENTO DEL GASTO SANITARIO DERIVADO DE CAMBIOS EN LA POBLACIÓN Y OTROS FACTORES (%)",
+    "headers": [
+      [
+        "C3",
+        "DESCOMPOSICIÓN DEL CRECIMIENTO DEL GASTO SANITARIO DERIVADO DE CAMBIOS EN LA POBLACIÓN Y OTROS FACTORES (%)"
+      ]
+    ],
+    "units": {
+      "Crecimiento por demografía": "percentage_points_published_growth_contribution",
+      "Crecimiento por otros factores": "percentage_points_published_growth_contribution",
+      "Total": "percent_published_growth"
+    },
+    "roles": {
+      "Total": "published_total_growth",
+      "Crecimiento por demografía": "growth_contribution",
+      "Crecimiento por otros factores": "growth_contribution"
+    },
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [],
+    "additivity": [
+      [
+        "'Gráfico 51'!D6:BF6",
+        "'Gráfico 51'!D7:BF7",
+        "'Gráfico 51'!D8:BF8"
+      ],
+      [
+        "'Gráfico 51'!D9:BF9",
+        "'Gráfico 51'!D10:BF10",
+        "'Gráfico 51'!D11:BF11"
+      ]
+    ]
+  },
+  {
+    "book": "2025",
+    "block": "Gráfico 54",
+    "universal_title": "DESCOMPOSICIÓN DEL CRECIMIENTO DEL GASTO EN EDUCACIÓN DERIVADO DE CAMBIOS EN LA POBLACIÓN Y OTROS FACTORES",
+    "headers": [
+      [
+        "C2",
+        "DESCOMPOSICIÓN DEL CRECIMIENTO DEL GASTO EN EDUCACIÓN DERIVADO DE CAMBIOS EN LA POBLACIÓN Y OTROS FACTORES (%)"
+      ]
+    ],
+    "units": {
+      "Crecimiento por demografía": "percentage_points_published_growth_contribution",
+      "Crecimiento por otros factores": "percentage_points_published_growth_contribution",
+      "Total": "percent_published_growth"
+    },
+    "roles": {
+      "Total": "published_total_growth",
+      "Crecimiento por demografía": "growth_contribution",
+      "Crecimiento por otros factores": "growth_contribution"
+    },
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [],
+    "additivity": [
+      [
+        "'Gráfico 54'!Y11:CA11",
+        "'Gráfico 54'!Y12:CA12",
+        "'Gráfico 54'!Y13:CA13"
+      ],
+      [
+        "'Gráfico 54'!Y14:CA14",
+        "'Gráfico 54'!Y15:CA15",
+        "'Gráfico 54'!Y16:CA16"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 3B",
+    "universal_title": "Número de hijos por mujer de las que acceden a la maternidad",
+    "headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 3. DESCOMPOSICIÓN DEL ÍNDICE COYUNTURAL DE FECUNDIDAD"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 3B. NÚMERO DE HIJOS POR MUJER DE AQUELLAS QUE ACCEDEN A LA MATERNIDAD"
+      ]
+    ],
+    "units": {
+      "Española": "children_per_motherhood_entrant_as_labelled",
+      "Extranjera": "children_per_motherhood_entrant_as_labelled",
+      "Ambas nacionalidades": "children_per_motherhood_entrant_as_labelled"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [],
+    "additivity": null
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 7B",
+    "universal_title": "Diferencia en el número de hijos por mujer de madres con nacionalidad extranjera y española",
+    "headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 7. PROYECCIONES DEL NÚMERO DE HIJOS POR MUJER Y DEL DIFERENCIAL ENTRE MADRES DE NACIONALIDAD EXTRANJERA Y ESPAÑOLA"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 7B. DIFERENCIAL EN EL NÚMERO DE HIJOS POR MUJER DE MADRES DE NACIONALIDAD EXTRANJERA Y ESPAÑOLA"
+      ]
+    ],
+    "units": {
+      "AIReF 2026": "children_per_woman_difference_as_labelled",
+      "Histórico": "children_per_woman_difference_as_labelled"
+    },
+    "roles": {},
+    "category_semantics": "source_category_as_labelled",
+    "pdfs": [],
+    "additivity": null
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 4A",
+    "universal_title": "Evolución del número de hijos de cada generación de mujeres. España en el contexto mundial y de principales países emisores",
+    "headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 4. ÍNDICE DE FECUNDIDAD POR COHORTE (CCF) EN EL ENTORNO INTERNACIONAL"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 4A. EVOLUCIÓN DEL NÚMERO DE HIJOS DE CADA GENERACIÓN DE MUJERES. ESPAÑA EN EL CONTEXTO MUNDIAL Y DE PAÍSES EMISORES"
+      ]
+    ],
+    "units": {
+      "España": "children_per_woman_cohort_as_labelled"
+    },
+    "roles": {},
+    "category_semantics": "year_generation_turns_30",
+    "pdfs": [
+      {
+        "page": 82,
+        "fragments": [
+          "ÍNDICE DE FECUNDIDAD POR COHORTE (CCF)",
+          "las mujeres nacidas en 1935 tuvieron en promedio 2,7 hijos",
+          "Año en que la generación cumple 30 años"
+        ]
+      }
+    ],
+    "additivity": null
+  }
+]

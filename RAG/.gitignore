@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv*/
+.env
+.env.*
+outputs/
+data/
+evaluation/
+Airef/
+*.log
+*.sqlite3*
+!runtime/
+!runtime/**/
+!runtime/**/*.gz
+!runtime/manifest.json

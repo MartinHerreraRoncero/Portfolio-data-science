@@ -1,0 +1,169 @@
+[
+  {
+    "book": "2025",
+    "block": "Cuadro  23 ",
+    "family": "fiscal_scenarios",
+    "title_cell": "C2",
+    "title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LAS DISTINTAS ELASTICIDADES DE INGRESOS CONSIDERADAS",
+    "universal_title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LAS DISTINTAS ELASTICIDADES DE INGRESOS CONSIDERADAS"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 12",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "TASA DE VAR. DEL PIB REAL (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE",
+    "universal_title": "TASA DE VAR. DEL PIB REAL (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 13",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "TASA DE VAR. DE LA INFLACIÓN (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE",
+    "universal_title": "TASA DE VAR. DE LA INFLACIÓN (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 14",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "TIPOS DE INTERÉS DE LAS NUEVAS EMISIONES (%), DIFERENCIAS S/ EL ESCENARIO BASE",
+    "universal_title": "TIPOS DE INTERÉS DE LAS NUEVAS EMISIONES (%), DIFERENCIAS S/ EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 15",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "TASA DE VARIACIÓN DEL PIB NOMINAL (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE",
+    "universal_title": "TASA DE VARIACIÓN DEL PIB NOMINAL (%), PROMEDIOS Y DIFERENCIAS SOBRE EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 16",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "SALDO PRIMARIO (%PIB), DIFERENCIAS SOBRE EL ESCENARIO BASE",
+    "universal_title": "SALDO PRIMARIO (%PIB), DIFERENCIAS SOBRE EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 17",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "DEUDA (%PIB), DIFERENCIAS SOBRE EL ESCENARIO BASE",
+    "universal_title": "DEUDA (%PIB), DIFERENCIAS SOBRE EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 18",
+    "family": "climate",
+    "title_cell": "C2",
+    "title": "INTERESES (%PIB), DIFERENCIAS S/ EL ESCENARIO BASE",
+    "universal_title": "INTERESES (%PIB), DIFERENCIAS S/ EL ESCENARIO BASE"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 20 ",
+    "family": "fiscal_scenarios",
+    "title_cell": "C2",
+    "title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LOS DISTINTOS ESCENARIOS MACROECONÓMICOS PLANTEADOS (%PIB)",
+    "universal_title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LOS DISTINTOS ESCENARIOS MACROECONÓMICOS PLANTEADOS (%PIB)"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 22 ",
+    "family": "fiscal_scenarios",
+    "title_cell": "C2",
+    "title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LOS DISTINTOS ESCENARIOS DE INMIGRACIÓN",
+    "universal_title": "EVOLUCIÓN DEL DÉFICIT Y LA DEUDA SEGÚN LOS DISTINTOS ESCENARIOS DE INMIGRACIÓN"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 24",
+    "family": "pension_scenarios",
+    "title_cell": "C2",
+    "title": "GASTO EN PENSIONES. DIFERENCIAS RESPECTO AL ESCENARIO BASE (%PIB)",
+    "universal_title": "GASTO EN PENSIONES. DIFERENCIAS RESPECTO AL ESCENARIO BASE (%PIB)"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 25",
+    "family": "pension_scenarios",
+    "title_cell": "C2",
+    "title": "DEUDA. DIFERENCIAS RESPECTO AL ESCENARIO BASE (%PIB)",
+    "universal_title": "DEUDA. DIFERENCIAS RESPECTO AL ESCENARIO BASE (%PIB)"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 4",
+    "family": "age_structure",
+    "title_cell": "D3",
+    "title": "ESTRUCTURA PORCENTUAL DE LA POBLACIÓN SEGÚN TRAMOS ETARIOS",
+    "universal_title": "ESTRUCTURA PORCENTUAL DE LA POBLACIÓN SEGÚN TRAMOS ETARIOS"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 5",
+    "family": "labour",
+    "title_cell": "C3",
+    "title": "IMPACTO DE LAS MEDIDAS DE MERCADO LABORAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)",
+    "universal_title": "IMPACTO DE LAS MEDIDAS DE MERCADO LABORAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)"
+  },
+  {
+    "book": "2025",
+    "block": "Cuadro 6",
+    "family": "labour",
+    "title_cell": "C3",
+    "title": "IMPACTO DEL INCREMENTO DEL SALARIO MÍNIMO INTERPROFESIONAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)",
+    "universal_title": "IMPACTO DEL INCREMENTO DEL SALARIO MÍNIMO INTERPROFESIONAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)"
+  },
+  {
+    "book": "2025",
+    "block": "RE 1. Cuadro 1",
+    "family": "demography",
+    "title_cell": "C2",
+    "title": "COMPARATIVA DE LAS PROYECCIONES DEMOGRÁFICAS PARA DIVERSOS AÑOS",
+    "universal_title": "COMPARATIVA DE LAS PROYECCIONES DEMOGRÁFICAS PARA DIVERSOS AÑOS"
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Cuadro 1",
+    "family": "age_structure",
+    "title_cell": "B3",
+    "title": "ANEXO I. CUADRO 1. ESTRUCTURA PORCENTUAL DE LA POBLACIÓN SEGÚN TRAMOS ETARIOS",
+    "universal_title": "Estructura porcentual de la población según tramos etarios"
+  },
+  {
+    "book": "2026",
+    "block": "Cuadro 11",
+    "family": "demography",
+    "title_cell": "B3",
+    "title": "CUADRO 11. COMPARATIVA DE LAS PROYECCIONES DEMOGRÁFICAS DE LA AIREF CON LAS DE OTROS ORGANISMOS PARA DIVERSOS AÑOS",
+    "universal_title": "Comparativa de las proyecciones demográficas de la AIReF con las de otros organismos para diversos años"
+  },
+  {
+    "book": "2026",
+    "block": "Cuadro 5",
+    "family": "labour",
+    "title_cell": "B3",
+    "title": "CUADRO 5. IMPACTO DEL INCREMENTO DEL SALARIO MÍNIMO INTERPROFESIONAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)",
+    "universal_title": "Impacto del incremento del salario mínimo interprofesional (desviaciones respecto al escenario sin medidas, % y puntos porcentuales)"
+  },
+  {
+    "book": "2026",
+    "block": "Cuadro 7",
+    "family": "labour",
+    "title_cell": "B3",
+    "title": "CUADRO 7. IMPACTO DE LAS MEDIDAS DE MERCADO LABORAL (DESVIACIONES RESPECTO AL ESCENARIO SIN MEDIDAS, % Y PUNTOS PORCENTUALES)",
+    "universal_title": "Impacto de las medidas de mercado laboral (desviaciones respecto al escenario sin medidas, % y puntos porcentuales)"
+  },
+  {
+    "book": "2025",
+    "block": "Gráfico 37",
+    "family": "resource_grid",
+    "title_cell": "B2",
+    "title": "GRÁFICO 37. RECURSOS NO FINANCIEROS SIN PRTR(%PIB)"
+  }
+]

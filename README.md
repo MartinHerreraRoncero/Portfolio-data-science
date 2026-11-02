@@ -2,7 +2,7 @@
 
 Soy economista con formación de máster en Finanzas y en Inteligencia Artificial, Data Science y Business Intelligence. Mi trabajo combina análisis económico, estadística y programación para abordar problemas de riesgo financiero, inversión y predicción.
 
-Este portfolio reúne proyectos en Python que abarcan preparación de datos, ingeniería de variables, comparación de modelos, explicabilidad y desarrollo de servicios de inferencia. Mi interés se centra en conectar el rendimiento de los modelos con las decisiones y los costes del problema que resuelven.
+Este portfolio reúne proyectos en Python sobre riesgo financiero, inversión, modelización predictiva y sistemas de preguntas y respuestas con modelos de lenguaje. Abarcan preparación de datos, comparación de modelos, explicabilidad y desarrollo de servicios de inferencia. Mi interés se centra en conectar el rendimiento de los modelos con las decisiones y los costes del problema que resuelven.
 
 ## Proyectos
 
@@ -10,7 +10,14 @@ Este portfolio reúne proyectos en Python que abarcan preparación de datos, ing
 
 **[Explorar el prototipo](./RAG/)** · **Work in progress**
 
-Sistema local de preguntas y respuestas sobre documentos, tablas y gráficos de AIReF. Combina LangGraph, DuckDB y modelos Qwen en Ollama para recuperar cifras con procedencia y generar explicaciones con citas. Incluye el diagrama del flujo actual y las instrucciones de ejecución. La validación completa del perfil actual está pendiente.
+Prototipo de generación aumentada por recuperación (RAG) para consultar documentos, tablas y gráficos de AIReF sobre pensiones y sostenibilidad fiscal. Combina recuperación documental y consultas estructuradas para responder con cifras trazables y explicaciones respaldadas por citas.
+
+- Orquestación con LangGraph y modelos Qwen locales mediante Ollama.
+- Recuperación semántica de pasajes y de un catálogo de tablas y gráficos.
+- Consulta de datos en DuckDB con identificación de fuente, periodo y unidad.
+- Comprobación de afirmaciones y cobertura, con aclaraciones, respuestas parciales o abstención cuando procede.
+
+Incluye el código del prototipo, los recursos necesarios para consultar la instantánea actual, instrucciones de ejecución y un diagrama del sistema. **La validación completa del perfil actual está pendiente; no se presenta como un sistema de producción.**
 
 ### Detección temprana de quiebras y optimización del coste de negocio
 
@@ -86,10 +93,11 @@ El notebook documenta el proceso analítico. Su ejecución completa requiere un 
 | Análisis y tratamiento de datos | Python, pandas, NumPy, SciPy, DuckDB, PyArrow |
 | Machine Learning | scikit-learn, XGBoost, LightGBM, CatBoost, imbalanced-learn, Optuna |
 | Deep Learning y NLP | PyTorch, Transformers, faster-whisper, pysentimiento |
+| RAG y modelos de lenguaje locales | LangGraph, Ollama, Qwen, embeddings, recuperación documental y estructurada |
 | Econometría y aprendizaje por refuerzo | statsmodels, VECM, PPO, DDPG, SAC |
 | Explicabilidad y visualización | SHAP, Matplotlib, Seaborn, NetworkX |
 | Servicios y experimentación | FastAPI, Pydantic, Uvicorn, Jupyter |
 
 ## Cómo consultar el portfolio
 
-Cada proyecto está organizado en su propia carpeta. Consulta su documentación para conocer los datos, la metodología, los resultados y los requisitos de ejecución. Las dependencias y los artefactos disponibles varían entre proyectos; los que incluyen una memoria en PDF permiten profundizar en el planteamiento y las conclusiones.
+Cada proyecto está organizado en su propia carpeta. Consulta su documentación para conocer los datos, la metodología, los resultados y los requisitos de ejecución. Las dependencias y los artefactos disponibles varían entre proyectos; los que incluyen una memoria en PDF permiten profundizar en el planteamiento y las conclusiones. Los proyectos marcados como **Work in progress** siguen en desarrollo: su documentación distingue las funcionalidades disponibles de las validaciones pendientes.

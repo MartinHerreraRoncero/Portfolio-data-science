@@ -119,6 +119,10 @@ def runtime_manifest(services):
         result['semantic_context']=dict(registry_id=services.semantic_context['registry_id'],path=CONTEXT_PATH.relative_to(ROOT).as_posix(),sha256=CONTEXT_SHA256)
         result['source_forecast_default']=FORECAST_DEFAULT_POLICY
     else:result['semantic_context']=None
+    if getattr(services,'reranker',None)is not None:
+        from rag_pensiones.graph_reranker import MODEL,REVISION,MODEL_DIR
+        result['reranker']=dict(model=MODEL,revision=REVISION,device='cpu',pool_size=50,final_per_need=10,
+            verified_files=json.loads((MODEL_DIR/'verified_files.json').read_text(encoding='utf-8')))
     result['manifest_hash']=canonical_hash(result)
     return result
 

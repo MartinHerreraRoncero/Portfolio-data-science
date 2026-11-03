@@ -310,11 +310,14 @@ def candidate_matches_need(card: dict, need: dict, *, metadata_discovery: bool =
 
 
 def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[float] | None,
-                               needs: list[dict], top_k_per_need: int = 10, *, metadata_discovery: bool = False) -> list[dict]:
+                               needs: list[dict], top_k_per_need: int = 10, *, metadata_discovery: bool = False,
+                               reranker=None, pool_size: int = 50) -> list[dict]:
     """Filter before ranking and fairly expose independent needs and unspecified editions."""
     if type(top_k_per_need) is not int or top_k_per_need < 1:
         raise ValueError('Positive per-need retrieval budget required')
     lists = []
+    if reranker is not None and (type(pool_size)is not int or not top_k_per_need<=pool_size<=100):
+        raise ValueError('Invalid reranker candidate budget')
     for need in needs:
         if need.get('kind') != 'data':
             continue
@@ -325,12 +328,15 @@ def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[flo
             groups[card['book'] if need.get('book') is None else 'requested'].add(card['card_id'])
         # Use the same complete request that produced query_vector.
         search_query = query
+        budget=pool_size if reranker is not None else top_k_per_need
         ranked = [retrieve_catalog(catalog, search_query, query_vector,
-                                  top_k=top_k_per_need, allowed_card_ids=groups[book])
+                                  top_k=budget, allowed_card_ids=groups[book])
                   for book in sorted(groups, key=lambda b: str(b))]
-        rows = [part[rank] for rank in range(top_k_per_need) for part in ranked if rank < len(part)]
+        rows = [part[rank] for rank in range(budget) for part in ranked if rank < len(part)]
         # An unspecified edition keeps at least one result from every represented book.
         limit = max(top_k_per_need, len(ranked))
+        if reranker is not None:
+            rows=reranker.rank(search_query,rows[:pool_size],limit)
         lists.append((need['need_id'], rows[:limit]))
     merged = {}; ordered = []
     for rank in range(max((len(rows) for _, rows in lists), default=0)):

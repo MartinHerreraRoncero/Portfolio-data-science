@@ -1,0 +1,211 @@
+{
+  "model": "Qwen/Qwen3-Reranker-0.6B",
+  "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+  "cases": [
+    {
+      "id": "real_2070_level",
+      "passed": false,
+      "baseline_target_present": false,
+      "seconds": 54.38999999999942,
+      "ranked": [
+        {
+          "id": "card:21c33a7876621767a5738ea8",
+          "series": "Productividad Alta",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9961755275726318,
+            "rank": 1,
+            "pool_rank": 4,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:25097907b6b05dcb072ad222",
+          "series": "Paro Alto",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9961755275726318,
+            "rank": 2,
+            "pool_rank": 26,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:217937e0cabd4557e390d335",
+          "series": "Población Alta",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9956685304641724,
+            "rank": 3,
+            "pool_rank": 1,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:554b050b6ff0cfab5e7bc123",
+          "series": "Migración Alta",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9956685304641724,
+            "rank": 4,
+            "pool_rank": 6,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:cde97ade2d91a3d26c7f2eec",
+          "series": "Esperanza de Vida Alta",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9953904151916504,
+            "rank": 5,
+            "pool_rank": 8,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:7947b9c00bd0e7a8048eb4ab",
+          "series": "Esperanza de Vida Baja",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9953904151916504,
+            "rank": 6,
+            "pool_rank": 28,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:8be551c876808aff18c9e2cb",
+          "series": "Productividad Baja",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9953904151916504,
+            "rank": 7,
+            "pool_rank": 38,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:bd646c134c27a1f7c8e9ca95",
+          "series": "Fecundidad Alta",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9950946569442749,
+            "rank": 8,
+            "pool_rank": 36,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:889202c5c9cff59ebd970fb9",
+          "series": "Población Baja",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9947799444198608,
+            "rank": 9,
+            "pool_rank": 18,
+            "pool_size": 50
+          }
+        },
+        {
+          "id": "card:f29faaafadc891a546170135",
+          "series": "Fecundidad Baja",
+          "metric": "Gasto en pensiones",
+          "reranker": {
+            "model": "Qwen/Qwen3-Reranker-0.6B",
+            "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+            "score": 0.9947799444198608,
+            "rank": 10,
+            "pool_rank": 48,
+            "pool_size": 50
+          }
+        }
+      ]
+    },
+    {
+      "id": "explicit_scenario",
+      "passed": true,
+      "expected": "base",
+      "seconds": 6.5939999999973224,
+      "ranked": [
+        {
+          "id": "base",
+          "score": 0.9982993006706238
+        },
+        {
+          "id": "alternative",
+          "score": 0.9890130758285522
+        }
+      ]
+    },
+    {
+      "id": "year_coverage",
+      "passed": true,
+      "expected": "long",
+      "seconds": 6.6560000000026776,
+      "ranked": [
+        {
+          "id": "long",
+          "score": 0.9820137619972229
+        },
+        {
+          "id": "short",
+          "score": 0.7310585975646973
+        }
+      ]
+    },
+    {
+      "id": "aggregate_scope",
+      "passed": true,
+      "expected": "total",
+      "seconds": 6.75,
+      "ranked": [
+        {
+          "id": "total",
+          "score": 0.9991958737373352
+        },
+        {
+          "id": "component",
+          "score": 0.9688562154769897
+        }
+      ]
+    },
+    {
+      "id": "unrelated_pool",
+      "passed": true,
+      "expected": null,
+      "seconds": 6.563000000001921,
+      "ranked": [
+        {
+          "id": "education",
+          "score": 0.000552778597921133
+        },
+        {
+          "id": "weather",
+          "score": 0.00015843621804378927
+        }
+      ]
+    }
+  ],
+  "passed": 4,
+  "total": 5,
+  "limitation": "Ranking checks only. Not conversational quality, calibrated probability, or factual verification."
+}

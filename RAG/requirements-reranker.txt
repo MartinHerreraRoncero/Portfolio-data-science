@@ -1,0 +1,4 @@
+# Isolated CPU worker; the prototype's LangGraph environment remains unchanged.
+torch==2.14.1
+transformers==5.21.0
+huggingface-hub>=0.34

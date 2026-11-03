@@ -264,6 +264,9 @@ class GraphServices:
         if scope not in{'production_full','legacy_2025_reference'}or documents['scope']!=scope:
             raise ValueError('Mismatched graph source scope')
         self.catalog=catalog;self.documents=documents;self.client=client
+        from rag_pensiones.graph_reranker import LocalReranker
+        import os
+        self.reranker=LocalReranker()if scope=='production_full'and os.environ.get('RAG_ENABLE_RERANKER')=='1'else None
         self.database=Path(database);self.scope=scope;self.query_lock=threading.RLock()
         verify_catalog_source(catalog,self.database)
         verify_document_sources(documents,database=self.database)
@@ -629,7 +632,8 @@ def build_graph(services,*,checkpointer=None):
 
     def catalog(state):
         result=[]if services.scope=='legacy_2025_reference'else retrieve_catalog_for_needs(
-            services.catalog,state['resolved_query'],state['query_vector'],state['interpretation']['needs'],metadata_discovery=True)
+            services.catalog,state['resolved_query'],state['query_vector'],state['interpretation']['needs'],metadata_discovery=True,
+            reranker=getattr(services,'reranker',None))
         if services.scope!='legacy_2025_reference':
             result=expand_policy_candidates(services.catalog,result,state['interpretation']['needs'],services.source_policy)
             result=expand_context_candidates(services.catalog,result,state['interpretation']['needs'],services.semantic_context,metadata_discovery=True)

@@ -20,7 +20,7 @@ from langgraph.errors import GraphInterrupt
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langsmith import tracing_context
 from rag_pensiones.graph_catalog import (canonical_hash, tokenize, retrieve_catalog_for_needs, validate_catalog,
-                                        verify_catalog_source)
+                                        verify_catalog_source, expand_source_object_candidates, _source_object_key)
 from rag_pensiones.graph_documents import (retrieve_documents, validate_document_corpus,
                                            verify_document_sources)
 from rag_pensiones.graph_models import GraphStageClient, MAX_CHAT_REQUEST_BYTES,structural_response_schema,prompt_context_bound
@@ -362,7 +362,7 @@ def _chat(services,stage,payload,schema):
     if sum(c['endpoint']=='/api/chat'for c in services.client.calls)>=10:
         raise ValueError('Bounded graph chat budget exhausted')
     payload=copy.deepcopy(payload)
-    if 'candidates'in payload:
+    if 'candidates'in payload and stage!='grounding':
         selected={cid for selection in payload.get('plan',{}).get('selections',[])for cid in selection['card_ids']}
         selected|={c['card_id']for c in payload['candidates']if c.get('source_policy')}
         best={}
@@ -371,15 +371,31 @@ def _chat(services,stage,payload,schema):
                 key=(nid,c.get('book'));rank=c.get('need_ranks',{}).get(nid,10**9+index)
                 if key not in best or rank<best[key][0]:best[key]=(rank,c['card_id'])
         selected|={cid for _,cid in best.values()}
+        protected_keys={_source_object_key(c)for c in payload['candidates']if c['card_id']in selected}
         payload['omitted_candidate_count']=0
+        payload['omitted_object_count']=0
+        payload['omitted_source_objects']=0
         while not _payload_fits(stage,payload,schema):
             counts={(nid,c.get('book')):sum(nid in other.get('matched_need_ids',[])
                     and other.get('book')==c.get('book') for other in payload['candidates'])
                     for c in payload['candidates']for nid in c.get('matched_need_ids',[])}
-            removable=[i for i,c in enumerate(payload['candidates'])if c['card_id']not in selected
-                       and all(counts[nid,c.get('book')]>1 for nid in c.get('matched_need_ids',[]))]
-            if not removable:break
-            payload['candidates'].pop(removable[-1]);payload['omitted_candidate_count']+=1
+            removable_keys=[]
+            for k in dict.fromkeys(_source_object_key(c)for c in payload['candidates']):
+                if k in protected_keys:continue
+                group=[c for c in payload['candidates']if _source_object_key(c)==k]
+                if all(counts.get((nid,c.get('book')),0)>sum(1 for g in group if nid in g.get('matched_need_ids',[])and g.get('book')==c.get('book'))
+                       for c in group for nid in c.get('matched_need_ids',[])):
+                    removable_keys.append(k)
+            if not removable_keys:
+                if not _payload_fits(stage,payload,schema):
+                    raise ValueError('Protected candidates exceed byte budget')
+                break
+            target_key=removable_keys[-1]
+            removed=[c for c in payload['candidates']if _source_object_key(c)==target_key]
+            payload['candidates']=[c for c in payload['candidates']if _source_object_key(c)!=target_key]
+            payload['omitted_candidate_count']+=len(removed)
+            payload['omitted_object_count']+=1
+            payload['omitted_source_objects']+=1
     if 'passages'in payload:
         # Only source identifiers/book and an authentic excerpt are needed by the
         # model. Full canonical passages remain in retrieval/provenance/replay.
@@ -512,8 +528,8 @@ def _plan_one_need(services,state,need,rows,feedback=''):
     if edition_blocked:summary['selection_blocked_reason']='publication_edition_missing'
     if unresolved:summary['scenario_binding']='not_linkable_to_offered_labels'
     if unresolved_horizon:summary['horizon_binding']='not_linkable_to_offered_years'
-    protected={next(c['card_id']for c in rows if c['book']==book)for book in {c['book']for c in rows}}
     before=len(rows)
+    before_objects=len({_source_object_key(c)for c in rows})
     while True:
         caps=[]if unresolved or unresolved_horizon else compile_capabilities(need,rows,services)
         if edition_blocked:
@@ -521,6 +537,8 @@ def _plan_one_need(services,state,need,rows,feedback=''):
             protected={next(c['card_id']for c in rows if c['book']==book and c['card_id']in cap_sources)
                 if any(c['book']==book and c['card_id']in cap_sources for c in rows)else
                 next(c['card_id']for c in rows if c['book']==book)for book in books}
+        else:
+            protected={next(c['card_id']for c in rows if c['book']==book)for book in {c['book']for c in rows}}
         # A sole forecast choice cannot silently resolve multiple report editions.
         selectable=[]if edition_blocked else caps
         available_axes=list(axes)
@@ -533,16 +551,24 @@ def _plan_one_need(services,state,need,rows,feedback=''):
         preview=capability_options(caps,rows,registry,query=state['query'],context=state.get('effective_context'))if edition_blocked else[]
         for option in preview:option.pop('capability_id')
         scoped={k:v for k,v in need.items()if k!='query_span'}
+        omitted_rows=before-len(rows)
+        omitted_objs=before_objects-len({_source_object_key(c)for c in rows})
+        summary['omitted_row_count']=omitted_rows
+        summary['omitted_object_count']=omitted_objs
         payload=dict(query=state['query'],context=state.get('effective_context'),need=scoped,cap_options=capwire,
-                     scope_summary=summary,feedback=feedback,omitted_capability_sources=before-len(rows),omitted_candidate_count=0)
+                     scope_summary=summary,feedback=feedback,omitted_capability_sources=omitted_rows,
+                     omitted_candidate_count=omitted_rows,omitted_source_objects=omitted_objs,
+                     omitted_object_count=omitted_objs)
         if unresolved_rows:
             payload['unresolved_sources']=[dict(card_id=c['card_id'],book=c['book'],measure=c.get('metric'),series=c.get('series'),
                 unit=c['unit'],period_kind=c.get('period_kind'),period_range=[min(c['periods']),max(c['periods'])]if c.get('periods')else[])for c in unresolved_rows]
         if edition_blocked:payload['clarification_candidates']=preview
         if _payload_fits('plan_need',payload,schema):break
-        removable=[i for i,c in enumerate(rows)if c['card_id']not in protected]
-        if not removable:raise ValueError('Protected capability sources exceed byte budget')
-        rows.pop(removable[-1])
+        protected_keys={_source_object_key(c)for c in rows if c['card_id']in protected}
+        removable_keys=[k for k in dict.fromkeys(_source_object_key(c)for c in rows)if k not in protected_keys]
+        if not removable_keys:raise ValueError('Protected capability sources exceed byte budget')
+        target_key=removable_keys[-1]
+        rows=[c for c in rows if _source_object_key(c)!=target_key]
     if not selectable and not available_axes:
         decision=dict(action='unavailable',reason='No se ha podido vincular el horizonte a los años ofrecidos.'if unresolved_horizon else
             'No se ha podido vincular el escenario a las etiquetas ofrecidas.'if unresolved else'No compatible certified capability for this need')
@@ -569,6 +595,7 @@ def _grounding_batch(services,state):
             protected.add(next(c['card_id']for c in offered['sources']if c['book']==book))
         if offered['exact_series']is not None:
             protected.add(next(c['card_id']for c in offered['sources']if c['series']==offered['exact_series']))
+    before_objects=len({_source_object_key(c)for c in rows})
     while True:
         inputs=grounding_inputs(original,rows,query,context);sources={};needs={}
         originals={n['need_id']:n for n in original['needs']}
@@ -581,12 +608,17 @@ def _grounding_batch(services,state):
                 row=sources.setdefault(source['card_id'],dict(copy.deepcopy(source),matched_need_ids=[]))
                 row['matched_need_ids'].append(nid)
         schema=grounding_schema(inputs)
+        omitted_rows=before-len(rows)
+        omitted_objs=before_objects-len({_source_object_key(c)for c in rows})
         payload=dict(query=query,context=context,needs=needs,candidates=list(sources.values()),
-            omitted_grounding_sources=before-len(rows),omitted_candidate_count=0)
+            omitted_grounding_sources=omitted_rows,omitted_candidate_count=omitted_rows,
+            omitted_source_objects=omitted_objs,omitted_object_count=omitted_objs)
         if _payload_fits('grounding',payload,schema):break
-        removable=[i for i,c in enumerate(rows)if c['card_id']not in protected]
-        if not removable:raise ValueError('Protected grounding metadata exceed byte budget')
-        rows.pop(removable[-1])
+        protected_keys={_source_object_key(c)for c in rows if c['card_id']in protected}
+        removable_keys=[k for k in dict.fromkeys(_source_object_key(c)for c in rows)if k not in protected_keys]
+        if not removable_keys:raise ValueError('Protected grounding metadata exceed byte budget')
+        target_key=removable_keys[-1]
+        rows=[c for c in rows if _source_object_key(c)!=target_key]
     raw=_chat(services,'grounding',payload,schema)
     actual=json.loads(services.client.calls[-1]['request']['messages'][1]['content'])
     if actual['needs']!=needs or unpack_candidate_table(actual['candidates'])!=list(sources.values()):
@@ -637,6 +669,7 @@ def build_graph(services,*,checkpointer=None):
         if services.scope!='legacy_2025_reference':
             result=expand_policy_candidates(services.catalog,result,state['interpretation']['needs'],services.source_policy)
             result=expand_context_candidates(services.catalog,result,state['interpretation']['needs'],services.semantic_context,metadata_discovery=True)
+            result=expand_source_object_candidates(services.catalog,result,state['interpretation']['needs'])
         return {'candidates':result}
 
     def documents(state):
@@ -650,6 +683,7 @@ def build_graph(services,*,checkpointer=None):
         candidates=expand_policy_candidates(services.catalog,state['candidates'],interpretation['needs'],services.source_policy)
         if services.scope!='legacy_2025_reference':
             candidates=expand_context_candidates(services.catalog,candidates,interpretation['needs'],services.semantic_context)
+            candidates=expand_source_object_candidates(services.catalog,candidates,interpretation['needs'])
         return dict(interpretation=interpretation,grounding_records=records,grounding_raw=raw,candidates=candidates)
 
     def plan(state):

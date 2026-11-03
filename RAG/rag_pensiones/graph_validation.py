@@ -120,7 +120,8 @@ def runtime_manifest(services):
         result['source_forecast_default']=FORECAST_DEFAULT_POLICY
     else:result['semantic_context']=None
     result['retrieval_diversification']=dict(enabled=True,pool_size=50,final_per_need=10,
-        policy='one_per_source_object_then_score_fill')
+        policy='one_per_source_object_then_score_fill',row_expansion='eligible_source_object_siblings',
+        budget_pruning='whole_source_objects')
     if getattr(services,'reranker',None)is not None:
         from rag_pensiones.graph_reranker import MODEL,REVISION,MODEL_DIR
         result['reranker']=dict(model=MODEL,revision=REVISION,device='cpu',pool_size=50,final_per_need=10,

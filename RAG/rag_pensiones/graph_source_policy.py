@@ -172,7 +172,7 @@ def add_policy_support(facts,interpretation,candidates,services):
                 supports.append(support);result.append(support)
             fact['source_policy_comparisons']=supports
             fact['source_policy_id']=services.source_policy['policy_id']
-            fact['source_policy_note']='Se prioriza el cuadro resumen por criterio del usuario. El gráfico publica '+', '.join(
+            fact['source_policy_note']='Se prioriza el cuadro resumen. El gráfico publica '+', '.join(
                 f"{s['value']} [{s['unit']}] ({s['source_sheet']}!{s['source_cell']}, {s['series']}, {s['period']})"for s in supports)+'. Discrepancia no explicada ni conciliada; se conservan ambos valores publicados.'
     if len(result)>80:raise ValueError('Policy support exceeds bounded result budget')
     return result

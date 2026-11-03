@@ -400,3 +400,124 @@ def derivation_operands_eligible(card,need,catalog,*,metadata_discovery=False):
     if len(rows)!=2 or any(r.get('calculation_safe')is not True or r.get('global_calculation_prohibition')is True for r in rows):return False
     return (all(rows[0].get(k)==rows[1].get(k)for k in keys)
             and all(Decimal(r['value']).is_finite()for r in rows))
+
+
+def _source_object_key(card):
+    if not card.get('block') or not card.get('source_path'):
+        return ('card', card.get('card_id'))
+    from rag_pensiones.graph_reranker import source_object
+    return source_object(card)
+
+
+def expand_source_object_candidates(catalog: dict, candidates: list[dict], needs: list[dict]) -> list[dict]:
+    """Expose structurally eligible sibling rows for diverse selected source objects."""
+    if not candidates:
+        return []
+    if not needs:
+        return copy.deepcopy(candidates)
+    candidates_copy = copy.deepcopy(candidates)
+
+    catalog_cards_by_key = defaultdict(list)
+    for card in catalog.get('cards', []):
+        catalog_cards_by_key[_source_object_key(card)].append(card)
+
+    needs_by_id = {n['need_id']: n for n in needs if n.get('need_id')}
+
+    object_cards = defaultdict(list)
+    object_seen_ids = defaultdict(set)
+    object_needs = defaultdict(set)
+    object_first_rep = {}
+    object_order = []
+
+    for card in candidates_copy:
+        cid = card.get('card_id')
+        k = _source_object_key(card)
+        if k not in object_cards:
+            object_order.append(k)
+            object_first_rep[k] = card
+
+        card_nids = card.get('matched_need_ids')
+        if card_nids is None or len(card_nids) == 0:
+            card_nids = [n['need_id'] for n in needs if candidate_matches_need(card, n, metadata_discovery=True)
+                         and derivation_operands_eligible(card, n, catalog, metadata_discovery=True)]
+            card['matched_need_ids'] = list(dict.fromkeys(card_nids))
+
+        object_needs[k].update(card['matched_need_ids'])
+
+        if cid in object_seen_ids[k]:
+            existing = next(c for c in object_cards[k] if c.get('card_id') == cid)
+            for nid in card['matched_need_ids']:
+                if nid not in existing['matched_need_ids']:
+                    existing['matched_need_ids'].append(nid)
+            if 'need_retrieval' in card:
+                existing_nids = {r['need_id'] for r in existing.get('need_retrieval', []) if 'need_id' in r}
+                for nr in card['need_retrieval']:
+                    if nr.get('need_id') not in existing_nids:
+                        existing.setdefault('need_retrieval', []).append(copy.deepcopy(nr))
+        else:
+            object_seen_ids[k].add(cid)
+            object_cards[k].append(card)
+
+    result = []
+    all_seen_cids = set()
+
+    for k in object_order:
+        rep = object_first_rep[k]
+        active_need_ids = sorted(object_needs[k])
+        active_needs = [needs_by_id[nid] for nid in active_need_ids if nid in needs_by_id]
+
+        for c in object_cards[k]:
+            c['matched_need_ids']=list(dict.fromkeys(c.get('matched_need_ids',[])+[
+                n['need_id']for n in active_needs
+                if candidate_matches_need(c,n,metadata_discovery=True)
+                and derivation_operands_eligible(c,n,catalog,metadata_discovery=True)]))
+            cid = c.get('card_id')
+            if cid not in all_seen_cids:
+                all_seen_cids.add(cid)
+                result.append(c)
+
+        if k[0] == 'card' or not active_needs:
+            continue
+
+        potential_siblings = catalog_cards_by_key.get(k, [])
+        for sibling_card in potential_siblings:
+            scid = sibling_card.get('card_id')
+            if scid in all_seen_cids:
+                continue
+
+            matched_nids = []
+            for need in active_needs:
+                if candidate_matches_need(sibling_card, need, metadata_discovery=True) and \
+                   derivation_operands_eligible(sibling_card, need, catalog, metadata_discovery=True):
+                    matched_nids.append(need['need_id'])
+
+            if not matched_nids:
+                continue
+
+            sibling = copy.deepcopy(sibling_card)
+            sibling['matched_need_ids'] = matched_nids
+
+            sibling['retrieval'] = dict(
+                mode='source_object_expansion',
+                parent_card_id=rep.get('card_id'),
+                source_object=list(k) if isinstance(k, tuple) else k,
+            )
+
+            if rep.get('need_retrieval'):
+                need_ret = []
+                for nid in matched_nids:
+                    parent=next((c for c in object_cards[k]if any(r.get('need_id')==nid for r in c.get('need_retrieval',[]))),
+                                next(c for c in object_cards[k]if nid in c.get('matched_need_ids',[])))
+                    p_ranks = [r['rank'] for r in parent.get('need_retrieval', []) if r.get('need_id') == nid and 'rank' in r]
+                    need_ret.append(dict(
+                        need_id=nid,
+                        rank=p_ranks[0] if p_ranks else 10**6,
+                        parent_card_id=parent.get('card_id'),
+                        expansion='source_object_sibling'
+                    ))
+                sibling['need_retrieval'] = need_ret
+
+            all_seen_cids.add(scid)
+            result.append(sibling)
+
+    return result

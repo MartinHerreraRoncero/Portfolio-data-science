@@ -1,0 +1,144 @@
+{
+  "report_name": "source_object_sizes",
+  "date": "2026-11-03",
+  "concept_distinction": {
+    "card_row": "A semantic catalog series card (CatalogCard) representing an entire time-series for a specific metric, series, unit, and scope within a source object block.",
+    "excel_physical_row": "A physical row in an official source Excel spreadsheet containing individual observations/periods. Multiple observation rows reconcile into card rows.",
+    "source_object": "A certified tabular or graphical block within a source document, grouping related semantic card rows."
+  },
+  "total_source_objects": 270,
+  "total_card_rows": 1314,
+  "catalog_hash": "c383df62f9fb0fdb83207a764f8de119eb6106152c000c72df19b6d0f8fc63ef",
+  "metadata_size_note": "Unpacked descriptive metadata estimate, not actual compressed model request size.",
+  "stats": {
+    "count": 270,
+    "p50": 4.0,
+    "p90": 9.0,
+    "p95": 12.0,
+    "max": 52,
+    "min": 1,
+    "mean": 4.87
+  },
+  "top15": [
+    {
+      "rank": 1,
+      "book": "2026",
+      "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "block": "Cuadro 11",
+      "card_row_count": 52,
+      "metadata_utf8_bytes": 29607
+    },
+    {
+      "rank": 2,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "RE 1. Cuadro 1",
+      "card_row_count": 26,
+      "metadata_utf8_bytes": 14162
+    },
+    {
+      "rank": 3,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 8 ",
+      "card_row_count": 18,
+      "metadata_utf8_bytes": 10755
+    },
+    {
+      "rank": 4,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 9 ",
+      "card_row_count": 18,
+      "metadata_utf8_bytes": 8880
+    },
+    {
+      "rank": 5,
+      "book": "2026",
+      "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "block": "Cuadro 12",
+      "card_row_count": 18,
+      "metadata_utf8_bytes": 8304
+    },
+    {
+      "rank": 6,
+      "book": "2026",
+      "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "block": "Anexo I. Gr 14",
+      "card_row_count": 17,
+      "metadata_utf8_bytes": 9232
+    },
+    {
+      "rank": 7,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 5",
+      "card_row_count": 15,
+      "metadata_utf8_bytes": 9072
+    },
+    {
+      "rank": 8,
+      "book": "2026",
+      "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "block": "Cuadro 5",
+      "card_row_count": 15,
+      "metadata_utf8_bytes": 9092
+    },
+    {
+      "rank": 9,
+      "book": "2026",
+      "path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "block": "Cuadro 7",
+      "card_row_count": 15,
+      "metadata_utf8_bytes": 8822
+    },
+    {
+      "rank": 10,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 10 ",
+      "card_row_count": 14,
+      "metadata_utf8_bytes": 9350
+    },
+    {
+      "rank": 11,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 24",
+      "card_row_count": 14,
+      "metadata_utf8_bytes": 7539
+    },
+    {
+      "rank": 12,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 25",
+      "card_row_count": 14,
+      "metadata_utf8_bytes": 7175
+    },
+    {
+      "rank": 13,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 7 ",
+      "card_row_count": 14,
+      "metadata_utf8_bytes": 6888
+    },
+    {
+      "rank": 14,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro  23 ",
+      "card_row_count": 12,
+      "metadata_utf8_bytes": 6613
+    },
+    {
+      "rank": 15,
+      "book": "2025",
+      "path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+      "block": "Cuadro 11",
+      "card_row_count": 12,
+      "metadata_utf8_bytes": 8457
+    }
+  ]
+}

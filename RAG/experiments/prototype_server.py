@@ -86,6 +86,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('X-Content-Type-Options','nosniff');self.end_headers();self.wfile.write(data)
 
     def do_GET(self):
+        if self.headers.get('Host','').casefold() not in {'127.0.0.1:8765','localhost:8765'}:
+            return self.respond(403,dict(error='Host local requerido'))
         path=urlsplit(self.path).path
         if path=='/':
             from rag_pensiones.graph_types import CHAT_MODEL

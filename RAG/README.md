@@ -6,7 +6,14 @@ Prototipo local con interfaz de chat para consultar documentos, tablas y gráfic
 
 Requiere Python 3.11 y Ollama instalado y en ejecución en `http://127.0.0.1:11434`. Los modelos se descargan aparte; no se necesitan claves de API. Requiere memoria suficiente para un modelo 9B Q8 y embeddings 4B; el consumo y la latencia dependen del equipo y no se ha certificado un mínimo de hardware.
 
-Desde la carpeta `RAG` del repositorio, en PowerShell:
+Descargar el ZIP del repositorio y extraerlo, o clonarlo con Git:
+
+```powershell
+git clone https://github.com/MartinHerreraRoncero/Portfolio-data-science.git
+cd Portfolio-data-science/RAG
+```
+
+Comprobar que `python --version` muestra Python 3.11. Desde esta carpeta `RAG`, en PowerShell:
 
 ```powershell
 python -m venv .venv
@@ -151,6 +158,14 @@ Una petición de consulta contiene `query` y puede incluir `conversation_id` y `
 La instantánea contiene 1.314 fichas, 42.880 observaciones y 440 fragmentos documentales. No es necesario recalcular embeddings. Los recursos comprimidos se restauran en sus rutas originales; algunas están bajo `evaluation/` por compatibilidad del código, pero contienen la base y certificados imprescindibles, no una batería de pruebas. Algunos módulos de curación permanecen en `experiments/` porque el runtime importa sus definiciones: no son versiones alternativas del sistema.
 
 Se excluyen tests, resultados de experimentos, vídeos, versiones anteriores, entornos virtuales, pesos de modelos y conversaciones guardadas. Esta distribución permite consultar la instantánea incluida; no reproduce todo el proceso histórico de construcción del corpus.
+
+## Reproducibilidad y seguridad local
+
+Se comprobó la instalación en una copia nueva descargada de GitHub, con un entorno virtual independiente de Python 3.11 en Windows: descarga pública de las dependencias, `pip check`, restauración de los doce recursos, carga de la interfaz y una consulta real a través del backend HTTP. Los modelos ya instalados se contrastaron con los manifiestos públicos de Ollama y sus digests coinciden con los exigidos. No se necesita ningún archivo privado del equipo del autor; Python, Ollama y la descarga separada de los modelos son prerrequisitos. Esta comprobación no certifica otros sistemas operativos ni equipos con memoria insuficiente, ni evalúa la calidad general de las respuestas.
+
+El servidor sólo escucha en `127.0.0.1:8765`; las lecturas exigen un `Host` local permitido y las escrituras comprueban además `Origin`. No ofrece autenticación entre usuarios del mismo equipo: los informes y conversaciones deben permanecer en un entorno local de confianza. Los textos del modelo se insertan en la interfaz mediante `textContent`, los identificadores de informes se validan como UUID y los procesos se lanzan sin shell. El cliente de Ollama rechaza endpoints externos, proxies y redirecciones.
+
+El paquete no necesita tokens ni credenciales. No publicar `outputs/`, archivos `.env`, checkpoints ni conversaciones: pueden contener preguntas e información del usuario. La revisión estática y la comprobación de dependencias reducen riesgos, pero no constituyen una garantía absoluta de seguridad. La auditoría de dependencias del 4 de noviembre de 2026 detectó 26 avisos conocidos en `pypdf==6.16.1`. Se probó la versión corregida 6.21.4, pero cambia la extracción textual y la autenticación rechaza el corpus existente; se conserva la versión compatible, sin desactivar las guardas. Actualizarla requiere reconstruir y validar los recursos afectados. El riesgo de documentos manipulados está acotado porque los PDF de la instantánea se autentican mediante hashes antes de leerse y la interfaz no permite subir documentos arbitrarios, pero los avisos siguen pendientes.
 
 ## Alcance y límites
 

@@ -37,7 +37,7 @@ TTL_MARKET_SECONDS = 24 * 3600        # 24 horas (diario)
 TTL_NEWS_SECONDS = 24 * 3600          # 24 horas (diario)
 TTL_MACRO_SECONDS = 24 * 3600         # 24 horas (diario global)
 
-FRED_API_KEY = os.getenv("FED_API_KEY", "3db6890dafdd5256345433bc73dfebe1")
+FRED_API_KEY = os.getenv("FED_API_KEY", "")
 
 # Singletons para Modelos NLP y GMM
 _finbert_tokenizer = None

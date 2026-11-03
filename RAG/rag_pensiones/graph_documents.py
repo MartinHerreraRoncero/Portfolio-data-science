@@ -161,7 +161,7 @@ def attach_document_embeddings(corpus, embeddings):
     return result
 
 
-def retrieve_documents(corpus, query, query_vector=None, top_k=6):
+def retrieve_documents(corpus, query, query_vector=None, top_k=6, *, books=None):
     validate_document_corpus(corpus)
     if not isinstance(query, str) or not query.strip() or type(top_k) is not int or top_k < 1:
         raise ValueError('Invalid documentary query')
@@ -186,6 +186,7 @@ def retrieve_documents(corpus, query, query_vector=None, top_k=6):
     df = Counter(t for doc in docs for t in set(doc))
     scores = []
     for chunk, doc in zip(corpus['chunks'], docs):
+        if books is not None and chunk['book']not in books:continue
         tf=Counter(doc)
         score=sum(math.log(1+(n-df[t]+.5)/(df[t]+.5))*tf[t]*2.5/(tf[t]+1.5*(.25+.75*len(doc)/average)) for t in sorted(set(tokenize(query))))
         cosine=sum(a*b for a,b in zip(query_vector,vectors[chunk['source_id']])) if vectors is not None else None

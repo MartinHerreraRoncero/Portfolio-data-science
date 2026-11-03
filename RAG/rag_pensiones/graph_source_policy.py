@@ -83,20 +83,18 @@ def load_source_policy(catalog,database):
     return policy
 
 
-def _entries_for_need(policy,need,catalog):
-    """No inference from the free-text question and no extension to nearby years."""
+def _entries_for_need(policy,need,catalog,*,candidate_card_ids=None):
+    """Bind reviewed precedence to eligible source members, never metric wording."""
+    if not candidate_card_ids:return []
+    bound=set(candidate_card_ids)
     if (need.get('kind')!='data' or need.get('source_block') is not None
         or need.get('population')=='individual' or need.get('unit')not in {'unspecified','percent_gdp'}):return []
     cards={c['card_id']:c for c in catalog['cards']};result=[]
     for group in policy['groups']:
         preferred=cards[group['preferred_card_id']]
         if not candidate_matches_need(preferred,need):continue
-        wanted=set(tokenize(need.get('metric','')))
-        anchors=set(tokenize(preferred['metric']))
-        allowed=set(tokenize(group['canonical_metric']+' '+preferred['metric']+' '+
-                    ' '.join(cards[c]['metric']for c in group['comparison_card_ids'])+' '+
-                    'como proporción del producto interior bruto peso futuro de las sobre el PIB porcentaje previsto público total agregado'))
-        if not anchors or not anchors<=wanted or not wanted<=allowed:continue
+        related={group['preferred_card_id'],*group['comparison_card_ids']}
+        if not bound & related:continue
         identity=' '.join(str(preferred.get(k)or'')for k in ['metric','series','scope','title']).casefold()
         if any(term.casefold()not in identity for term in need.get('scope_terms',[])):continue
         if need.get('series') is not None and canonical_block(need['series'])!=canonical_block(preferred['series']):continue
@@ -113,7 +111,9 @@ def expand_policy_candidates(catalog,candidates,needs,policy):
     result=copy.deepcopy(candidates);byid={c['card_id']:c for c in result}
     allcards={c['card_id']:c for c in catalog['cards']}
     for need in needs:
-        for group,entry in _entries_for_need(policy,need,catalog):
+        bound={c['card_id']for c in candidates if need['need_id']in c.get('matched_need_ids',[])
+               and candidate_matches_need(c,need)}
+        for group,entry in _entries_for_need(policy,need,catalog,candidate_card_ids=bound):
             related={group['preferred_card_id'],*group['comparison_card_ids']}
             # A reviewed relation is followed only after a member was retrieved
             # for this need; it never selects a policy by keywords or expected value.
@@ -145,7 +145,7 @@ def enforce_source_policy(plan,interpretation,candidates,policy,catalog):
         if selection['operation']!='lookup':continue
         applicable={a['group_id']:a for c in candidates for a in c.get('source_policy',[])
                     if a['need_id']==need['need_id']and a['period']in selection['periods']}
-        for group,entry in _entries_for_need(policy,need,catalog):
+        for group,entry in _entries_for_need(policy,need,catalog,candidate_card_ids=selection['card_ids']):
             if group['group_id']not in applicable or entry['period']not in selection['periods']:continue
             if not selection['card_ids']:continue
             if not set(selection['card_ids'])&{group['preferred_card_id'],*group['comparison_card_ids']}:continue
@@ -161,7 +161,7 @@ def add_policy_support(facts,interpretation,candidates,services):
         fact=copy.deepcopy(original);result.append(fact)
         if fact.get('derived'):continue
         need=needs[fact['need_id']]
-        for group,entry in _entries_for_need(services.source_policy,need,services.catalog):
+        for group,entry in _entries_for_need(services.source_policy,need,services.catalog,candidate_card_ids=[fact['card_id']]):
             if fact['observation_id']!=entry['preferred_observation_id']:continue
             supports=[]
             for record in entry['comparison_records']:
@@ -172,7 +172,7 @@ def add_policy_support(facts,interpretation,candidates,services):
                 supports.append(support);result.append(support)
             fact['source_policy_comparisons']=supports
             fact['source_policy_id']=services.source_policy['policy_id']
-            fact['source_policy_note']='Se prioriza el cuadro resumen por criterio del usuario. El gráfico publica '+', '.join(
+            fact['source_policy_note']='Se prioriza el cuadro resumen. El gráfico publica '+', '.join(
                 f"{s['value']} [{s['unit']}] ({s['source_sheet']}!{s['source_cell']}, {s['series']}, {s['period']})"for s in supports)+'. Discrepancia no explicada ni conciliada; se conservan ambos valores publicados.'
     if len(result)>80:raise ValueError('Policy support exceeds bounded result budget')
     return result

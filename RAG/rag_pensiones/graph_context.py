@@ -63,6 +63,7 @@ def compact_semantic_context(card,registry):
     if any(card.get(key)!=value for key,value in entry['raw'].items()):raise ValueError('Candidate differs from reviewed semantic source')
     context=entry['proposed'];result=dict(source_scope=context['aggregation_role'],semantic_label=context['semantic_label'],
                                         series_role=context['series_role'])
+    if 'parent_card_ids'in context:result['parent_card_ids']=copy.deepcopy(context['parent_card_ids'])
     if context.get('scope_qualifier'):result['scope_qualifier']=context['scope_qualifier']
     if context.get('context_forecast_vintage')and not re.search(r'\d{4}',str(card.get('series',''))):
         result['forecast_vintage']=context['context_forecast_vintage']
@@ -76,7 +77,7 @@ def prefer_current_forecast(need,rows,registry):
     This runs after grounding. Unknown roles and explicitly requested series or
     objects remain eligible; a base lacking the requested horizon has no veto.
     """
-    if registry is None or need.get('book')is None or need.get('series')is not None or need.get('source_block')is not None:return rows
+    if registry is None or need.get('series')is not None or need.get('source_block')is not None:return rows
     entries=_entries(registry)
     def family(card):
         entry=entries.get(card['card_id'])
@@ -84,7 +85,7 @@ def prefer_current_forecast(need,rows,registry):
         if any(card.get(key)!=value for key,value in entry['raw'].items()):raise ValueError('Candidate differs from reviewed forecast source')
         context=entry['proposed']
         return (context['semantic_label'],card.get('book'),card.get('unit'),card.get('quantity_role'),card.get('period_kind'))
-    bases=[card for card in rows if card.get('book')==need['book']and card['card_id']in entries
+    bases=[card for card in rows if (need.get('book')is None or card.get('book')==need['book'])and card['card_id']in entries
            and entries[card['card_id']]['proposed'].get('forecast_role')=='report_base'
            and candidate_matches_need(card,need)]
     result=[]
@@ -137,20 +138,13 @@ def _user_history(context):
 
 
 def subtotal_scope_allowed(card,registry,query=None,context=None):
-    entry=_entries(registry).get(card['card_id'])
-    if entry is None or entry['proposed']['aggregation_role']!='subtotal':return True
-    selector=entry['raw']['series']if entry['proposed']['series_role']=='model_group'else entry['raw']['metric']
-    normal=lambda text:[word[:-1]if len(word)>4 and word.endswith('s')else word for word in tokenize(text)]
-    wanted=normal(selector)
-    for text in ([query]if isinstance(query,str)else[])+_user_history(context):
-        words=normal(text)
-        for index in range(len(words)-len(wanted)+1):
-            if words[index:index+len(wanted)]!=wanted:continue
-            before=index-1
-            while before>=0 and words[before]in {'el','la','los','las','un','una'}:before-=1
-            if wanted[0]not in {'no','sin'}and before>=0 and words[before]in {'no','sin'}:continue
-            return True
-    return False
+    """Eligibility is metadata-driven; semantic scope is judged by the planner.
+
+    Query wording never hides a certified subtotal. Preserve registry and raw
+    source binding validation, without claiming that this proves user intent.
+    """
+    compact_semantic_context(card,registry)
+    return True
 
 
 def enforce_context_scope(plan,candidates,registry,query=None,context=None):
@@ -184,9 +178,6 @@ def source_measure_view(card,semantic_context,*,query=None,context=None):
         row[key]=copy.deepcopy(card.get(key))
     row['series_role']=semantic_context['series_role']if semantic_context is not None else None
     row['semantic_context']=copy.deepcopy(semantic_context)
-    alias=' '.join(tokenize(card['metric']))
-    if (query is None or semantic_context is None or(alias and any(
-        ' '+alias+' 'in ' '+' '.join(tokenize(text))+' 'for text in [query,*_user_history(context)]))):
-        row['published_measure_name']=card['metric']
+    row['published_measure_name']=card['metric']
     if semantic_context is None:row['container_title']=card.get('title')
     return row

@@ -70,7 +70,8 @@ def check_shape(value, schema):
         for item in value:
             check_shape(item,schema.get('items',{}))
     elif isinstance(value,str):
-        if len(value)<schema.get('minLength',0) or len(value)>schema.get('maxLength',100000):
+        if (len(value)<schema.get('minLength',0)
+                or ('maxLength'in schema and len(value)>schema['maxLength'])):
             raise InvalidPlan('Invalid JSON string length')
     return value
 
@@ -118,6 +119,14 @@ def runtime_manifest(services):
         result['semantic_context']=dict(registry_id=services.semantic_context['registry_id'],path=CONTEXT_PATH.relative_to(ROOT).as_posix(),sha256=CONTEXT_SHA256)
         result['source_forecast_default']=FORECAST_DEFAULT_POLICY
     else:result['semantic_context']=None
+    result['retrieval_diversification']=dict(enabled=True,pool_size=50,final_per_need=10,
+        policy='one_per_source_object_then_score_fill',row_expansion='eligible_source_object_siblings',
+        budget_pruning='whole_source_objects')
+    if getattr(services,'reranker',None)is not None:
+        from rag_pensiones.graph_reranker import MODEL,REVISION,MODEL_DIR
+        result['reranker']=dict(model=MODEL,revision=REVISION,device='cpu',pool_size=50,final_per_need=10,
+            query_uses_interpretation=True,diversity_policy='one_per_source_object_then_score_fill',
+            verified_files=json.loads((MODEL_DIR/'verified_files.json').read_text(encoding='utf-8')))
     result['manifest_hash']=canonical_hash(result)
     return result
 
@@ -291,15 +300,33 @@ def numeric_claim(fact):
 
 
 def align_literal_quote(quote,canonical_passage):
-    """Locate through whitespace equivalence, then restore exact source characters."""
+    """Align layout whitespace only; restore an exact source substring and offsets."""
     if not isinstance(quote,str)or not isinstance(canonical_passage,str):raise InvalidPlan('Invalid quote text')
-    normalized=' '.join(quote.split())
+    def normalize(text):
+        characters=[];offsets=[];punctuation='.,;:!?%()[]{}«»'
+        for match in re.finditer(r'\s+|\S',text):
+            token=match.group(0)
+            if token.isspace():
+                before=text[:match.start()].rstrip();after=text[match.end():].lstrip()
+                left=before[-1:]or'';right=after[:1]or''
+                decimal=((left in {'.',','}and before[:-1].rstrip()[-1:].isdigit()and right.isdigit())or
+                         (right in {'.',','}and left.isdigit()and after[1:].lstrip()[:1].isdigit()))
+                if not decimal and((left and left in punctuation)or(right and right in punctuation)):continue
+                token=' '
+            characters.append(token);offsets.append((match.start(),match.end()))
+        return ''.join(characters),offsets
+    normalized,_=normalize(quote.strip())
     if not normalized:raise TextContentRejection('Empty quote')
-    characters=[];offsets=[]
-    for match in re.finditer(r'\s+|\S',canonical_passage):
-        characters.append(' 'if match.group(0).isspace()else match.group(0))
-        offsets.append((match.start(),match.end()))
-    index=''.join(characters).find(normalized)
+    passage,offsets=normalize(canonical_passage);index=passage.find(normalized)
+    while index>=0:
+        end_index=index+len(normalized);left=passage[index-1:index]if index else'';right=passage[end_index:end_index+1]
+        partial_word=((normalized[0].isalnum()and(left.isalnum()or left=='_'))or
+                      (normalized[-1].isalnum()and(right.isalnum()or right=='_')))
+        partial_number=(normalized[0].isdigit()and left in {'.',',','+','-'}and
+                        (left in {'+','-'}or passage[max(0,index-2):index-1].isdigit()))
+        partial_number|=normalized[-1].isdigit()and right in {'.',','}and passage[end_index+1:end_index+2].isdigit()
+        if not partial_word and not partial_number:break
+        index=passage.find(normalized,index+1)
     if index<0:raise TextContentRejection('Quote outside retrieved canonical passage')
     start=offsets[index][0];end=offsets[index+len(normalized)-1][1]
     return dict(quote=canonical_passage[start:end],start_char=start,end_char=end)
@@ -309,7 +336,7 @@ def validate_text_claims(claims, needs, documents, *, hybrid=False):
     source_map={d['source_id']:d for d in documents}
     need_map={n['need_id']:n for n in needs if n['kind']=='text'}
     for claim in claims:
-        if claim['need_id'] not in need_map:raise InvalidPlan('Text claim outside a textual need')
+        if claim['need_id'] not in need_map:raise TextContentRejection('Text claim outside a textual need',code='unknown_need_id')
         if hybrid and contains_financial_quantity(claim['text']):
             raise TextContentRejection('Hybrid text must explain causes without financial figures or percentages',code='hybrid_financial_quantity')
         if not claim['text'].strip() or not claim['evidence']:
@@ -363,7 +390,7 @@ def replay_graph_report(report, *, services=None):
     # asset identities while replacing only the inference transport.
     replay_services=copy.copy(services)
     replay_services.client=GraphStageClient(transport=ReplayTransport())
-    replayed=answer_graph(report['query'],context=report.get('effective_context',report['context']),services=replay_services,
+    replayed=answer_graph(report['query'],_execution_query=report.get('execution_query'),context=report.get('execution_context',report.get('effective_context',report['context'])),services=replay_services,
                           thread_id=report['session_id'])
     if calls:
         raise ValueError('Replay left unused model calls')
@@ -372,7 +399,7 @@ def replay_graph_report(report, *, services=None):
         for field in ['stage','attempted','error','digest_before','digest_after','parsed_response']:
             if canonical_hash(original.get(field))!=canonical_hash(reproduced.get(field)):
                 raise ValueError('Replay stage validation differs: '+field)
-    for key in ['resolved_query','status','publication','retrieval','plan','numeric_facts','manifest',
+    for key in [k for k in ['execution_query','execution_context','standalone_query','conversation_resolution']if k in report]+['resolved_query','status','publication','retrieval','plan','numeric_facts','manifest',
                 'raw_interpretation','raw_intent_audit','interpretation','planning_decisions',
                 'offered_capabilities','ambiguity_summaries','checker_verdicts','need_outcomes','text_rejections','text_coverage',
                 'grounding_raw','grounding_records','checked_numeric_results','raw_result_checks']:

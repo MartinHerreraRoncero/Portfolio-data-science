@@ -13,3 +13,12 @@ Airef/
 !runtime/**/
 !runtime/**/*.gz
 !runtime/manifest.json
+*.mp4
+*.mov
+*.avi
+*.webm
+*.mp3
+*.wav
+tests/
+work/
+tmp/

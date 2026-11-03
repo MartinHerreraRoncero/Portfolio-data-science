@@ -1,4 +1,4 @@
-"""Local-only, truthful 9B/4B transports with a shared inference permit."""
+"""Local-only, pinned chat/embedding transports with a shared inference permit."""
 import copy
 import json
 import math
@@ -8,13 +8,19 @@ from urllib.parse import urlparse
 import urllib.request
 
 from rag_pensiones.graph_types import (CHAT_DIGEST, CHAT_MODEL, CHAT_OPTIONS,
-                                       EMBED_DIGEST, EMBED_DIMENSION, EMBED_MODEL,EMBED_KEEP_ALIVE,stage_chat_settings,chat_keep_alive)
+                                       EMBED_DIGEST, EMBED_DIMENSION, EMBED_MODEL,EMBED_KEEP_ALIVE,EMBED_OPTIONS,stage_chat_settings,chat_keep_alive,
+                                       CHAT_TEMPLATE_TOKEN_RESERVE,chat_input_bound)
 from rag_pensiones.qwen_embeddings import _json, vector
 
 INFERENCE_GATE = threading.BoundedSemaphore(1)
 MAX_RESPONSE_BYTES = 16 * 1024 * 1024
-MAX_CHAT_REQUEST_BYTES = 6400
+MAX_CHAT_REQUEST_BYTES = 16 * 1024
 MAX_EMBED_INPUT_BYTES = 6400
+
+
+def prompt_context_bound(messages,options):
+    """Byte-level tokenizer upper bound, plus template and reserved output."""
+    return chat_input_bound(messages)+options['num_predict']
 
 
 def structural_response_schema(schema):
@@ -47,14 +53,14 @@ class RejectRedirects(urllib.request.HTTPRedirectHandler):
 
 
 class LocalOllamaTransport:
-    def __init__(self, base_url='http://127.0.0.1:11434', timeout=180):
+    def __init__(self, base_url='http://127.0.0.1:11434', timeout=None):
         parsed = urlparse(base_url)
         if (parsed.scheme != 'http' or parsed.hostname not in {'localhost', '127.0.0.1', '::1'}
                 or parsed.username or parsed.password or parsed.path not in {'', '/'}
                 or parsed.query or parsed.fragment):
             raise ValueError('Graph profile requires a local Ollama endpoint')
-        if isinstance(timeout, bool) or not isinstance(timeout, (int, float)) or not math.isfinite(timeout) or not 0 < timeout <= 600:
-            raise ValueError('Invalid bounded timeout')
+        if timeout is not None and (isinstance(timeout, bool) or not isinstance(timeout, (int, float)) or not math.isfinite(timeout) or timeout <= 0):
+            raise ValueError('Invalid timeout')
         self.base_url = base_url.rstrip('/')
         self.timeout = timeout
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), RejectRedirects())
@@ -73,14 +79,14 @@ class LocalOllamaTransport:
 
 
 class GraphStageClient:
-    """Every chat uses 9B; embeddings exclusively use the existing Qwen4B model.
+    """Every chat uses the pinned model; embeddings use the existing Qwen4B model.
 
     ``chat`` returns parsed JSON; raw requests and responses remain in ``calls``.
     A missing model is an error, never an instruction to pull or switch models.
     """
     def __init__(self, *, model=CHAT_MODEL, transport=None, semaphore=None):
         if model != CHAT_MODEL:
-            raise ValueError('Only the approved 9B chat model is permitted')
+            raise ValueError('Only the configured chat model is permitted')
         self.model = model
         self.transport = transport if transport is not None else LocalOllamaTransport()
         self.semaphore = semaphore if semaphore is not None else INFERENCE_GATE
@@ -146,12 +152,14 @@ class GraphStageClient:
             raise ValueError('Invalid chat messages')
         if not isinstance(schema, dict) or schema.get('type') != 'object':
             raise ValueError('Object JSON response schema required')
-        settings=stage_chat_settings(stage)
+        settings=stage_chat_settings(stage,messages)
         payload = dict(model=CHAT_MODEL, messages=copy.deepcopy(messages), format=structural_response_schema(schema),
                        stream=False, **settings, keep_alive=chat_keep_alive(stage))
         request_bytes=len(json.dumps(payload,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode())
         if request_bytes>MAX_CHAT_REQUEST_BYTES:
             raise ValueError('Graph chat input exceeds conservative full-request byte budget')
+        if prompt_context_bound(messages,settings['options'])>settings['options']['num_ctx']:
+            raise ValueError('Graph prompt exceeds conservative context bound')
         response, record = self._execute(payload, '/api/chat', stage)
         try:
             if response.get('done') is not True or response.get('done_reason') != 'stop':
@@ -185,7 +193,7 @@ class GraphStageClient:
         if any(len(t.encode()) > MAX_EMBED_INPUT_BYTES for t in texts):
             raise ValueError('Embedding input exceeds byte budget')
         payload = dict(model=EMBED_MODEL, input=list(texts), truncate=False,
-                       dimensions=EMBED_DIMENSION, keep_alive=EMBED_KEEP_ALIVE)
+                       dimensions=EMBED_DIMENSION, keep_alive=EMBED_KEEP_ALIVE,options=copy.deepcopy(EMBED_OPTIONS))
         response, record = self._execute(payload, '/api/embed', 'embedding')
         try:
             values = response.get('embeddings')

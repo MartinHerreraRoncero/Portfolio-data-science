@@ -59,16 +59,21 @@ def named_intent_schema(query,context,count):
                 required=['answer_requests'],additionalProperties=False)
 
 
-def decode_named_intent(raw,query,context=None,*,count):
+def decode_named_intent(raw,query,context=None,*,count,schema=None):
     from rag_pensiones.graph_validation import check_shape
-    check_shape(raw,named_intent_schema(query,context,count))
+    check_shape(raw,schema if schema is not None else named_intent_schema(query,context,count))
     def clean(value):
         if isinstance(value,str)and value.strip().casefold()in {'','null','none'}:return None
         return value.strip()if isinstance(value,str)else value
     from rag_pensiones.graph_context import _user_history
     from rag_pensiones.graph_catalog import tokenize
-    original_texts=[query,*_user_history(context)];hint_audit=[];needs=[]
+    original_texts=[query,*_user_history(context)];hint_audit=[];needs=[];retained={};mapping={}
     for index,item in enumerate(raw['answer_requests'],1):
+        original_id='n'+str(index)
+        identity=json.dumps(item,sort_keys=True,ensure_ascii=False,allow_nan=False)
+        if identity in retained:
+            mapping[original_id]=retained[identity];continue
+        retained[identity]=original_id;mapping[original_id]=original_id
         qualifiers=[clean(item[k])for k in ['explicit_population_group','explicit_geographic_area']]
         periods=copy.deepcopy(item['target_data_periods'])
         if item['requested_quantity']in {'mean','contribution'}and len(periods)==2 and len(set(periods))==2:
@@ -85,9 +90,10 @@ def decode_named_intent(raw,query,context=None,*,count):
             book=clean(item['report_publication_year']),series=series,
             source_block=clean(item['explicit_table_or_chart_name']),unit=WIRE_UNIT_CODES[item['requested_unit']],
             periods=periods,quantity_request=item['requested_quantity']))
-    topics=[' | '.join(str(value)for value in [n['metric'],n['book'],*n['periods'],*n['scope_terms']]
-                      if value is not None and str(value))for n in needs]
+    topics=[' | '.join(str(value)for value in [n['metric'],n['book'],n.get('series'),n.get('source_block'),n.get('unit'),n.get('population'),*n['periods'],*n['scope_terms']]
+                      if value is not None and str(value)and value!='unspecified')for n in needs]
     result=dict(resolved_query='\n'.join([query,*topics]),needs=needs)
+    result['request_coalescing']=dict(raw_count=len(raw['answer_requests']),retained_count=len(needs),original_to_retained=mapping)
     if hint_audit:result['discarded_scenario_hints']=hint_audit
     return result
 
@@ -128,15 +134,15 @@ def prepare_need_candidates(need,candidates,services):
           and('matched_need_ids'not in c or need['need_id']in c['matched_need_ids'])]
     rows.sort(key=lambda c:min((r['rank']for r in c.get('need_retrieval',[])
                                 if r['need_id']==need['need_id']),default=10**9))
-    forced=set();forced_books=set()
+    forced=set();comparisons=set()
     if need.get('quantity_request','unspecified')in {'level','unspecified'}:
-        for group,entry in _entries_for_need(services.source_policy,need,services.catalog):
-            forced.add(group['preferred_card_id']);forced_books.add(group['book'])
+        for group,entry in _entries_for_need(services.source_policy,need,services.catalog,
+                candidate_card_ids={c['card_id']for c in rows}):
+            forced.add(group['preferred_card_id']);comparisons.update(group['comparison_card_ids'])
     if forced:
-        # A known generic concept follows the reviewed registry, not whichever
-        # matching chart happened to rank first. Explicit source/series opt-outs
-        # were checked by the registry's scope matcher.
-        rows=[c for c in rows if c['book']not in forced_books or c['card_id']in forced]
+        # Only replace members of the authorized comparison family. Other
+        # measures in this publication remain candidates for semantic choice.
+        rows=[c for c in rows if c['card_id']not in comparisons or c['card_id']in forced]
         for cid in sorted(forced-{c['card_id']for c in rows}):
             source=next(c for c in services.catalog['cards']if c['card_id']==cid)
             row=copy.deepcopy(source);row.update(matched_need_ids=[need['need_id']],need_retrieval=[],
@@ -189,31 +195,22 @@ def compile_capabilities(need,offered,services):
 
 
 def material_axes(need,candidates):
-    axes=[]
-    if need.get('book')is None:axes.append('edition')
-    if need.get('unit')=='unspecified':axes.append('unit')
-    if not need.get('periods'):axes.append('period')
-    if need.get('population')=='unspecified':axes.append('population')
-    if not need.get('metric'):axes.append('metric')
-    if need.get('series')is None and len({c.get('series')for c in candidates})>1:axes.append('scenario')
-    return axes
+    # Vocabulary only: the model decides whether any clarification is necessary.
+    return ['edition','unit','period','population','metric','scenario']
 
 
-def decision_schema(capabilities,axes,*,edition_choices=None):
+def decision_schema(capabilities,axes,*,edition_choices=None,allow_explanation=False):
     def enum(values):return dict(type='string',enum=list(values))
     def obj(properties):return dict(type='object',properties=properties,required=list(properties),additionalProperties=False)
     branches=[]
     if capabilities:branches.append(obj(dict(action=enum(['select']),capability_id=enum([c['capability_id']for c in capabilities]))))
     if axes:
-        fields=['edition']if'edition'in axes else axes
-        question=dict(type='string',minLength=1,maxLength=180)
-        if fields==['edition']and edition_choices:
-            books=sorted(set(edition_choices))
-            text=('¿Quieres consultar la edición '+books[0]+' del informe?'if len(books)==1 else
-                  '¿Qué edición del informe quieres consultar: '+' o '.join(books)+'?')
-            question['enum']=[text]
+        fields=list(axes)
+        question=dict(type='string',minLength=1)
         branches.append(obj(dict(action=enum(['clarify']),field=enum(fields),question=question)))
-    branches.append(obj(dict(action=enum(['unavailable']),reason=dict(type='string',minLength=1,maxLength=180))))
+    if allow_explanation:
+        branches.append(obj(dict(action=enum(['explain']),reason=dict(type='string',minLength=1))))
+    branches.append(obj(dict(action=enum(['unavailable']),reason=dict(type='string',minLength=1))))
     return dict(type='object',oneOf=branches)
 
 
@@ -237,7 +234,7 @@ def checker_schema(actions):
         if action not in CHECKER_APPROVALS:raise ValueError('Unsupported checker action')
         properties[nid]=dict(type='object',properties=dict(
             decision=dict(type='string',enum=[CHECKER_APPROVALS[action],'rechazar']),
-            reason=dict(type='string',minLength=1,maxLength=180)),
+            reason=dict(type='string',minLength=1)),
             required=['decision','reason'],additionalProperties=False)
     return dict(type='object',properties=properties,required=list(actions),additionalProperties=False)
 
@@ -253,22 +250,33 @@ def review_schema(claims,needs):
     def obj(properties):return dict(type='object',properties=properties,required=list(properties),additionalProperties=False)
     claim_ids=[c['claim_id']for c in claims];need_ids=[n['need_id']for n in needs]
     if len(claim_ids)!=len(set(claim_ids))or len(need_ids)!=len(set(need_ids)):raise ValueError('Duplicate review identifier')
-    judgments={cid:obj(dict(supported=dict(type='boolean'),reason=dict(type='string',maxLength=180)))for cid in claim_ids}
+    judgments={cid:obj(dict(supported=dict(type='boolean'),reason=dict(type='string')))for cid in claim_ids}
     coverage={}
     for nid in need_ids:
-        has_claim=any(c['need_id']==nid for c in claims)
-        answered=dict(type='boolean')if has_claim else dict(type='boolean',enum=[False])
-        reasons=['covered','missing_from_answer','not_in_evaluated_evidence','scope_mismatch']
-        if not has_claim:reasons.remove('covered')
-        coverage[nid]=obj(dict(answered=answered,reason=dict(type='string',enum=reasons)))
+        coverage[nid]=obj(dict(requested_result_present=dict(type='boolean'),requested_scope_supported=dict(type='boolean'),
+            claim_ids=dict(type='array',items=dict(type='string'),maxItems=max(1,len(claim_ids)))))
     return obj(dict(judgments=obj(judgments),coverage=obj(coverage)))
 
 
 def decode_review(raw,claims,needs):
     from rag_pensiones.graph_validation import check_shape
     check_shape(raw,review_schema(claims,needs))
+    judgments={cid:dict(claim_id=cid,**copy.deepcopy(row))for cid,row in raw['judgments'].items()}
+    owners={claim['claim_id']:claim['need_id']for claim in claims};coverage=[]
+    for need in needs:
+        nid=need['need_id'];row=copy.deepcopy(raw['coverage'][nid]);witnesses=row['claim_ids'];issues=[]
+        positive=row['requested_result_present']and row['requested_scope_supported']
+        valid_witnesses=bool(witnesses)and len(set(witnesses))==len(witnesses)and all(
+            owners.get(cid)==nid and judgments[cid]['supported']for cid in witnesses)
+        answered=positive and valid_witnesses
+        if (witnesses or positive)and not valid_witnesses:issues.append('invalid_or_missing_owned_approved_witnesses')
+        if answered:row['reason']='covered'
+        elif not any(owner==nid for owner in owners.values())or row['requested_scope_supported']:row['reason']='missing_from_answer'
+        elif row['requested_result_present']:row['reason']='scope_mismatch'
+        else:row['reason']='not_in_evaluated_evidence'
+        coverage.append(dict(need_id=nid,**row,answered=answered,validation_issues=issues))
     return dict(judgments=[dict(claim_id=c['claim_id'],**copy.deepcopy(raw['judgments'][c['claim_id']]))for c in claims],
-                coverage=[dict(need_id=n['need_id'],**copy.deepcopy(raw['coverage'][n['need_id']]))for n in needs])
+                coverage=coverage)
 
 
 def grounding_inputs(interpretation,candidates,query,context=None):
@@ -321,9 +329,11 @@ def grounding_schema(inputs):
                   dict(type='string',enum=[exact])if exact is not None else
                   dict(type=['string','null'],enum=[*offered['series_labels'],None,unresolved_scenario_token(offered)]))
         years=offered['years']
+        target=(dict(type='null')if offered['before']['periods']and not years else
+                dict(type=['array','null'],items=dict(type='string',enum=years)if years else dict(type='string'),
+                     minItems=1 if offered['before']['periods']else 0,maxItems=len(years)))
         properties[nid]=obj(dict(scenario=scenario,
-            target_years=dict(type=['array','null'],items=dict(type='string',enum=years)if years else dict(type='string'),
-                              maxItems=len(years))))
+            target_years=target))
     return obj(properties)
 
 
@@ -338,7 +348,8 @@ def apply_grounding(interpretation,inputs,raw):
         scenario=dict(action=action,label=label if action=='bind'else None)
         if years is not None and len(set(years))!=len(years):raise InvalidPlan('Duplicate grounded horizon')
         if scenario['action']=='bind':need['series']=scenario['label']
-        elif scenario['action']=='no_restriction':need['series']=None
+        elif scenario['action']=='no_restriction'and inputs[nid]['before']['series'] is not None:
+            scenario=dict(action='unresolved',label=None)
         # unresolved deliberately preserves the original hint, never a fabricated ID.
         raw_years={p for label in need['periods']for p in metadata_period_endpoints(label)}
         missing=(raw_years-set(inputs[nid]['years']))-{need.get('book')}

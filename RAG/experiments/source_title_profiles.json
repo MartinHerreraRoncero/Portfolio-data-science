@@ -1,0 +1,103 @@
+[
+  {
+    "book": "2025",
+    "block": "Gráfico 44",
+    "universal_title": "EMPLEOS NO FINANCIEROS SIN PRTR (%PIB)",
+    "source_headers": [
+      [
+        "C3",
+        "EMPLEOS NO FINANCIEROS SIN PRTR EN % SOBRE EL PIB"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 1B",
+    "universal_title": "Diferencial en el número de hijos por mujer entre madres extranjeras y españolas",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 1. TENDENCIAS RECIENTES EN LA FECUNDIDAD DE MADRES ESPAÑOLAS Y EXTRANJERAS"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 1B. DIFERENCIAL EN EL NÚMERO DE HIJOS POR MUJER ENTRE MADRES DE NACIONALIDAD EXTRANJERA Y ESPAÑOLA"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 2A",
+    "universal_title": "Evolución del número de hijos por mujer. España en el contexto mundial y de principales países emisores",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 2. ÍNDICE COYUNTURAL DE FECUNDIDAD EN EL ENTORNO INTERNACIONAL"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 2A. EVOLUCIÓN DEL NÚMERO DE HIJOS POR MUJER. ESPAÑA EN EL CONTEXTO MUNDIAL Y DE PAÍSES EMISORES"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 12A",
+    "universal_title": "Proyecciones de la esperanza de vida (años). Al nacer",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 12. PROYECCIONES DE ESPERANZA DE VIDA (AÑOS)"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 12A. ESPERANZA DE VIDA AL NACER"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 12B",
+    "universal_title": "Proyecciones de la esperanza de vida (años). A los 65 años",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 12. PROYECCIONES DE ESPERANZA DE VIDA (AÑOS)"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 12B. ESPERANZA DE VIDA A LOS 65 AÑOS"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 15A",
+    "universal_title": "Proyecciones de flujos migratorios exteriores (miles de personas). Flujo neto de inmigración",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 15. PROYECCIONES DE FLUJOS MIGRATORIOS (MILES DE PERSONAS)"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFIO 15A. FLUJO NETO DE INMIGRACIÓN"
+      ]
+    ]
+  },
+  {
+    "book": "2026",
+    "block": "Anexo I. Gr 15B",
+    "universal_title": "Proyecciones de flujos migratorios exteriores (miles de personas). Flujos de inmigración y emigración exterior",
+    "source_headers": [
+      [
+        "B2",
+        "ANEXO I. GRÁFICO 15. PROYECCIONES DE FLUJOS MIGRATORIOS (MILES DE PERSONAS)"
+      ],
+      [
+        "B3",
+        "ANEXO I. GRÁFICO 15B. FLUJOS DE INMIGRACIÓN Y EMIGRACIÓN EXTERIOR"
+      ]
+    ]
+  }
+]

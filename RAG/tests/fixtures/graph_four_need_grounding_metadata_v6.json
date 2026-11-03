@@ -1,0 +1,254 @@
+{
+  "query": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.",
+  "effective_context": null,
+  "interpretation": {
+    "resolved_query": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.\nPensiones | 2026 | 2030\nSanidad | 2026 | 2030\nEducación | 2026 | 2030\nIntereses | 2026 | 2030",
+    "needs": [
+      {
+        "need_id": "n1",
+        "query_span": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.",
+        "kind": "data",
+        "metric": "Pensiones",
+        "population": "aggregate",
+        "scope_terms": [],
+        "book": "2026",
+        "series": null,
+        "source_block": null,
+        "unit": "percent_gdp",
+        "periods": [
+          "2030"
+        ],
+        "quantity_request": "level"
+      },
+      {
+        "need_id": "n2",
+        "query_span": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.",
+        "kind": "data",
+        "metric": "Sanidad",
+        "population": "aggregate",
+        "scope_terms": [],
+        "book": "2026",
+        "series": null,
+        "source_block": null,
+        "unit": "percent_gdp",
+        "periods": [
+          "2030"
+        ],
+        "quantity_request": "level"
+      },
+      {
+        "need_id": "n3",
+        "query_span": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.",
+        "kind": "data",
+        "metric": "Educación",
+        "population": "aggregate",
+        "scope_terms": [],
+        "book": "2026",
+        "series": null,
+        "source_block": null,
+        "unit": "percent_gdp",
+        "periods": [
+          "2030"
+        ],
+        "quantity_request": "level"
+      },
+      {
+        "need_id": "n4",
+        "query_span": "Informe de 2026: indica pensiones, sanidad, educación e intereses en 2030, en porcentaje del PIB.",
+        "kind": "data",
+        "metric": "Intereses",
+        "population": "aggregate",
+        "scope_terms": [],
+        "book": "2026",
+        "series": null,
+        "source_block": null,
+        "unit": "percent_gdp",
+        "periods": [
+          "2030"
+        ],
+        "quantity_request": "level"
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "card_id": "card:2a75ac0c8feb3369be5c208a",
+      "book": "2026",
+      "block": "Cuadro 12",
+      "metric": "Pensiones",
+      "series": "AIReF 2026",
+      "unit": "percent_gdp",
+      "period_kind": "year",
+      "quantity_role": "level",
+      "scope": "",
+      "title": "Empleos no financieros sin PRTR (% PIB)",
+      "periods": [
+        "2025",
+        "2030",
+        "2050"
+      ],
+      "observation_ids": [
+        "airef:2026:386",
+        "airef:2026:387",
+        "airef:2026:388"
+      ],
+      "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+      "description": "Informe: 2026\nObjeto: Cuadro 12\nTítulo: Empleos no financieros sin PRTR (% PIB)\nMagnitud: Pensiones\nSerie: AIReF 2026\nUnidad: percent_gdp\nRol: level\nTipo de periodo: year\nPeriodos disponibles: 2025, 2030, 2050",
+      "period_warnings": [],
+      "matched_need_ids": [
+        "n1"
+      ],
+      "need_retrieval": [],
+      "retrieval": {
+        "mode": "offline_primary_fixture"
+      },
+      "semantic_context": {
+        "source_scope": "component",
+        "semantic_label": "Gasto público en pensiones",
+        "series_role": "forecast_vintage",
+        "scope_qualifier": "sin PRTR (encabezado explícito del bloque)",
+        "forecast_role": "report_base"
+      }
+    },
+    {
+      "card_id": "card:cce9bd175606c6380b9ecfd4",
+      "book": "2026",
+      "block": "Cuadro 12",
+      "metric": "Sanidad",
+      "series": "AIReF 2026",
+      "unit": "percent_gdp",
+      "period_kind": "year",
+      "quantity_role": "level",
+      "scope": "",
+      "title": "Empleos no financieros sin PRTR (% PIB)",
+      "periods": [
+        "2025",
+        "2030",
+        "2050"
+      ],
+      "observation_ids": [
+        "airef:2026:396",
+        "airef:2026:397",
+        "airef:2026:398"
+      ],
+      "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+      "description": "Informe: 2026\nObjeto: Cuadro 12\nTítulo: Empleos no financieros sin PRTR (% PIB)\nMagnitud: Sanidad\nSerie: AIReF 2026\nUnidad: percent_gdp\nRol: level\nTipo de periodo: year\nPeriodos disponibles: 2025, 2030, 2050",
+      "period_warnings": [],
+      "matched_need_ids": [
+        "n2"
+      ],
+      "need_retrieval": [],
+      "retrieval": {
+        "mode": "offline_primary_fixture"
+      },
+      "semantic_context": {
+        "source_scope": "component",
+        "semantic_label": "Gasto público en sanidad",
+        "series_role": "forecast_vintage",
+        "scope_qualifier": "sin PRTR (encabezado explícito del bloque)"
+      }
+    },
+    {
+      "card_id": "card:9d0415070ba2d874864fe508",
+      "book": "2026",
+      "block": "Cuadro 12",
+      "metric": "Educación",
+      "series": "AIReF 2026",
+      "unit": "percent_gdp",
+      "period_kind": "year",
+      "quantity_role": "level",
+      "scope": "",
+      "title": "Empleos no financieros sin PRTR (% PIB)",
+      "periods": [
+        "2025",
+        "2030",
+        "2050"
+      ],
+      "observation_ids": [
+        "airef:2026:406",
+        "airef:2026:407",
+        "airef:2026:408"
+      ],
+      "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+      "description": "Informe: 2026\nObjeto: Cuadro 12\nTítulo: Empleos no financieros sin PRTR (% PIB)\nMagnitud: Educación\nSerie: AIReF 2026\nUnidad: percent_gdp\nRol: level\nTipo de periodo: year\nPeriodos disponibles: 2025, 2030, 2050",
+      "period_warnings": [],
+      "matched_need_ids": [
+        "n3"
+      ],
+      "need_retrieval": [],
+      "retrieval": {
+        "mode": "offline_primary_fixture"
+      },
+      "semantic_context": {
+        "source_scope": "component",
+        "semantic_label": "Gasto público en educación",
+        "series_role": "forecast_vintage",
+        "scope_qualifier": "sin PRTR (encabezado explícito del bloque)"
+      }
+    },
+    {
+      "card_id": "card:172e1e462997200f05712d45",
+      "book": "2026",
+      "block": "Cuadro 12",
+      "metric": "Intereses",
+      "series": "AIReF 2026",
+      "unit": "percent_gdp",
+      "period_kind": "year",
+      "quantity_role": "level",
+      "scope": "",
+      "title": "Empleos no financieros sin PRTR (% PIB)",
+      "periods": [
+        "2025",
+        "2030",
+        "2050"
+      ],
+      "observation_ids": [
+        "airef:2026:391",
+        "airef:2026:392",
+        "airef:2026:393"
+      ],
+      "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+      "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+      "description": "Informe: 2026\nObjeto: Cuadro 12\nTítulo: Empleos no financieros sin PRTR (% PIB)\nMagnitud: Intereses\nSerie: AIReF 2026\nUnidad: percent_gdp\nRol: level\nTipo de periodo: year\nPeriodos disponibles: 2025, 2030, 2050",
+      "period_warnings": [],
+      "matched_need_ids": [
+        "n4"
+      ],
+      "need_retrieval": [],
+      "retrieval": {
+        "mode": "offline_primary_fixture"
+      },
+      "source_policy": [
+        {
+          "policy_id": "airef-summary-source-priority-v3",
+          "group_id": "airef2026-interest-percent-gdp",
+          "need_id": "n4",
+          "period": "2030",
+          "role": "preferred_summary",
+          "preferred_card_id": "card:172e1e462997200f05712d45",
+          "comparison_card_ids": [
+            "card:225413810eaeab6de383dc08"
+          ],
+          "primary_evidence": [
+            {
+              "doc_id": "a41ffe179cb55e31fed1dba5ac28c83b521eb0f74fe0655d0ed3141c42727787",
+              "pages": [
+                65,
+                66
+              ]
+            }
+          ]
+        }
+      ],
+      "semantic_context": {
+        "source_scope": "component",
+        "semantic_label": "Gasto público en intereses",
+        "series_role": "forecast_vintage",
+        "scope_qualifier": "sin PRTR (encabezado explícito del bloque)"
+      }
+    }
+  ]
+}

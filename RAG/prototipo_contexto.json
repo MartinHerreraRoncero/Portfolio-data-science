@@ -1,0 +1,10 @@
+{
+  "publication_policy": "latest_supported",
+  "ambiguity_policy": "explain_supported_alternatives",
+  "history": [
+    {
+      "role": "user",
+      "content": "Usa la publicación más reciente que tenga el dato solicitado. Distingue el año del dato y el de publicación; no presentes una previsión futura como dato actual."
+    }
+  ]
+}

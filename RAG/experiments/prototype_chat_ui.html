@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#003e5c">
+  <title>RAG-Langgraph · Asistente documental informes sostenibilidad AIReF</title>
+  <link rel="stylesheet" href="/assets/chat.css">
+  <script src="/assets/chat.js" defer></script>
+</head>
+<body>
+<svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-3H4zM20 4h-4a3 3 0 0 0-3 3v14a4 4 0 0 1 4-3h3z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7M12 5v15"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v9M6.3 5.8a9 9 0 1 0 11.4 0"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="5" rx="1"/><rect x="2" y="16" width="8" height="5" rx="1"/><rect x="14" y="16" width="8" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+</svg>
+<header class="app-header">
+  <a href="/" class="brand" aria-label="RAG-Langgraph, inicio"><span class="brand-icon"><svg><use href="#i-book"/></svg></span><span>RAG-Langgraph<span class="brand-divider">/</span><span class="brand-description">Asistente documental informes sostenibilidad AIReF</span></span></a>
+  <div class="header-actions"><span class="local-label"><i></i> Entorno local</span><button id="new" class="button secondary"><svg><use href="#i-plus"/></svg><span>Nueva conversación</span></button><button id="close" class="button icon-button" title="Cerrar sesión y liberar los modelos" aria-label="Cerrar sesión y liberar los modelos"><svg><use href="#i-power"/></svg></button></div>
+</header>
+<main class="workspace">
+  <section class="conversation-panel" aria-labelledby="chat-title">
+    <div class="panel-heading"><div><p class="eyebrow">CONSULTA DOCUMENTAL</p><h1 id="chat-title">Tu conversación con las fuentes</h1></div><span class="badge">Experimental</span></div>
+    <div id="chat" class="chat" role="log" aria-label="Conversación" aria-live="polite" aria-relevant="additions">
+      <div id="welcome" class="welcome">
+        <span class="welcome-icon"><svg><use href="#i-spark"/></svg></span>
+        <p class="eyebrow">UN PUNTO DE PARTIDA, MUCHAS CONEXIONES</p>
+        <h2>Pregunta. Explora. Contrasta.</h2>
+        <p>Consulta los documentos y datos del proyecto.<br>Cada respuesta reúne sus evidencias para que puedas revisarlas.</p>
+        <div class="suggestions" aria-label="Ideas para empezar">
+          <button data-suggestion="¿Qué dicen las fuentes sobre la sostenibilidad del sistema de pensiones?"><span>Sostenibilidad de las pensiones</span><svg><use href="#i-chevron"/></svg></button>
+          <button data-suggestion="¿Qué proyecciones de gasto en pensiones hay disponibles?"><span>Proyecciones de gasto disponibles</span><svg><use href="#i-chevron"/></svg></button>
+        </div>
+        <span class="welcome-note">Las respuestas pueden contener errores. Revisa siempre las citas.</span>
+      </div>
+    </div>
+    <div class="composer-area">
+      <div id="clarify" class="clarification-banner" hidden><span class="status-dot"></span>El asistente necesita una aclaración. Responde aquí abajo para continuar.</div>
+      <form id="composer" class="composer">
+        <label class="sr-only" for="query">Tu mensaje</label>
+        <textarea id="query" rows="2" maxlength="12000" placeholder="Escribe tu pregunta sobre las fuentes…"></textarea>
+        <div class="composer-footer"><span id="composer-hint">Enter para enviar <span>·</span> Mayús + Enter para nueva línea</span><button id="ask" class="send-button" type="submit" aria-label="Enviar mensaje"><svg><use href="#i-arrow"/></svg></button></div>
+      </form>
+      <p id="status" class="query-status" role="status">Listo para explorar las fuentes.</p>
+      <details id="query-details" class="query-details">
+        <summary><span><svg><use href="#i-flow"/></svg>Detalle de la consulta</span><span id="detail-label">Sin consulta</span></summary>
+        <div class="detail-content"><p id="detail-empty">Cuando hagas una consulta, aquí encontrarás el estado, las fuentes y su traza.</p><div id="detail-meta"></div><a id="detail-trace" target="_blank" rel="noopener" hidden>Abrir traza completa ↗</a><pre id="detail-json" hidden></pre></div>
+      </details>
+      <p class="memory-note">Memoria temporal y limitada por tamaño. Los informes se conservan en disco.</p>
+    </div>
+  </section>
+  <aside class="flow-panel" aria-labelledby="flow-title">
+    <div class="flow-heading"><div><p class="eyebrow">TRAZABILIDAD EN DIRECTO</p><h2 id="flow-title">El recorrido de tu pregunta</h2></div><span id="live-badge" class="live-badge"><i></i> En espera</span></div>
+    <p class="flow-description">Sigue cada etapa mientras el sistema consulta, conecta y contrasta la evidencia.</p>
+    <div class="flow-card" id="flow-card">
+      <div class="flow-card-top"><span>GRAFO LANGGRAPH</span><button id="expand-graph" class="text-button" type="button" aria-pressed="false">Ampliar grafo ↗</button><span id="flow-counter">0 etapas observadas</span></div>
+
+      <p class="architecture-label">PROCESO LANGGRAPH · 14 NODOS REALES</p>
+      <div class="graph-viewport" id="graph-viewport"><div id="flow-diagram" class="flow-diagram" aria-label="Diagrama de ejecución del RAG"></div></div>
+
+      <div class="flow-legend"><span><i class="legend-dot pending"></i>Pendiente</span><span><i class="legend-dot active"></i>En curso</span><span><i class="legend-dot done"></i>Completado</span></div>
+    </div>
+    <details class="technical-note"><summary>Sobre este entorno</summary><p>Modelo de conversación: <strong>__CHAT_MODEL__</strong>. Las consultas se ejecutan de una en una. Cerrar sesión libera los modelos; cerrar la pestaña no los descarga.</p><p>La actividad del flujo describe la ejecución. No certifica la exactitud de las respuestas.</p></details>
+  </aside>
+</main>
+<footer class="app-footer"><span>Fuentes conectadas. Evidencia visible.</span><span>Paleta inspirada en AIReF <span class="footer-dot">·</span> Prototipo local</span></footer>
+</body>
+</html>
+

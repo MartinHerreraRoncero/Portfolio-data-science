@@ -1,0 +1,6 @@
+docling==2.143.0
+docling-core==2.105.0
+docling-ibm-models==4.0.4
+pypdfium2==5.14.0
+duckdb==1.5.5
+pypdf==6.16.1

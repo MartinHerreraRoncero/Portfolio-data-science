@@ -1,0 +1,1570 @@
+{
+  "version": 1,
+  "baseline": {
+    "database": "evaluation/labour_unit_semantics_2026-10-31/run_v1/labour_units.duckdb",
+    "validation": "evaluation/labour_unit_semantics_2026-10-31/run_v1/validation.json",
+    "extractor": "experiments/labour_unit_semantics.py",
+    "expected_admitted": 38386,
+    "expected_pending": 8827,
+    "db_sha256": "cda1a2161603569ee0cf6d7cd00c0baebb2c47318d6b3b8ed4f7eb9df9b8da77",
+    "relations": {
+      "pending": "labour_numeric_queue",
+      "admitted": "labour_usable_keys",
+      "staging": "staging_records",
+      "canonical_tables": "table_observations"
+    },
+    "reason_field": "labour_reason"
+  },
+  "default": {
+    "status": "bloqueado",
+    "action": "review_unresolved_semantics",
+    "priority": 0,
+    "confidence": "provisional",
+    "phase": "blocked",
+    "evidence": {
+      "kind": "unreviewed_default",
+      "admission_pending": true
+    }
+  },
+  "rules": [
+    {
+      "id": "confirmed_source_conflicts",
+      "when": {
+        "classification_reason": {
+          "in": [
+            "literal_series_source_conflict",
+            "growth_decomposition_conflict",
+            "published_base_auxiliary_conflict",
+            "literal_header_conflict"
+          ]
+        }
+      },
+      "status": "bloqueado",
+      "action": "clarify_source_conflict",
+      "priority": 20,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "source_conflict",
+        "references": [
+          "grid_conflicts",
+          "growth_decomposition_reviews",
+          "table_conflicts",
+          "literal_vector_reviews"
+        ]
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "scatter_units",
+      "when": {
+        "classification_reason": {
+          "eq": "scatter_units_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "accredit_both_axis_units",
+      "priority": 15,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "verified_geometry_unresolved_units",
+        "reference": "reviewed_scatter_pairs"
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "forecast_markers",
+      "when": {
+        "classification_reason": {
+          "eq": "forecast_marker_not_measure"
+        }
+      },
+      "status": "excluido",
+      "action": "preserve_diagnostic_not_economic_measure",
+      "priority": 0,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "technical_plot_role",
+        "decision_scope": "economic_quantity_index"
+      },
+      "phase": "excluded",
+      "precedence": 10
+    },
+    {
+      "id": "drawing_helpers",
+      "when": {
+        "classification_reason": {
+          "eq": "drawing_helper_not_economic_series"
+        }
+      },
+      "status": "excluido",
+      "action": "preserve_diagnostic_not_economic_measure",
+      "priority": 0,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "technical_plot_role",
+        "decision_scope": "economic_quantity_index"
+      },
+      "phase": "excluded",
+      "precedence": 10
+    },
+    {
+      "id": "signed_pyramids",
+      "when": {
+        "classification_reason": {
+          "eq": "signed_pyramid_scope_review"
+        }
+      },
+      "status": "bloqueado",
+      "action": "define_signed_geometry_population_contract",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "auxiliary_base_conflict",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Cuadro 14"
+        },
+        "classification_reason": {
+          "eq": "auxiliary_table_cells"
+        }
+      },
+      "status": "bloqueado",
+      "action": "clarify_published_auxiliary_base_conflict",
+      "priority": 20,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "source_conflict",
+        "reference": "table_conflicts"
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "internal_model_levels",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "in": [
+            "Cuadro 12",
+            "Cuadro 13",
+            "Cuadro 15",
+            "Cuadro 16",
+            "Cuadro 17",
+            "Cuadro 18"
+          ]
+        },
+        "classification_reason": {
+          "eq": "auxiliary_table_cells"
+        }
+      },
+      "status": "recuperable",
+      "action": "define_internal_model_level_contract",
+      "priority": 30,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "semantic_contract",
+      "precedence": 10
+    },
+    {
+      "id": "ageing_source_grid",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico 89"
+        },
+        "serie_literal": {
+          "eq": "Envejecimiento"
+        },
+        "classification_reason": {
+          "eq": "quantity_role_not_admitted"
+        }
+      },
+      "status": "recuperable",
+      "action": "recover_category_from_same_source_row",
+      "priority": 90,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "bounded_source_grid_candidate",
+        "header": "C4",
+        "category_column": "B",
+        "unit": "percentage_points_gdp"
+      },
+      "phase": "ready",
+      "precedence": 10
+    },
+    {
+      "id": "ageing_source_grid_2026",
+      "when": {
+        "book": {
+          "eq": "2026"
+        },
+        "bloque": {
+          "eq": "Gráfico 37"
+        },
+        "serie_literal": {
+          "eq": "Envejecimiento"
+        },
+        "classification_reason": {
+          "eq": "quantity_role_not_admitted"
+        }
+      },
+      "status": "recuperable",
+      "action": "recover_category_from_same_source_row",
+      "priority": 90,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "bounded_source_grid_candidate",
+        "header": "C4",
+        "category_column": "B",
+        "unit": "percentage_points_gdp"
+      },
+      "phase": "ready",
+      "precedence": 10
+    },
+    {
+      "id": "implicit_funding_grid",
+      "when": {
+        "book": {
+          "eq": "2026"
+        },
+        "bloque": {
+          "eq": "Gráfico 12"
+        },
+        "serie_literal": {
+          "eq": "Transferencias implícitas"
+        },
+        "classification_reason": {
+          "eq": "quantity_role_not_admitted"
+        }
+      },
+      "status": "recuperable",
+      "action": "recover_horizontal_funding_categories",
+      "priority": 85,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "bounded_source_grid_candidate",
+        "value_ref": "E18:AI18",
+        "category_ref": "E5:AI5",
+        "name_cell": "D18",
+        "unit": "percent_gdp"
+      },
+      "phase": "ready",
+      "precedence": 10
+    },
+    {
+      "id": "published_resource_differences",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico 37"
+        },
+        "tipo": {
+          "eq": "variacion_publicada"
+        },
+        "classification_reason": {
+          "eq": "table_evidence_review"
+        }
+      },
+      "status": "recuperable",
+      "action": "validate_published_resource_difference",
+      "priority": 95,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "bounded_formula_candidate",
+        "cells": [
+          "Q3",
+          "AL3"
+        ],
+        "formulas": [
+          "=Q6-K6",
+          "=AL6-Q6"
+        ],
+        "unit": "percentage_points_gdp"
+      },
+      "phase": "ready",
+      "precedence": 10
+    },
+    {
+      "id": "mixed_interest_metric",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico 56"
+        },
+        "classification_reason": {
+          "eq": "series_unit_conflict"
+        }
+      },
+      "status": "recuperable",
+      "action": "define_per_series_mixed_metric_contract",
+      "priority": 40,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "explicit_series_metric_candidate",
+        "header": "E4",
+        "metric": "Intereses (% PIB)",
+        "unit": "percent_gdp",
+        "admission_pending": true,
+        "preserve_universal_metric": true
+      },
+      "phase": "semantic_contract",
+      "precedence": 10
+    },
+    {
+      "id": "resource_duplicate_alias",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico 37"
+        },
+        "tipo": {
+          "eq": "posicion_serie"
+        },
+        "classification_reason": {
+          "eq": "table_evidence_review"
+        }
+      },
+      "status": "excluido",
+      "action": "link_duplicate_representation_to_admitted_cell",
+      "priority": 0,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "verified_semantic_duplicate"
+      },
+      "phase": "excluded",
+      "precedence": 10
+    },
+    {
+      "id": "lossless_category_encoding",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "row_number": {
+          "in": [
+            12191,
+            12192,
+            12204,
+            12205,
+            12230,
+            12231,
+            14257,
+            14258,
+            18288,
+            18324,
+            18325
+          ]
+        },
+        "classification_reason": {
+          "eq": "category_identity_review"
+        }
+      },
+      "status": "recuperable",
+      "action": "validate_lossless_category_encoding",
+      "priority": 100,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "source_checked_category_encoding_candidate",
+        "required_normalization": "newline to slash separator only when exact original matches",
+        "preserve_original": true,
+        "admission_pending": true
+      },
+      "phase": "ready",
+      "precedence": 10
+    },
+    {
+      "id": "saldo_gasto_caption",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico RE 4.1"
+        },
+        "classification_reason": {
+          "eq": "metric_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "clarify_saldo_vs_gasto_caption",
+      "priority": 15,
+      "confidence": "confirmed",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "icf_ccf_contract",
+      "when": {
+        "book": {
+          "eq": "2026"
+        },
+        "bloque": {
+          "eq": "Anexo I. Gr 8B"
+        },
+        "classification_reason": {
+          "eq": "metric_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "define_per_series_icf_ccf_metric_vector_time_contract",
+      "priority": 15,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "tax_rate_caption",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico 41"
+        },
+        "classification_reason": {
+          "eq": "metric_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "review_tax_rate_unit_and_caption_typo",
+      "priority": 15,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "retirement_denominator",
+      "when": {
+        "book": {
+          "eq": "2025"
+        },
+        "bloque": {
+          "eq": "Gráfico RE 3.3"
+        },
+        "classification_reason": {
+          "eq": "metric_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "verify_retirement_denominator_and_caption",
+      "priority": 15,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "pyramid_metric_contract",
+      "when": {
+        "book": {
+          "eq": "2026"
+        },
+        "bloque": {
+          "in": [
+            "Anexo I. Gr 16A",
+            "Anexo I. Gr 16B",
+            "Anexo I. Gr 16C"
+          ]
+        },
+        "classification_reason": {
+          "eq": "metric_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "define_pyramid_sign_and_scope_contract",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "unresolved_category_encoding",
+      "when": {
+        "row_number": {
+          "in": [
+            14283,
+            14284,
+            14296,
+            14297,
+            14309,
+            14310,
+            14322,
+            14323,
+            14348,
+            14349,
+            15801,
+            15802,
+            15811
+          ]
+        },
+        "classification_reason": {
+          "eq": "category_identity_review"
+        }
+      },
+      "status": "bloqueado",
+      "action": "review_unit_after_lossless_category_encoding",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "unknown_bindings",
+      "when": {
+        "classification_reason": {
+          "eq": "binding_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "review_explicit_binding_and_series_identity",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "unknown_units",
+      "when": {
+        "classification_reason": {
+          "eq": "unit_still_unresolved"
+        }
+      },
+      "status": "bloqueado",
+      "action": "accredit_explicit_unit_and_scale",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "unproved_categories",
+      "when": {
+        "classification_reason": {
+          "eq": "unproved_category_point"
+        }
+      },
+      "status": "bloqueado",
+      "action": "recover_explicit_category_without_calendar_fill",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    },
+    {
+      "id": "unreconciled_literals",
+      "when": {
+        "classification_reason": {
+          "eq": "literal_values_not_reconciled"
+        }
+      },
+      "status": "bloqueado",
+      "action": "reconcile_complete_vector_and_series_identity",
+      "priority": 10,
+      "confidence": "provisional",
+      "evidence": {
+        "kind": "reviewed_classification_candidate",
+        "admission_pending": true
+      },
+      "phase": "blocked",
+      "precedence": 10
+    }
+  ],
+  "duplicate_pairs": [
+    {
+      "book": "2025",
+      "row_number": 16773,
+      "canonical_book": "2025",
+      "canonical_row_number": 50777
+    },
+    {
+      "book": "2025",
+      "row_number": 16774,
+      "canonical_book": "2025",
+      "canonical_row_number": 50778
+    },
+    {
+      "book": "2025",
+      "row_number": 16775,
+      "canonical_book": "2025",
+      "canonical_row_number": 50779
+    },
+    {
+      "book": "2025",
+      "row_number": 16776,
+      "canonical_book": "2025",
+      "canonical_row_number": 50780
+    },
+    {
+      "book": "2025",
+      "row_number": 16777,
+      "canonical_book": "2025",
+      "canonical_row_number": 50781
+    },
+    {
+      "book": "2025",
+      "row_number": 16778,
+      "canonical_book": "2025",
+      "canonical_row_number": 50782
+    },
+    {
+      "book": "2025",
+      "row_number": 16779,
+      "canonical_book": "2025",
+      "canonical_row_number": 50783
+    },
+    {
+      "book": "2025",
+      "row_number": 16780,
+      "canonical_book": "2025",
+      "canonical_row_number": 50784
+    },
+    {
+      "book": "2025",
+      "row_number": 16781,
+      "canonical_book": "2025",
+      "canonical_row_number": 50785
+    },
+    {
+      "book": "2025",
+      "row_number": 16725,
+      "canonical_book": "2025",
+      "canonical_row_number": 50841
+    },
+    {
+      "book": "2025",
+      "row_number": 16726,
+      "canonical_book": "2025",
+      "canonical_row_number": 50842
+    },
+    {
+      "book": "2025",
+      "row_number": 16727,
+      "canonical_book": "2025",
+      "canonical_row_number": 50843
+    },
+    {
+      "book": "2025",
+      "row_number": 16728,
+      "canonical_book": "2025",
+      "canonical_row_number": 50844
+    },
+    {
+      "book": "2025",
+      "row_number": 16729,
+      "canonical_book": "2025",
+      "canonical_row_number": 50845
+    },
+    {
+      "book": "2025",
+      "row_number": 16730,
+      "canonical_book": "2025",
+      "canonical_row_number": 50846
+    },
+    {
+      "book": "2025",
+      "row_number": 16731,
+      "canonical_book": "2025",
+      "canonical_row_number": 50847
+    },
+    {
+      "book": "2025",
+      "row_number": 16732,
+      "canonical_book": "2025",
+      "canonical_row_number": 50848
+    },
+    {
+      "book": "2025",
+      "row_number": 16733,
+      "canonical_book": "2025",
+      "canonical_row_number": 50849
+    },
+    {
+      "book": "2025",
+      "row_number": 16734,
+      "canonical_book": "2025",
+      "canonical_row_number": 50850
+    },
+    {
+      "book": "2025",
+      "row_number": 16735,
+      "canonical_book": "2025",
+      "canonical_row_number": 50851
+    },
+    {
+      "book": "2025",
+      "row_number": 16736,
+      "canonical_book": "2025",
+      "canonical_row_number": 50852
+    },
+    {
+      "book": "2025",
+      "row_number": 16737,
+      "canonical_book": "2025",
+      "canonical_row_number": 50853
+    },
+    {
+      "book": "2025",
+      "row_number": 16738,
+      "canonical_book": "2025",
+      "canonical_row_number": 50854
+    },
+    {
+      "book": "2025",
+      "row_number": 16739,
+      "canonical_book": "2025",
+      "canonical_row_number": 50855
+    },
+    {
+      "book": "2025",
+      "row_number": 16740,
+      "canonical_book": "2025",
+      "canonical_row_number": 50856
+    },
+    {
+      "book": "2025",
+      "row_number": 16741,
+      "canonical_book": "2025",
+      "canonical_row_number": 50857
+    },
+    {
+      "book": "2025",
+      "row_number": 16742,
+      "canonical_book": "2025",
+      "canonical_row_number": 50858
+    },
+    {
+      "book": "2025",
+      "row_number": 16743,
+      "canonical_book": "2025",
+      "canonical_row_number": 50859
+    },
+    {
+      "book": "2025",
+      "row_number": 16744,
+      "canonical_book": "2025",
+      "canonical_row_number": 50860
+    },
+    {
+      "book": "2025",
+      "row_number": 16745,
+      "canonical_book": "2025",
+      "canonical_row_number": 50861
+    },
+    {
+      "book": "2025",
+      "row_number": 16746,
+      "canonical_book": "2025",
+      "canonical_row_number": 50862
+    },
+    {
+      "book": "2025",
+      "row_number": 16747,
+      "canonical_book": "2025",
+      "canonical_row_number": 50863
+    },
+    {
+      "book": "2025",
+      "row_number": 16748,
+      "canonical_book": "2025",
+      "canonical_row_number": 50864
+    },
+    {
+      "book": "2025",
+      "row_number": 16749,
+      "canonical_book": "2025",
+      "canonical_row_number": 50865
+    },
+    {
+      "book": "2025",
+      "row_number": 16750,
+      "canonical_book": "2025",
+      "canonical_row_number": 50866
+    },
+    {
+      "book": "2025",
+      "row_number": 16751,
+      "canonical_book": "2025",
+      "canonical_row_number": 50867
+    },
+    {
+      "book": "2025",
+      "row_number": 16752,
+      "canonical_book": "2025",
+      "canonical_row_number": 50868
+    },
+    {
+      "book": "2025",
+      "row_number": 16753,
+      "canonical_book": "2025",
+      "canonical_row_number": 50869
+    },
+    {
+      "book": "2025",
+      "row_number": 16754,
+      "canonical_book": "2025",
+      "canonical_row_number": 50870
+    },
+    {
+      "book": "2025",
+      "row_number": 16755,
+      "canonical_book": "2025",
+      "canonical_row_number": 50871
+    },
+    {
+      "book": "2025",
+      "row_number": 16756,
+      "canonical_book": "2025",
+      "canonical_row_number": 50872
+    },
+    {
+      "book": "2025",
+      "row_number": 16757,
+      "canonical_book": "2025",
+      "canonical_row_number": 50873
+    },
+    {
+      "book": "2025",
+      "row_number": 16758,
+      "canonical_book": "2025",
+      "canonical_row_number": 50874
+    },
+    {
+      "book": "2025",
+      "row_number": 16759,
+      "canonical_book": "2025",
+      "canonical_row_number": 50875
+    },
+    {
+      "book": "2025",
+      "row_number": 16760,
+      "canonical_book": "2025",
+      "canonical_row_number": 50876
+    },
+    {
+      "book": "2025",
+      "row_number": 16761,
+      "canonical_book": "2025",
+      "canonical_row_number": 50877
+    },
+    {
+      "book": "2025",
+      "row_number": 16762,
+      "canonical_book": "2025",
+      "canonical_row_number": 50878
+    },
+    {
+      "book": "2025",
+      "row_number": 16763,
+      "canonical_book": "2025",
+      "canonical_row_number": 50879
+    },
+    {
+      "book": "2025",
+      "row_number": 16764,
+      "canonical_book": "2025",
+      "canonical_row_number": 50880
+    },
+    {
+      "book": "2025",
+      "row_number": 16765,
+      "canonical_book": "2025",
+      "canonical_row_number": 50881
+    },
+    {
+      "book": "2025",
+      "row_number": 16766,
+      "canonical_book": "2025",
+      "canonical_row_number": 50882
+    },
+    {
+      "book": "2025",
+      "row_number": 16767,
+      "canonical_book": "2025",
+      "canonical_row_number": 50883
+    },
+    {
+      "book": "2025",
+      "row_number": 16768,
+      "canonical_book": "2025",
+      "canonical_row_number": 50884
+    },
+    {
+      "book": "2025",
+      "row_number": 16769,
+      "canonical_book": "2025",
+      "canonical_row_number": 50885
+    },
+    {
+      "book": "2025",
+      "row_number": 16770,
+      "canonical_book": "2025",
+      "canonical_row_number": 50886
+    },
+    {
+      "book": "2025",
+      "row_number": 16771,
+      "canonical_book": "2025",
+      "canonical_row_number": 50887
+    },
+    {
+      "book": "2025",
+      "row_number": 16772,
+      "canonical_book": "2025",
+      "canonical_row_number": 50888
+    },
+    {
+      "book": "2025",
+      "row_number": 16809,
+      "canonical_book": "2025",
+      "canonical_row_number": 50889
+    },
+    {
+      "book": "2025",
+      "row_number": 16810,
+      "canonical_book": "2025",
+      "canonical_row_number": 50890
+    },
+    {
+      "book": "2025",
+      "row_number": 16811,
+      "canonical_book": "2025",
+      "canonical_row_number": 50891
+    },
+    {
+      "book": "2025",
+      "row_number": 16812,
+      "canonical_book": "2025",
+      "canonical_row_number": 50892
+    },
+    {
+      "book": "2025",
+      "row_number": 16813,
+      "canonical_book": "2025",
+      "canonical_row_number": 50893
+    },
+    {
+      "book": "2025",
+      "row_number": 16814,
+      "canonical_book": "2025",
+      "canonical_row_number": 50894
+    },
+    {
+      "book": "2025",
+      "row_number": 16815,
+      "canonical_book": "2025",
+      "canonical_row_number": 50895
+    },
+    {
+      "book": "2025",
+      "row_number": 16816,
+      "canonical_book": "2025",
+      "canonical_row_number": 50896
+    },
+    {
+      "book": "2025",
+      "row_number": 16817,
+      "canonical_book": "2025",
+      "canonical_row_number": 50897
+    },
+    {
+      "book": "2025",
+      "row_number": 16853,
+      "canonical_book": "2025",
+      "canonical_row_number": 50953
+    },
+    {
+      "book": "2025",
+      "row_number": 16854,
+      "canonical_book": "2025",
+      "canonical_row_number": 50954
+    },
+    {
+      "book": "2025",
+      "row_number": 16855,
+      "canonical_book": "2025",
+      "canonical_row_number": 50955
+    },
+    {
+      "book": "2025",
+      "row_number": 16856,
+      "canonical_book": "2025",
+      "canonical_row_number": 50956
+    },
+    {
+      "book": "2025",
+      "row_number": 16857,
+      "canonical_book": "2025",
+      "canonical_row_number": 50957
+    },
+    {
+      "book": "2025",
+      "row_number": 16858,
+      "canonical_book": "2025",
+      "canonical_row_number": 50958
+    },
+    {
+      "book": "2025",
+      "row_number": 16859,
+      "canonical_book": "2025",
+      "canonical_row_number": 50959
+    },
+    {
+      "book": "2025",
+      "row_number": 16860,
+      "canonical_book": "2025",
+      "canonical_row_number": 50960
+    },
+    {
+      "book": "2025",
+      "row_number": 16861,
+      "canonical_book": "2025",
+      "canonical_row_number": 50961
+    },
+    {
+      "book": "2025",
+      "row_number": 16862,
+      "canonical_book": "2025",
+      "canonical_row_number": 50962
+    },
+    {
+      "book": "2025",
+      "row_number": 16863,
+      "canonical_book": "2025",
+      "canonical_row_number": 50963
+    },
+    {
+      "book": "2025",
+      "row_number": 16864,
+      "canonical_book": "2025",
+      "canonical_row_number": 50964
+    },
+    {
+      "book": "2025",
+      "row_number": 16865,
+      "canonical_book": "2025",
+      "canonical_row_number": 50965
+    },
+    {
+      "book": "2025",
+      "row_number": 16866,
+      "canonical_book": "2025",
+      "canonical_row_number": 50966
+    },
+    {
+      "book": "2025",
+      "row_number": 16867,
+      "canonical_book": "2025",
+      "canonical_row_number": 50967
+    },
+    {
+      "book": "2025",
+      "row_number": 16868,
+      "canonical_book": "2025",
+      "canonical_row_number": 50968
+    },
+    {
+      "book": "2025",
+      "row_number": 16869,
+      "canonical_book": "2025",
+      "canonical_row_number": 50969
+    },
+    {
+      "book": "2025",
+      "row_number": 16870,
+      "canonical_book": "2025",
+      "canonical_row_number": 50970
+    },
+    {
+      "book": "2025",
+      "row_number": 16871,
+      "canonical_book": "2025",
+      "canonical_row_number": 50971
+    },
+    {
+      "book": "2025",
+      "row_number": 16872,
+      "canonical_book": "2025",
+      "canonical_row_number": 50972
+    },
+    {
+      "book": "2025",
+      "row_number": 16873,
+      "canonical_book": "2025",
+      "canonical_row_number": 50973
+    },
+    {
+      "book": "2025",
+      "row_number": 16874,
+      "canonical_book": "2025",
+      "canonical_row_number": 50974
+    },
+    {
+      "book": "2025",
+      "row_number": 16875,
+      "canonical_book": "2025",
+      "canonical_row_number": 50975
+    },
+    {
+      "book": "2025",
+      "row_number": 16876,
+      "canonical_book": "2025",
+      "canonical_row_number": 50976
+    },
+    {
+      "book": "2025",
+      "row_number": 16877,
+      "canonical_book": "2025",
+      "canonical_row_number": 50977
+    },
+    {
+      "book": "2025",
+      "row_number": 16878,
+      "canonical_book": "2025",
+      "canonical_row_number": 50978
+    },
+    {
+      "book": "2025",
+      "row_number": 16879,
+      "canonical_book": "2025",
+      "canonical_row_number": 50979
+    },
+    {
+      "book": "2025",
+      "row_number": 16880,
+      "canonical_book": "2025",
+      "canonical_row_number": 50980
+    },
+    {
+      "book": "2025",
+      "row_number": 16881,
+      "canonical_book": "2025",
+      "canonical_row_number": 50981
+    },
+    {
+      "book": "2025",
+      "row_number": 16882,
+      "canonical_book": "2025",
+      "canonical_row_number": 50982
+    },
+    {
+      "book": "2025",
+      "row_number": 16883,
+      "canonical_book": "2025",
+      "canonical_row_number": 50983
+    },
+    {
+      "book": "2025",
+      "row_number": 16884,
+      "canonical_book": "2025",
+      "canonical_row_number": 50984
+    },
+    {
+      "book": "2025",
+      "row_number": 16885,
+      "canonical_book": "2025",
+      "canonical_row_number": 50985
+    },
+    {
+      "book": "2025",
+      "row_number": 16886,
+      "canonical_book": "2025",
+      "canonical_row_number": 50986
+    },
+    {
+      "book": "2025",
+      "row_number": 16887,
+      "canonical_book": "2025",
+      "canonical_row_number": 50987
+    },
+    {
+      "book": "2025",
+      "row_number": 16888,
+      "canonical_book": "2025",
+      "canonical_row_number": 50988
+    },
+    {
+      "book": "2025",
+      "row_number": 16889,
+      "canonical_book": "2025",
+      "canonical_row_number": 50989
+    },
+    {
+      "book": "2025",
+      "row_number": 16890,
+      "canonical_book": "2025",
+      "canonical_row_number": 50990
+    },
+    {
+      "book": "2025",
+      "row_number": 16891,
+      "canonical_book": "2025",
+      "canonical_row_number": 50991
+    },
+    {
+      "book": "2025",
+      "row_number": 16892,
+      "canonical_book": "2025",
+      "canonical_row_number": 50992
+    },
+    {
+      "book": "2025",
+      "row_number": 16893,
+      "canonical_book": "2025",
+      "canonical_row_number": 50993
+    },
+    {
+      "book": "2025",
+      "row_number": 16894,
+      "canonical_book": "2025",
+      "canonical_row_number": 50994
+    },
+    {
+      "book": "2025",
+      "row_number": 16895,
+      "canonical_book": "2025",
+      "canonical_row_number": 50995
+    },
+    {
+      "book": "2025",
+      "row_number": 16896,
+      "canonical_book": "2025",
+      "canonical_row_number": 50996
+    },
+    {
+      "book": "2025",
+      "row_number": 16897,
+      "canonical_book": "2025",
+      "canonical_row_number": 50997
+    },
+    {
+      "book": "2025",
+      "row_number": 16898,
+      "canonical_book": "2025",
+      "canonical_row_number": 50998
+    },
+    {
+      "book": "2025",
+      "row_number": 16899,
+      "canonical_book": "2025",
+      "canonical_row_number": 50999
+    },
+    {
+      "book": "2025",
+      "row_number": 16900,
+      "canonical_book": "2025",
+      "canonical_row_number": 51000
+    },
+    {
+      "book": "2025",
+      "row_number": 16915,
+      "canonical_book": "2025",
+      "canonical_row_number": 51015
+    },
+    {
+      "book": "2025",
+      "row_number": 16916,
+      "canonical_book": "2025",
+      "canonical_row_number": 51016
+    },
+    {
+      "book": "2025",
+      "row_number": 16917,
+      "canonical_book": "2025",
+      "canonical_row_number": 51017
+    },
+    {
+      "book": "2025",
+      "row_number": 16918,
+      "canonical_book": "2025",
+      "canonical_row_number": 51018
+    },
+    {
+      "book": "2025",
+      "row_number": 16919,
+      "canonical_book": "2025",
+      "canonical_row_number": 51019
+    },
+    {
+      "book": "2025",
+      "row_number": 16920,
+      "canonical_book": "2025",
+      "canonical_row_number": 51020
+    },
+    {
+      "book": "2025",
+      "row_number": 16921,
+      "canonical_book": "2025",
+      "canonical_row_number": 51021
+    },
+    {
+      "book": "2025",
+      "row_number": 16922,
+      "canonical_book": "2025",
+      "canonical_row_number": 51022
+    },
+    {
+      "book": "2025",
+      "row_number": 16923,
+      "canonical_book": "2025",
+      "canonical_row_number": 51023
+    },
+    {
+      "book": "2025",
+      "row_number": 16924,
+      "canonical_book": "2025",
+      "canonical_row_number": 51024
+    },
+    {
+      "book": "2025",
+      "row_number": 16925,
+      "canonical_book": "2025",
+      "canonical_row_number": 51025
+    },
+    {
+      "book": "2025",
+      "row_number": 16926,
+      "canonical_book": "2025",
+      "canonical_row_number": 51026
+    },
+    {
+      "book": "2025",
+      "row_number": 16927,
+      "canonical_book": "2025",
+      "canonical_row_number": 51027
+    },
+    {
+      "book": "2025",
+      "row_number": 16928,
+      "canonical_book": "2025",
+      "canonical_row_number": 51028
+    },
+    {
+      "book": "2025",
+      "row_number": 16929,
+      "canonical_book": "2025",
+      "canonical_row_number": 51029
+    },
+    {
+      "book": "2025",
+      "row_number": 16930,
+      "canonical_book": "2025",
+      "canonical_row_number": 51030
+    },
+    {
+      "book": "2025",
+      "row_number": 16931,
+      "canonical_book": "2025",
+      "canonical_row_number": 51031
+    },
+    {
+      "book": "2025",
+      "row_number": 16932,
+      "canonical_book": "2025",
+      "canonical_row_number": 51032
+    },
+    {
+      "book": "2025",
+      "row_number": 16933,
+      "canonical_book": "2025",
+      "canonical_row_number": 51033
+    },
+    {
+      "book": "2025",
+      "row_number": 16934,
+      "canonical_book": "2025",
+      "canonical_row_number": 51034
+    },
+    {
+      "book": "2025",
+      "row_number": 16935,
+      "canonical_book": "2025",
+      "canonical_row_number": 51035
+    },
+    {
+      "book": "2025",
+      "row_number": 16936,
+      "canonical_book": "2025",
+      "canonical_row_number": 51036
+    },
+    {
+      "book": "2025",
+      "row_number": 16937,
+      "canonical_book": "2025",
+      "canonical_row_number": 51037
+    },
+    {
+      "book": "2025",
+      "row_number": 16938,
+      "canonical_book": "2025",
+      "canonical_row_number": 51038
+    },
+    {
+      "book": "2025",
+      "row_number": 16939,
+      "canonical_book": "2025",
+      "canonical_row_number": 51039
+    },
+    {
+      "book": "2025",
+      "row_number": 16940,
+      "canonical_book": "2025",
+      "canonical_row_number": 51040
+    },
+    {
+      "book": "2025",
+      "row_number": 16941,
+      "canonical_book": "2025",
+      "canonical_row_number": 51041
+    },
+    {
+      "book": "2025",
+      "row_number": 16942,
+      "canonical_book": "2025",
+      "canonical_row_number": 51042
+    },
+    {
+      "book": "2025",
+      "row_number": 16943,
+      "canonical_book": "2025",
+      "canonical_row_number": 51043
+    },
+    {
+      "book": "2025",
+      "row_number": 16944,
+      "canonical_book": "2025",
+      "canonical_row_number": 51044
+    },
+    {
+      "book": "2025",
+      "row_number": 16945,
+      "canonical_book": "2025",
+      "canonical_row_number": 51045
+    },
+    {
+      "book": "2025",
+      "row_number": 16946,
+      "canonical_book": "2025",
+      "canonical_row_number": 51046
+    },
+    {
+      "book": "2025",
+      "row_number": 16947,
+      "canonical_book": "2025",
+      "canonical_row_number": 51047
+    },
+    {
+      "book": "2025",
+      "row_number": 16948,
+      "canonical_book": "2025",
+      "canonical_row_number": 51048
+    },
+    {
+      "book": "2025",
+      "row_number": 16949,
+      "canonical_book": "2025",
+      "canonical_row_number": 51049
+    },
+    {
+      "book": "2025",
+      "row_number": 16950,
+      "canonical_book": "2025",
+      "canonical_row_number": 51050
+    },
+    {
+      "book": "2025",
+      "row_number": 16951,
+      "canonical_book": "2025",
+      "canonical_row_number": 51051
+    },
+    {
+      "book": "2025",
+      "row_number": 16952,
+      "canonical_book": "2025",
+      "canonical_row_number": 51052
+    },
+    {
+      "book": "2025",
+      "row_number": 16953,
+      "canonical_book": "2025",
+      "canonical_row_number": 51053
+    },
+    {
+      "book": "2025",
+      "row_number": 16954,
+      "canonical_book": "2025",
+      "canonical_row_number": 51054
+    },
+    {
+      "book": "2025",
+      "row_number": 16955,
+      "canonical_book": "2025",
+      "canonical_row_number": 51055
+    },
+    {
+      "book": "2025",
+      "row_number": 16956,
+      "canonical_book": "2025",
+      "canonical_row_number": 51056
+    }
+  ]
+}

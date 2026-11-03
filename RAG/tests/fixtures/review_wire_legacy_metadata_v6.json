@@ -1,0 +1,142 @@
+{
+  "b08": {
+    "query": "¿Con qué año histórico se comparan los niveles futuros de generosidad y qué pensión mensual exacta cobraré si me jubilo en 2031?",
+    "needs": [
+      {
+        "need_id": "n1",
+        "query_span": "¿Con qué año histórico se comparan los niveles futuros de generosidad y qué pensión mensual exacta cobraré si me jubilo en 2031?",
+        "kind": "text",
+        "metric": "pensión mensual exacta",
+        "population": "individual",
+        "scope_terms": [],
+        "book": "2025",
+        "series": null,
+        "source_block": null,
+        "unit": "euros",
+        "periods": [
+          "2031"
+        ],
+        "quantity_request": "level"
+      },
+      {
+        "need_id": "n2",
+        "query_span": "¿Con qué año histórico se comparan los niveles futuros de generosidad y qué pensión mensual exacta cobraré si me jubilo en 2031?",
+        "kind": "text",
+        "metric": "año histórico de comparación de niveles futuros de generosidad",
+        "population": "aggregate",
+        "scope_terms": [],
+        "book": "2025",
+        "series": null,
+        "source_block": null,
+        "unit": "unspecified",
+        "periods": [
+          "2031"
+        ],
+        "quantity_request": "unspecified"
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "n1C1",
+        "need_id": "n1",
+        "text": "No se puede determinar la pensión mensual exacta para 2031, ya que el texto solo proporciona proyecciones agregadas de tasas de generosidad y evolución del número de pensiones, sin calcular pensiones individuales.",
+        "evidence": [
+          {
+            "source_id": "PDF:584d9591b1e2b56574e5dc76",
+            "quote": "La tasa de generosidad del sistema contributivo de pensiones 34, expresada \ncomo el porcentaje que representa la pensión media respecto al salario \nmedio, disminuye del 65,6% en 2023 al 56,7% en 2050 y 53,7% en 2070."
+          },
+          {
+            "source_id": "PDF:94e57efe50ab42ecfe0cd556",
+            "quote": "El número de pensiones32 crecerá hasta mitad de la década de los 50, desde \n11,3 millones en 2023, alcanzando un máximo de 17,3 millones de pensiones \nen 2055."
+          }
+        ]
+      }
+    ],
+    "passages": [
+      {
+        "source_id": "PDF:584d9591b1e2b56574e5dc76",
+        "book": "2025",
+        "text": "Opinión sobre la sostenibilidad de las AA. PP. a la rgo plazo \n31 de marzo de 2025 99 \nsupondría el reconocimiento explícito o implícito de mayores transferencia s \nal sistema. \nLa tasa de generosidad del sistema contributivo de pensiones 34, expresada \ncomo el porcentaje que representa la pensión media respecto al salario \nmedio, disminuye del 65,6% en 2023 al 56,7% en 2050 y 53,7% en 2070. Por lo \ntanto, la tasa de generosidad, que es un indicador de suficiencia calculado \ncon datos agregados, volvería a niveles próximos a los alcanzados en 2015.  \nEsta trayectoria es el resultado de la diferente evolución de las pensiones \nfrente a los salarios: mientras que las primeras crecen con el IPC, tal y como  \nestablece la regulación, los segundos lo hacen con la productividad y el IPC \nde acuerdo con la definición del modelo de crecimiento de largo plazo. \nGRÁFICO 48. TASA DE GENEROSIDAD \n  \n"
+      },
+      {
+        "source_id": "PDF:94e57efe50ab42ecfe0cd556",
+        "book": "2025",
+        "text": "4,1%\n3,2% 3,0%\n-1%\n0%\n1%\n2%\n3%\n4%\n5%\n2024-2030 2031-2040 2041-2050 2051-2060 2061-2070\nNúmero de pensiones Revalorización Efecto sustitución Gasto\n \nFuente: AIReF \nEl número de pensiones32 crecerá hasta mitad de la década de los 50, desde \n11,3 millones en 2023, alcanzando un máximo de 17,3 millones de pensiones \nen 2055.  A partir de entonces, comienza una senda descendente hasta \nalcanzar 16,8 millones en 2070, principalmente por la extinción del régimen \nde Clases Pasivas, que no va a acompañado de un aumento de las \npensiones de la Seguridad Social desde 2055. \n \n32 Un pensionista puede ser beneficiario de más de una pensión. La ratio pensionistas \n/ pensiones se mantiene estable alrededor del 0,9 "
+      }
+    ]
+  },
+  "n01": {
+    "query": "Según estas páginas, ¿cuántos hombres recibirán una pensión contributiva en 2032?",
+    "needs": [
+      {
+        "need_id": "n1",
+        "query_span": "Según estas páginas, ¿cuántos hombres recibirán una pensión contributiva en 2032?",
+        "kind": "text",
+        "metric": "hombres que recibirán una pensión contributiva",
+        "population": "individual",
+        "scope_terms": [
+          "hombres"
+        ],
+        "book": "2025",
+        "series": null,
+        "source_block": null,
+        "unit": "persons",
+        "periods": [
+          "2032"
+        ],
+        "quantity_request": "level"
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "n1C1",
+        "need_id": "n1",
+        "text": "No hay evidencia en los pasajes sobre el número específico de hombres que recibirán una pensión contributiva en 2032.",
+        "evidence": [
+          {
+            "source_id": "PDF:94e57efe50ab42ecfe0cd556",
+            "quote": "El número de pensiones32 crecerá hasta mitad de la década de los 50, desde \n11,3 millones en 2023, alcanzando un máximo de 17,3 millones de pensiones \nen 2055."
+          },
+          {
+            "source_id": "PDF:f947f766d1d87f065a32679e",
+            "quote": "GRÁFICO 47. NÚMERO DE PENSIONES (MILLONES)  \n11,3\n12,5\n13,7\n15,0\n16,2 17,0 17,3 17,2 17,0 16,8\n0,0\n2,0\n4,0\n6,0\n8,0\n10,0\n12,0\n14,0\n16,0\n18,0\n20,0\n2023 2030 2035 2040 2045 2050 2055 2060 2065 2070\nSeguridad Social Clases Pasivas Pensiones no contributivas TOTAL"
+          }
+        ]
+      },
+      {
+        "claim_id": "n1C2",
+        "need_id": "n1",
+        "text": "Los datos proporcionados muestran el total de pensiones sin desglose por género para el año 2032.",
+        "evidence": [
+          {
+            "source_id": "PDF:f947f766d1d87f065a32679e",
+            "quote": "GRÁFICO 47. NÚMERO DE PENSIONES (MILLONES)  \n11,3\n12,5\n13,7\n15,0\n16,2 17,0 17,3 17,2 17,0 16,8\n0,0\n2,0\n4,0\n6,0\n8,0\n10,0\n12,0\n14,0\n16,0\n18,0\n20,0\n2023 2030 2035 2040 2045 2050 2055 2060 2065 2070\nSeguridad Social Clases Pasivas Pensiones no contributivas TOTAL"
+          }
+        ]
+      },
+      {
+        "claim_id": "n1C3",
+        "need_id": "n1",
+        "text": "El texto indica que el número de pensiones crecerá hasta 2055, pero no especifica la cifra para 2032 ni por género.",
+        "evidence": [
+          {
+            "source_id": "PDF:94e57efe50ab42ecfe0cd556",
+            "quote": "El número de pensiones32 crecerá hasta mitad de la década de los 50, desde \n11,3 millones en 2023, alcanzando un máximo de 17,3 millones de pensiones \nen 2055."
+          }
+        ]
+      }
+    ],
+    "passages": [
+      {
+        "source_id": "PDF:94e57efe50ab42ecfe0cd556",
+        "book": "2025",
+        "text": "4,1%\n3,2% 3,0%\n-1%\n0%\n1%\n2%\n3%\n4%\n5%\n2024-2030 2031-2040 2041-2050 2051-2060 2061-2070\nNúmero de pensiones Revalorización Efecto sustitución Gasto\n \nFuente: AIReF \nEl número de pensiones32 crecerá hasta mitad de la década de los 50, desde \n11,3 millones en 2023, alcanzando un máximo de 17,3 millones de pensiones \nen 2055.  A partir de entonces, comienza una senda descendente hasta \nalcanzar 16,8 millones en 2070, principalmente por la extinción del régimen \nde Clases Pasivas, que no va a acompañado de un aumento de las \npensiones de la Seguridad Social desde 2055. \n \n32 Un pensionista puede ser beneficiario de más de una pensión. La ratio pensionistas \n/ pensiones se mantiene estable alrededor del 0,9 "
+      },
+      {
+        "source_id": "PDF:f947f766d1d87f065a32679e",
+        "book": "2025",
+        "text": "Opinión sobre la sostenibilidad de las AA. PP. a la rgo plazo \n31 de marzo de 2025 98 \nGRÁFICO 47. NÚMERO DE PENSIONES (MILLONES)  \n11,3\n12,5\n13,7\n15,0\n16,2 17,0 17,3 17,2 17,0 16,8\n0,0\n2,0\n4,0\n6,0\n8,0\n10,0\n12,0\n14,0\n16,0\n18,0\n20,0\n2023 2030 2035 2040 2045 2050 2055 2060 2065 2070\nSeguridad Social Clases Pasivas Pensiones no contributivas TOTAL\n \nFuente: Seguridad Social y AIReF \nLa pensión media aumenta a lo largo del periodo por la combinación d e la \nrevalorización con el IPC y un efecto sustitución positivo. El efecto sustitución, \npor el que las pensiones de las nuevas altas sustituyen a las de las bajas, tiene \nun impacto de aumento del gasto debido a que las de las primeras, son \nsuperiores a las de las segundas, aunque su evolución es decreciente \ninicialmente para luego empezar a subir otra vez por la positiva evolución de \nlos salarios, pasando de aportar menos del 20% del crecimiento de la pensión \nmedia al 40% en el final del periodo de proyección. "
+      }
+    ]
+  }
+}

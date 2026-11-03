@@ -1,0 +1,3 @@
+# Isolated source review; no changes to the RAG runtime.
+-r requirements-excel-pilot.txt
+pypdf==6.16.1

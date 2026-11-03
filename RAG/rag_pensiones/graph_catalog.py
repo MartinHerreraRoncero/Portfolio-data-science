@@ -311,12 +311,12 @@ def candidate_matches_need(card: dict, need: dict, *, metadata_discovery: bool =
 
 def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[float] | None,
                                needs: list[dict], top_k_per_need: int = 10, *, metadata_discovery: bool = False,
-                               reranker=None, pool_size: int = 50) -> list[dict]:
+                               reranker=None, pool_size: int = 50, diversity: bool = True) -> list[dict]:
     """Filter before ranking and fairly expose independent needs and unspecified editions."""
     if type(top_k_per_need) is not int or top_k_per_need < 1:
         raise ValueError('Positive per-need retrieval budget required')
     lists = []
-    if reranker is not None and (type(pool_size)is not int or not top_k_per_need<=pool_size<=100):
+    if (reranker is not None or diversity) and (type(pool_size)is not int or not top_k_per_need<=pool_size<=100):
         raise ValueError('Invalid reranker candidate budget')
     for need in needs:
         if need.get('kind') != 'data':
@@ -328,7 +328,7 @@ def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[flo
             groups[card['book'] if need.get('book') is None else 'requested'].add(card['card_id'])
         # Use the same complete request that produced query_vector.
         search_query = query
-        budget=pool_size if reranker is not None else top_k_per_need
+        budget=pool_size if reranker is not None or diversity else top_k_per_need
         ranked = [retrieve_catalog(catalog, search_query, query_vector,
                                   top_k=budget, allowed_card_ids=groups[book])
                   for book in sorted(groups, key=lambda b: str(b))]
@@ -336,7 +336,9 @@ def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[flo
         # An unspecified edition keeps at least one result from every represented book.
         limit = max(top_k_per_need, len(ranked))
         if reranker is not None:
-            rows=reranker.rank(search_query,rows[:pool_size],limit)
+            rows=reranker.rank(search_query,rows[:pool_size],limit,need=need)
+        elif diversity:
+            rows=diversify_candidates(rows[:pool_size],limit)
         lists.append((need['need_id'], rows[:limit]))
     merged = {}; ordered = []
     for rank in range(max((len(rows) for _, rows in lists), default=0)):
@@ -353,6 +355,21 @@ def retrieve_catalog_for_needs(catalog: dict, query: str, query_vector: list[flo
             merged[cid]['need_retrieval'].append(dict(need_id=need_id, rank=rank + 1,
                                                       scores=copy.deepcopy(card['retrieval'])))
     return ordered
+
+
+def diversify_candidates(cards, limit):
+    """Prefer one representative per source object, preserving retrieval order."""
+    from rag_pensiones.graph_reranker import source_object
+    representatives=[];remaining=[];seen=set()
+    for rank,card in enumerate(cards,1):
+        row=copy.deepcopy(card);key=source_object(card)
+        representative=key not in seen
+        row.setdefault('retrieval',{})['diversification']=dict(
+            pool_rank=rank,pool_size=len(cards),
+            selection='object_representative' if representative else 'score_fill')
+        (representatives if representative else remaining).append(row)
+        seen.add(key)
+    return (representatives+remaining)[:limit]
 
 
 def derivation_operands_eligible(card,need,catalog,*,metadata_discovery=False):

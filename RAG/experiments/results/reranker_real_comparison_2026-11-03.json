@@ -1,0 +1,92 @@
+{
+  "protocol_sha256": "141bf591c99a0a1f8c0b0408272a93edb508086241231dde68d1e49d43e6d796",
+  "improvements": [
+    "2070_previous_failure"
+  ],
+  "regressions": [
+    "2050_pension_level"
+  ],
+  "source_recall": {
+    "baseline": 4,
+    "diversity_only": 3,
+    "reranker_only": 3,
+    "reranker_diversity": 4
+  },
+  "meets_source_recall_gate": false,
+  "production_enabled": false,
+  "limitation": "Five source-recall replays only; no chatbot calls, new embeddings, general quality certification, or baseline promotion.",
+  "cases": [
+    {
+      "id": "2070_previous_failure",
+      "positions": {
+        "baseline": null,
+        "diversity_only": null,
+        "reranker_only": null,
+        "reranker_diversity": 3
+      },
+      "baseline_seconds": 4.48399999999674,
+      "reranker_seconds": 48.54699999999866,
+      "pool_contains_target": true
+    },
+    {
+      "id": "2070_previous_success",
+      "positions": {
+        "baseline": 1,
+        "diversity_only": 1,
+        "reranker_only": 1,
+        "reranker_diversity": 1
+      },
+      "baseline_seconds": 1.4530000000013388,
+      "reranker_seconds": 73.81199999999808,
+      "pool_contains_target": true
+    },
+    {
+      "id": "2050_pension_level",
+      "positions": {
+        "baseline": 8,
+        "diversity_only": null,
+        "reranker_only": null,
+        "reranker_diversity": null
+      },
+      "baseline_seconds": 2.9219999999986612,
+      "reranker_seconds": 57.53199999999924,
+      "pool_contains_target": true
+    },
+    {
+      "id": "2050_public_deficit",
+      "positions": {
+        "baseline": 1,
+        "diversity_only": 1,
+        "reranker_only": 2,
+        "reranker_diversity": 2
+      },
+      "baseline_seconds": 4.468000000000757,
+      "reranker_seconds": 48.09300000000076,
+      "pool_contains_target": true
+    },
+    {
+      "id": "2050_income_tax",
+      "positions": {
+        "baseline": 2,
+        "diversity_only": 2,
+        "reranker_only": 1,
+        "reranker_diversity": 1
+      },
+      "baseline_seconds": 4.421999999998661,
+      "reranker_seconds": 54.79699999999866,
+      "pool_contains_target": true
+    }
+  ],
+  "position_regressions": [
+    "2050_public_deficit"
+  ],
+  "source_checks": 13,
+  "technical_tests": 7,
+  "chatbot_calls": 0,
+  "new_embeddings": 0,
+  "source_code_hashes": {
+    "rag_pensiones/graph_catalog.py": "b8978e8971ede7fef48be07322ee4f462dbc5e0a288a02a4f0f5eed68edbd185",
+    "rag_pensiones/graph_reranker.py": "b38313965425c8e4b5da6109ab8d0a843b99346dc1d3fe77debd641de962010d",
+    "experiments/compare_reranker_real_cases.py": "4513f72d0676d606c36be0791862b622eb93d40a569c4e9d8cc8210abf1e0dfa"
+  }
+}

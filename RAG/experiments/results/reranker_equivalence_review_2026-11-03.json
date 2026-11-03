@@ -1,0 +1,101 @@
+{
+  "review_kind": "retrospective_source_equivalence_adjudication_not_new_execution",
+  "input_hashes": {
+    "evaluation\\reranker_real_comparison_2026-11-03_v1\\comparison.json": "6b35bdfe227ee046c2b202966839eba55d833726dbe7687d3c180f05cb5147a6",
+    "evaluation\\reranker_real_comparison_2026-11-03_v1\\protocol.json": "141bf591c99a0a1f8c0b0408272a93edb508086241231dde68d1e49d43e6d796",
+    "D:\\Portfolio-data-science\\RAG\\experiments\\fixtures\\source_equivalence_2026-11-03.json": "c1d32dd414f341be050bc4a21ed51054693ab15de709d7273e9a89641cba5306"
+  },
+  "original_contract_source_hits": {
+    "baseline": 4,
+    "diversity_only": 5,
+    "reranker_only": 4,
+    "reranker_diversity": 5
+  },
+  "total_original_contracts": 5,
+  "excluding_flagged_contract": {
+    "total": 4,
+    "source_hits": {
+      "baseline": 3,
+      "diversity_only": 4,
+      "reranker_only": 3,
+      "reranker_diversity": 4
+    }
+  },
+  "reranker_enabled": false,
+  "model_calls": 0,
+  "new_embeddings": 0,
+  "new_retrieval_calls": 0,
+  "limitation": "Retrospective annotations informed by observed outputs. No new benchmark, no baseline promotion, no answer-accuracy certification.",
+  "cases": [
+    {
+      "id": "2070_previous_failure",
+      "query_alignment": "not_independently_certified",
+      "added_sources": [
+        "card:1d99fc3c931e7934fd7d9394"
+      ],
+      "positions": {
+        "baseline": null,
+        "diversity_only": 9,
+        "reranker_only": null,
+        "reranker_diversity": 3
+      },
+      "alignment_issue": null
+    },
+    {
+      "id": "2070_previous_success",
+      "query_alignment": "not_independently_certified",
+      "added_sources": [
+        "card:1d99fc3c931e7934fd7d9394"
+      ],
+      "positions": {
+        "baseline": 1,
+        "diversity_only": 1,
+        "reranker_only": 1,
+        "reranker_diversity": 1
+      },
+      "alignment_issue": null
+    },
+    {
+      "id": "2050_pension_level",
+      "query_alignment": "not_independently_certified",
+      "added_sources": [
+        "card:24cfcfc5ec429655dde441b4",
+        "card:2a75ac0c8feb3369be5c208a",
+        "card:5302a59e3198ca49bafff4f7"
+      ],
+      "positions": {
+        "baseline": 8,
+        "diversity_only": 6,
+        "reranker_only": 7,
+        "reranker_diversity": 6
+      },
+      "alignment_issue": null
+    },
+    {
+      "id": "2050_public_deficit",
+      "query_alignment": "publication_target_conflict",
+      "added_sources": [
+        "card:e8a1516f983717d180d465fc"
+      ],
+      "positions": {
+        "baseline": 1,
+        "diversity_only": 1,
+        "reranker_only": 2,
+        "reranker_diversity": 2
+      },
+      "alignment_issue": "Original gold targets the2025 forecast, while effective_context requests latest_supported. PDF2026 pp7,71 and its charts3,32 report an updated total balance for2050. These vintages are not equivalent. Retain the source-contract review but exclude this case from claims of validated user-question accuracy."
+    },
+    {
+      "id": "2050_income_tax",
+      "query_alignment": "not_independently_certified",
+      "added_sources": [],
+      "positions": {
+        "baseline": 2,
+        "diversity_only": 2,
+        "reranker_only": 1,
+        "reranker_diversity": 1
+      },
+      "alignment_issue": null
+    }
+  ]
+}

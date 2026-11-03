@@ -1,0 +1,246 @@
+{
+  "schema_version": "reviewed-source-equivalence-v1",
+  "catalog_hash": "c383df62f9fb0fdb83207a764f8de119eb6106152c000c72df19b6d0f8fc63ef",
+  "review_status": "manual_source_review",
+  "review_scope": "Retrospective source coverage only. No inference, new retrieval or numerical accuracy certification.",
+  "groups": [
+    {
+      "id": "public_pension_base_2025_2070",
+      "contract": {
+        "measure": "Total public pension spending",
+        "scope": "Public pension system",
+        "publication": "2025",
+        "scenario": "AIReF base",
+        "unit": "percent_gdp",
+        "period": "2070",
+        "quantity_type": "level"
+      },
+      "reason": "Same 2025 base projection in charts45,125,126, comparison chartRE4.4 (Opinion2025 row), and summary table9. PDF2025 p96 describes total spending; workbook row headings distinguish earlier vintages and alternative scenarios. Table9 reports a small numerical discrepancy; semantic source coverage is accepted, not numerical interchangeability.",
+      "members": [
+        {
+          "card_id": "card:a6541ae9b1cb4c6d3f019a1f",
+          "observation_id": "airef:2025:50496",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Gráfico 125",
+          "source_cell": "BH5",
+          "period": "2070",
+          "value": "14.660534438528824000000000"
+        },
+        {
+          "card_id": "card:76135aac6b91cc760c2882f6",
+          "observation_id": "airef:2025:17842",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Gráfico 45",
+          "source_cell": "BG8",
+          "period": "2070",
+          "value": "14.660534438528824000000000"
+        },
+        {
+          "card_id": "card:69738fcc385ff8ac06ff6205",
+          "observation_id": "airef:2025:50664",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Gráfico 126",
+          "source_cell": "BI5",
+          "period": "2070",
+          "value": "14.660534438528824000000000"
+        },
+        {
+          "card_id": "card:973dd69334b67fd53eff4635",
+          "observation_id": "airef:2025:455",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Cuadro 9 ",
+          "source_cell": "H9",
+          "period": "2070",
+          "value": "14.662275531434679000000000"
+        },
+        {
+          "card_id": "card:1d99fc3c931e7934fd7d9394",
+          "observation_id": "airef:2025:20603",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Gráfico RE 4.4",
+          "source_cell": "BC12",
+          "period": "2070",
+          "value": "14.660534438528824000000000"
+        }
+      ]
+    },
+    {
+      "id": "public_pension_base_2026_2050",
+      "contract": {
+        "measure": "Total public pension spending",
+        "scope": "Public pension system",
+        "publication": "2026",
+        "scenario": "AIReF base",
+        "unit": "percent_gdp",
+        "period": "2050",
+        "quantity_type": "level"
+      },
+      "reason": "PDF2026 pp13-15 identifies AIReF gross public pension projection and contrasts AR2024/EUROPOP alternatives. Chart1 AIReF and chart4 AIReF2026 reproduce the base series. Table12 rowPensiones is the spending component within total nonfinancial expenditure, not total expenditure; its2050 cell gives the same pension total. Chart12 uses total pension spending as the funding requirement; pp53-54 define its public-pension scope.",
+      "members": [
+        {
+          "card_id": "card:08bd77071ae8e9b2aea694c9",
+          "observation_id": "airef:2026:915",
+          "book": "2026",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+          "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+          "source_sheet": "Gráfico 4",
+          "source_cell": "AL11",
+          "period": "2050",
+          "value": "16.398787143158614000000000"
+        },
+        {
+          "card_id": "card:2a75ac0c8feb3369be5c208a",
+          "observation_id": "airef:2026:388",
+          "book": "2026",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+          "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+          "source_sheet": "Cuadro 12",
+          "source_cell": "F8",
+          "period": "2050",
+          "value": "16.398787143158614000000000"
+        },
+        {
+          "card_id": "card:5302a59e3198ca49bafff4f7",
+          "observation_id": "airef:2026:510",
+          "book": "2026",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+          "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+          "source_sheet": "Gráfico 1",
+          "source_cell": "AL10",
+          "period": "2050",
+          "value": "16.398787143158614000000000"
+        },
+        {
+          "card_id": "card:24cfcfc5ec429655dde441b4",
+          "observation_id": "airef:2026:1994",
+          "book": "2026",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+          "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+          "source_sheet": "Gráfico 12",
+          "source_cell": "AI16",
+          "period": "2050",
+          "value": "16.398787143158621000000000"
+        }
+      ]
+    },
+    {
+      "id": "public_balance_base_2025_2050",
+      "contract": {
+        "measure": "Total public fiscal balance",
+        "scope": "All public administrations",
+        "publication": "2025",
+        "scenario": "AIReF base",
+        "unit": "percent_gdp",
+        "period": "2050",
+        "quantity_type": "level"
+      },
+      "reason": "Tables20,22,23 label the base scenario deficit row; chart60 SaldoTotal reproduces total balance, not SaldoPrimario. Same publication/scope/horizon/unit. Chart74 has an unreconciled numerical difference and is not automatically added. The2026 revision is a different vintage, not an equivalent2025 observation.",
+      "members": [
+        {
+          "card_id": "card:d861d0959a10fe0af77598a6",
+          "observation_id": "airef:2025:1083",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Cuadro  23 ",
+          "source_cell": "I6",
+          "period": "2050",
+          "value": "-6.955915803236229600000000"
+        },
+        {
+          "card_id": "card:498a79e8690676ea7cd308a4",
+          "observation_id": "airef:2025:1047",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Cuadro 22 ",
+          "source_cell": "I6",
+          "period": "2050",
+          "value": "-6.955915803236229600000000"
+        },
+        {
+          "card_id": "card:a64d903379722f8a379d2a50",
+          "observation_id": "airef:2025:999",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Cuadro 20 ",
+          "source_cell": "I6",
+          "period": "2050",
+          "value": "-6.955915803236229600000000"
+        },
+        {
+          "card_id": "card:e8a1516f983717d180d465fc",
+          "observation_id": "airef:2025:19954",
+          "book": "2025",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2025_Opinion_Sostenibilidad_AAPP/Graficos-y-cuadros Segunda Opinión sobre la sostenibilidad de las Administraciones públicas a largo plazo.xlsx",
+          "source_sha256": "a74921530a00b649860530503abe6a532d540e778a150015dfe5864710ddccfa",
+          "source_sheet": "Gráfico 60",
+          "source_cell": "BG11",
+          "period": "2050",
+          "value": "-6.955915803236228700000000"
+        }
+      ]
+    },
+    {
+      "id": "income_tax_base_2026_2050",
+      "contract": {
+        "measure": "Personal income tax revenue",
+        "scope": "All public administrations",
+        "publication": "2026",
+        "scenario": "AIReF base",
+        "unit": "percent_gdp",
+        "period": "2050",
+        "quantity_type": "level"
+      },
+      "reason": "Chart18 explicitly labels the IRPF revenue series as percentGDP and includes2050. Other taxes, total resources, historical tax composition and2025-vintage projections are different quantities or vintages.",
+      "members": [
+        {
+          "card_id": "card:8125bce933adb0b0b1a90c74",
+          "observation_id": "airef:2026:3795",
+          "book": "2026",
+          "unit": "percent_gdp",
+          "source_path": "Airef/2026_Estudio_Regla_Gasto_Pensiones/AIReF.-Tablas-y-graficos.-Estudio-de-evaluacion-de-la-regla-de-gasto-en-pensiones.xlsx",
+          "source_sha256": "ee7b6e18fe3f5c9197fce6d086b8cb51c366f4e069b539c5f38fec62a55597c5",
+          "source_sheet": "Gráfico 18",
+          "source_cell": "BF8",
+          "period": "2050",
+          "value": "12.107728312188778000000000"
+        }
+      ]
+    }
+  ],
+  "case_review_notes": {
+    "2050_public_deficit": {
+      "query_alignment": "publication_target_conflict",
+      "alignment_issue": "Original gold targets the2025 forecast, while effective_context requests latest_supported. PDF2026 pp7,71 and its charts3,32 report an updated total balance for2050. These vintages are not equivalent. Retain the source-contract review but exclude this case from claims of validated user-question accuracy.",
+      "newer_source_ids": [
+        "card:c92db5ce8170af895a220ef5",
+        "card:5d3fc15d471aee9615abbae7"
+      ]
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 const GRAPH_NODES = [
   ['interpret','Entender la pregunta',260,40],['intent_audit','Confirmar lo que pides',260,90],
-  ['embed','Convertir pregunta a vectores',260,140],['catalog','Buscar datos en catálogo',155,200],['documents','Buscar en documentos',365,200],
+  ['embed','Convertir pregunta a vectores',260,140],['catalog','Buscar y diversificar datos',155,200],['documents','Buscar en documentos',365,200],
   ['ground','Relacionar datos y pregunta',260,260],['plan','Preparar las consultas',260,310],
   ['validate','Validar plan y consultar datos',260,360],['clarify','Pedirte una aclaración',440,310],
   ['execute','Consultar base de datos',260,420],['generate','Redactar la respuesta',260,470],
@@ -100,7 +100,7 @@ function diagram(){
   }
   root.append(svg);
   for(const group of FLOW_GROUPS){
-    const node=element('div','flow-node pending');node.dataset.group=group.id;node.setAttribute('title','Nodo LangGraph: '+group.id);
+    const node=element('div','flow-node pending');node.dataset.group=group.id;node.setAttribute('title',group.id==='catalog'?'Catálogo: hasta 50 candidatos por necesidad; priorizar una ficha por documento y tabla o gráfico; rellenar hasta 10. Reranker desactivado.':'Nodo LangGraph: '+group.id);
     node.setAttribute('style',`left:${(group.x-66)/520*100}%;top:${(group.y-18)/630*100}%;width:${132/520*100}%;`);
     const copy=element('span','node-copy');copy.append(element('span','node-title',group.title),element('span','node-detail',group.detail));
     node.append(copy,element('span','node-indicator'));groupElements.set(group.id,node);root.append(node);
